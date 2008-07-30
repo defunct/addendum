@@ -6,10 +6,10 @@
     <groupId>com.agtrz</groupId>
     <artifactId>addendum</artifactId>
     <packaging>jar</packaging>
-    <version>0.1</version>
+    <version>0.9</version>
 
     <name>addendum</name>
-    <description>Test benches.</description>
+    <description>Schema management.</description>
 
     <organization>
         <name>Alan Gutierrez</name>
@@ -25,6 +25,16 @@
     </licenses>
 
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
