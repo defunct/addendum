@@ -15,9 +15,9 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SchemaUpgrade
+public class Addendum
 {
-    private static final Logger log = LoggerFactory.getLogger(SchemaUpgrade.class);
+    private static final Logger log = LoggerFactory.getLogger(Addendum.class);
     
     private final List<Patch> listOfChanges = new ArrayList<Patch>();
     
@@ -27,7 +27,7 @@ public class SchemaUpgrade
     
     private final Patch[] create;
     
-    public SchemaUpgrade(Patch[] create)
+    public Addendum(Patch[] create)
     {
         this.updateTable = "Configuration";
         this.updateColumn = "schemaRevision";
@@ -44,20 +44,12 @@ public class SchemaUpgrade
         return "UPDATE " + updateTable + " SET " + updateColumn + " = ?";
     }
     
-    public void change(Connection connection) throws Danger
+    public void change(Connection connection) throws SQLException
     {
-        try
-        {
-            tryChange(connection);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            throw new Danger(1001, e);
-        }
+        tryChange(connection);
     }
     
-    public void tryChange(Connection connection) throws Danger, SQLException
+    public void tryChange(Connection connection) throws SQLException
     {
         DatabaseMetaData metaData = connection.getMetaData();
         ResultSet results = metaData.getTables(null, null, updateTable, null);
@@ -126,7 +118,7 @@ public class SchemaUpgrade
     
     public interface Patch
     {
-        public void execute(Connection connnection) throws SQLException, Danger;
+        public void execute(Connection connnection) throws SQLException;
     }
     
     public final static class SqlPatch
@@ -160,12 +152,6 @@ public class SchemaUpgrade
 
         private final int code;
 
-        public Danger()
-        {
-            super(null, null);
-            code = 0;
-        }
-
         public Danger(int code, Object... arguments)
         {
             super(message(code, arguments));
@@ -180,8 +166,8 @@ public class SchemaUpgrade
 
         private static String message(Integer code, Object[] arguments)
         {
-            ResourceBundle exceptions = ResourceBundle.getBundle("/com/agtrz/addendum/exceptions");
-            ResourceBundle userExceptions = ResourceBundle.getBundle("/META-INF/addendum/exceptions");
+            ResourceBundle exceptions = ResourceBundle.getBundle("com.agtrz.addendum.exceptions");
+            ResourceBundle userExceptions = null; // ResourceBundle.getBundle("/META-INF/addendum/exceptions");
             String format = null;
             if ((format = exceptions.getString(code.toString())) == null)
             {
