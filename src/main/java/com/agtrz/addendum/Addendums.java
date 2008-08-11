@@ -17,19 +17,18 @@ public class Addendums
 {
     static final Logger log = LoggerFactory.getLogger(Addendums.class);
     
+    private final List<Addendum> listOfBootstraps = new ArrayList<Addendum>();
+    
     private final List<Addendum> listOfChanges = new ArrayList<Addendum>();
     
     private final String updateTable;
     
     private final String updateColumn;
     
-    private final Addendum[] create;
-    
-    public Addendums(Addendum[] create)
+    public Addendums(String updateTable, String updateColumn)
     {
-        this.updateTable = "Configuration";
-        this.updateColumn = "schemaRevision";
-        this.create = create;
+        this.updateTable = updateTable;
+        this.updateColumn = updateColumn;
     }
     
     private String selectVersion()
@@ -99,9 +98,9 @@ public class Addendums
             }
             else
             {
-                for (int i = 0; i < create.length; i++)
+                for (Addendum addendum : listOfBootstraps)
                 {
-                    create[i].execute(connection);
+                    addendum.execute(connection);
                 }
                 
                 tryChange(connection);
@@ -109,9 +108,14 @@ public class Addendums
         }
     }
     
-    public void add(Addendum change)
+    public void addBootstrap(Addendum addendum)
     {
-        listOfChanges.add(change);
+        this.listOfBootstraps.add(addendum);
+    }
+    
+    public void add(Addendum addendum)
+    {
+        listOfChanges.add(addendum);
     }
 }
 
