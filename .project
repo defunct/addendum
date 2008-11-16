@@ -1,6 +1,6 @@
 <projectDescription>
   <name>addendum</name>
-  <comment>Test benches.</comment>
+  <comment>Schema construction.</comment>
   <projects/>
   <buildSpec>
     <buildCommand>
