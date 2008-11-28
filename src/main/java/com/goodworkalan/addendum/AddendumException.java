@@ -2,7 +2,7 @@
 /**
  * 
  */
-package com.agtrz.addendum;
+package com.goodworkalan.addendum;
 
 import java.text.MessageFormat;
 import java.util.MissingResourceException;

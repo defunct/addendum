@@ -1,4 +1,4 @@
-package com.agtrz.addendum;
+package com.goodworkalan.addendum;
 
 import java.io.BufferedReader;
 import java.io.IOException;

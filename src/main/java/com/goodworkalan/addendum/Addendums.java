@@ -1,5 +1,5 @@
 /* Copyright Alan Gutierrez 2006 */
-package com.agtrz.addendum;
+package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

@@ -1,4 +1,4 @@
-package com.agtrz.addendum;
+package com.goodworkalan.addendum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
