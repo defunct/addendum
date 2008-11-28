@@ -1,6 +1,6 @@
 <projectDescription>
-  <name>addendum-core</name>
-  <comment>Schema construction.</comment>
+  <name>addendum</name>
+  <comment>Schema management.</comment>
   <projects/>
   <buildSpec>
     <buildCommand>

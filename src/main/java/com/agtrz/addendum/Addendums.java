@@ -110,7 +110,7 @@ public class Addendums
     
     public void addBootstrap(Addendum addendum)
     {
-        this.listOfBootstraps.add(addendum);
+        listOfBootstraps.add(addendum);
     }
     
     public void add(Addendum addendum)
