@@ -2,15 +2,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <parent>
-        <groupId>com.agtrz</groupId>
-        <artifactId>addendum</artifactId>
-        <version>0.9.0</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.agtrz</groupId>
-    <artifactId>addendum-core</artifactId>
+    <artifactId>addendum</artifactId>
     <packaging>jar</packaging>
     <version>0.9.0</version>
 
