@@ -3,10 +3,10 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.agtrz</groupId>
+    <groupId>com.goodworkalan</groupId>
     <artifactId>addendum</artifactId>
     <packaging>jar</packaging>
-    <version>0.9.0</version>
+    <version>0.7.X</version>
 
     <name>addendum</name>
     <description>Schema management.</description>
@@ -43,6 +43,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+      <repository>
+        <id>ssh-repository</id>
+        <url>scpexe://maribor.blogometer.com/cb/www/static/goodworkalan/m2/repository</url>
+      </repository>
+    </distributionManagement>
 
     <build>
         <resources>
@@ -114,6 +121,13 @@
                 </configuration>
              </plugin>
         </plugins>
+        <extensions>
+          <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+             <artifactId>wagon-ssh-external</artifactId>
+             <version>1.0-alpha-5</version>
+          </extension>
+        </extensions>
     </build>
     <reporting>
         <plugins>
