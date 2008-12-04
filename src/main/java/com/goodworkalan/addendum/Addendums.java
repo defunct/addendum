@@ -67,7 +67,7 @@ public class Addendums
 
                 log.debug("Updating schema starting at version " + version + ".");
                 
-                log.info("There are currently " + listOfChanges.size() + " patches. Please make sure you start new instances at that number.");
+                log.info("There are currently " + listOfChanges.size() + " patches.");
                 
                 for (int i = version; i < listOfChanges.size(); i++)
                 {
