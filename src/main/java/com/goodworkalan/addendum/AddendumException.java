@@ -29,11 +29,11 @@ extends Exception
 
     private static String message(Integer code, Object[] arguments)
     {
-        ResourceBundle exceptions = ResourceBundle.getBundle("com.agtrz.addendum.exceptions");
+        ResourceBundle exceptions = ResourceBundle.getBundle("com.goodworkalan.addendum.exceptions");
         ResourceBundle userExceptions = null;
         try
         {
-            userExceptions = ResourceBundle.getBundle("/META-INF/com/agtrz/addendum/exceptions");
+            userExceptions = ResourceBundle.getBundle("/META-INF/com/goodworkalan/addendum/exceptions");
         }
         catch (MissingResourceException e)
         {
