@@ -9,6 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
+/**
+ * TODO ScriptAddendum that would call out to other addendum scripts, so
+ * that you could provide scripts for different database languages, but 
+ * keep common custom addendums.
+ * 
+ * @author Alan Gutierrez
+ */
 @ReadBy(SqlAddendumReader.class)
 public final class SqlAddendum
 implements Addendum
