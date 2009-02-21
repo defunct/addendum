@@ -8,16 +8,19 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+// TODO Document.
 public class AddendumInputStream
 {
+    // TODO Document.
     private final BufferedReader reader;
     
+    // TODO Document.
     public AddendumInputStream(InputStream inputStream, String charset) throws UnsupportedEncodingException
     {
         this.reader = new BufferedReader(new InputStreamReader(inputStream, charset));
     }
     
+    // TODO Document.
     public List<Addendum> read() throws AddendumException, IOException
     {
         List<Addendum> addendums = new ArrayList<Addendum>();

@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 
+// TODO Document.
 public class SqlAddendumReader implements AddendumReader
 {
+    // TODO Document.
     public Addendum read(Class<?> addendumClass, BufferedReader reader) throws IOException
     {
         StringBuilder newString = new StringBuilder();

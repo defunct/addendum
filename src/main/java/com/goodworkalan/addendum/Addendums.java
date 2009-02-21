@@ -13,39 +13,50 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO Document.
 public class Addendums
 {
+    // TODO Document.
     static final Logger log = LoggerFactory.getLogger(Addendums.class);
     
+    // TODO Document.
     private final List<Addendum> listOfBootstraps = new ArrayList<Addendum>();
     
+    // TODO Document.
     private final List<Addendum> listOfChanges = new ArrayList<Addendum>();
     
+    // TODO Document.
     private final String updateTable;
     
+    // TODO Document.
     private final String updateColumn;
     
+    // TODO Document.
     public Addendums(String updateTable, String updateColumn)
     {
         this.updateTable = updateTable;
         this.updateColumn = updateColumn;
     }
     
+    // TODO Document.
     private String selectVersion()
     {
         return "SELECT " + updateColumn + " FROM " + updateTable;
     }
     
+    // TODO Document.
     private String updateVersion()
     {
         return "UPDATE " + updateTable + " SET " + updateColumn + " = ?";
     }
     
+    // TODO Document.
     public void change(Connection connection) throws SQLException, AddendumException
     {
         tryChange(connection);
     }
     
+    // TODO Document.
     public void tryChange(Connection connection) throws SQLException, AddendumException
     {
         DatabaseMetaData metaData = connection.getMetaData();
@@ -108,11 +119,13 @@ public class Addendums
         }
     }
     
+    // TODO Document.
     public void addBootstrap(Addendum addendum)
     {
         listOfBootstraps.add(addendum);
     }
     
+    // TODO Document.
     public void add(Addendum addendum)
     {
         listOfChanges.add(addendum);

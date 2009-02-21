@@ -20,8 +20,10 @@ import java.sql.Statement;
 public final class SqlAddendum
 implements Addendum
 {
+    // TODO Document.
     private final String sql;
     
+    // TODO Document.
     public SqlAddendum(String sql)
     {
         if (sql == null)
@@ -32,6 +34,7 @@ implements Addendum
         this.sql = sql;
     }
     
+    // TODO Document.
     public void execute(Connection connnection) throws SQLException, AddendumException
     {
         Addendums.log.info("Executing SQL statement <" + sql + ">");
