@@ -12,6 +12,7 @@ import java.sql.SQLException;
  */
 public interface Addendum
 {
+    // TODO Document.
     public void execute(Connection connnection)
         throws SQLException, AddendumException;
 }
