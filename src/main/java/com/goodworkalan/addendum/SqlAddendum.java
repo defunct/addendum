@@ -31,10 +31,10 @@ implements Addendum
     }
     
     // TODO Document.
-    public void execute(Connection connnection) throws SQLException, AddendumException
+    public void execute(Connection connection) throws SQLException, AddendumException
     {
         Addendums.log.info("Executing SQL statement <" + sql + ">");
-        Statement statement = connnection.createStatement();
+        Statement statement = connection.createStatement();
         statement.execute(sql);
         statement.close();
     }

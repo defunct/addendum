@@ -37,7 +37,13 @@ public class AddendumInputStream
             {
                 throw new AddendumException(100, e);
             }
-            ReadBy readBy = addendumClass.getAnnotation(ReadBy.class);
+            ReadBy readBy = null;
+            Class<?> superClass = addendumClass;
+            while (readBy == null && superClass != null)
+            {
+                readBy = superClass.getAnnotation(ReadBy.class);
+                superClass = superClass.getSuperclass();
+            }
             if (readBy == null)
             {
                 throw new AddendumException(100);

@@ -12,8 +12,7 @@ import java.sql.SQLException;
 public interface Addendum
 {
     // TODO Document.
-    public void execute(Connection connnection)
-        throws SQLException, AddendumException;
+    public void execute(Connection connection) throws SQLException, AddendumException;
 }
 
 /* vim: set et sw=4 ts=4 ai tw=78 nowrap: */

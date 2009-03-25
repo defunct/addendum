@@ -1,0 +1,51 @@
+package com.goodworkalan.addendum;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The root object of the domain-specific language used by
+ * {@link DatabaseAddendum} to define database update actions.
+ * 
+ * @author Alan Gutierrez
+ */
+public class Schema
+{
+    private final List<Update> updates;
+    
+    public Schema(List<Update> updates)
+    {
+        this.updates = updates;
+    }
+
+    /**
+     * Create a new table with the given name.
+     * 
+     * @param name
+     *            The table name.
+     * @return This schema to continue building.
+     */
+    public Table createTable(String name)
+    {
+        List<Column<?, ?>> columns = new ArrayList<Column<?,?>>();
+        List<String> primaryKey = new ArrayList<String>();
+        updates.add(new CreateTable(name, columns, primaryKey));
+        return new Table(this, name, columns, primaryKey);
+    }
+
+    /**
+     * Add a new column to the table named by the given table name with the
+     * given name and given column type.
+     * 
+     * @param tableName
+     *            The name of the table in which to add the new column.
+     * @param name
+     *            The column name.
+     * @param columnType
+     *            Type column type.
+     */
+    public AddColumn addColumn(String tableName, String name, ColumnType columnType)
+    {
+        return new AddColumn(this, tableName, name, columnType);
+    }
+}
