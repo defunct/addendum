@@ -1,7 +1,3 @@
-/* Copyright Alan Gutierrez 2006 */
-/**
- * 
- */
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
