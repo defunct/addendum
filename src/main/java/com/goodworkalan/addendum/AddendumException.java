@@ -1,6 +1,5 @@
 package com.goodworkalan.addendum;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -20,69 +19,38 @@ extends Exception
     /** The serial version id. */
     private static final long serialVersionUID = 20080620L;
     
-    /** An I/O exception occurred while reading the dialect resource path. */
-    public static int UNABLE_TO_READ_RESOURCE_PATH = 301;
-    
-    public static int UNABLE_TO_READ_RESOURCE_FILE = 302;
-    
-    /**
-     * Unable to find a dialect class defined in
-     * META-INF/services/com.goodworkalan.dialect.Dialect.
-     */
-    public static int DIALECT_CLASS_NOT_FOUND = 401;
-    
-    /** A dialect class specified in a  META-INF/services/com.goodworkalan.dialect.Dialect resource does not implement the Dielect interface. */
-    public static int NOT_A_DIALECT = 402;
-
-    /** Unable to instantiate a dialect. */
-    public static int CANNOT_CREATE_DIALECT = 403;
-    
-    /** The dialect does not support the specified unique id generator. */
-    public static int DIALECT_DOES_NOT_SUPPORT_GENERATOR = 501;
-    
-    // TODO Document.
+    /** The error code. */
     private final int code;
 
     /** A list of arguments to the formatted error message. */
     private final List<Object> arguments = new ArrayList<Object>();
 
-    // TODO Document.
-    public AddendumException(int code, Object... arguments)
+    /**
+     * Create a Sheaf exception with the given error code.
+     * 
+     * @param code
+     *            The error code.
+     */
+    public AddendumException(int code)
     {
-        super(message(code, arguments));
+        super();
         this.code = code;
     }
 
-    // TODO Document.
-    public AddendumException(int code, Throwable cause, Object... arguments)
+    /**
+     * Wrap the given cause exception in an addendum exception with the given
+     * error code.
+     * 
+     * @param code
+     *            The error code.
+     * @param cause
+     *            The cause exception.
+     */
+    public AddendumException(int code, Throwable cause)
     {
-        super(message(code, arguments), cause);
+        super(cause);
         this.code = code;
     }
-
-    // TODO Document.
-    private static String message(Integer code, Object[] arguments)
-    {
-        ResourceBundle exceptions = ResourceBundle.getBundle("com.goodworkalan.addendum.exceptions");
-        ResourceBundle userExceptions = null;
-        try
-        {
-            userExceptions = ResourceBundle.getBundle("/META-INF/com/goodworkalan/addendum/exceptions");
-        }
-        catch (MissingResourceException e)
-        {
-        }
-        String format = null;
-        if ((format = exceptions.getString(code.toString())) == null)
-        {
-            if (userExceptions != null && (format = userExceptions.getString(code.toString())) == null)
-            {
-                format = exceptions.getString("no-format");
-            }
-        }
-        return MessageFormat.format(format, arguments);
-    }
-
 
     /**
      * Get the error code.
@@ -118,7 +86,7 @@ extends Exception
     public String getMessage()
     {
         String key = Integer.toString(code);
-        ResourceBundle exceptions = ResourceBundle.getBundle("com.goodworkalan.sheaf.exceptions");
+        ResourceBundle exceptions = ResourceBundle.getBundle("com.goodworkalan.addendum.exceptions");
         String format;
         try
         {

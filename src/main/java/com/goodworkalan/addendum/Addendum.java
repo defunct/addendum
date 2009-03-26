@@ -12,10 +12,15 @@ import java.sql.SQLException;
 public interface Addendum
 {
     /**
-     * Update 
+     * Perform a single update on the web applications configuration, database
+     * or data files possibly using the given configuration.
+     * 
      * @param connection
+     *            A JDBC connection.
      * @throws SQLException
+     *             For any SQL error.
      * @throws AddendumException
+     *             For any error occuring during the update.
      */
     public void execute(Connection connection) throws SQLException, AddendumException;
 }

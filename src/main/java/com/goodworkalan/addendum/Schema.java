@@ -11,9 +11,16 @@ import java.util.List;
  */
 public class Schema
 {
+    /** A list of updates to perform. */
     private final List<Update> updates;
-    
-    public Schema(List<Update> updates)
+
+    /**
+     * Create a new schema.
+     * 
+     * @param updates
+     *            A list to record the updates to perform.
+     */
+    Schema(List<Update> updates)
     {
         this.updates = updates;
     }
