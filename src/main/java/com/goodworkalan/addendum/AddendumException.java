@@ -22,6 +22,9 @@ extends Exception
     /** The error code. */
     private final int code;
 
+    /** The requested generator type is not supported by the SQL dialect. */
+    public final static int DIALECT_DOES_NOT_SUPPORT_GENERATOR = 101;
+    
     /** A list of arguments to the formatted error message. */
     private final List<Object> arguments = new ArrayList<Object>();
 
