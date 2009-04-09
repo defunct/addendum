@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.goodworkalan.addendum.AddendumException;
 import com.goodworkalan.addendum.Column;
-import com.goodworkalan.addendum.DatabaseAddendum;
 import com.goodworkalan.addendum.Dialect;
 
 /**
