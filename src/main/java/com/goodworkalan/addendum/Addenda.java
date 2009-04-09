@@ -13,10 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO Document.
-public class Addendums
+public class Addenda
 {
     // TODO Document.
-    static final Logger log = LoggerFactory.getLogger(Addendums.class);
+    static final Logger log = LoggerFactory.getLogger(Addenda.class);
     
     // TODO Document.
     private final List<Addendum> listOfBootstraps = new ArrayList<Addendum>();
@@ -31,7 +31,7 @@ public class Addendums
     private final String updateColumn;
     
     // TODO Document.
-    public Addendums(String updateTable, String updateColumn)
+    public Addenda(String updateTable, String updateColumn)
     {
         this.updateTable = updateTable;
         this.updateColumn = updateColumn;

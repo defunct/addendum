@@ -33,7 +33,7 @@ implements Addendum
     // TODO Document.
     public void execute(Connection connection) throws SQLException, AddendumException
     {
-        Addendums.log.info("Executing SQL statement <" + sql + ">");
+        Addenda.log.info("Executing SQL statement <" + sql + ">");
         Statement statement = connection.createStatement();
         statement.execute(sql);
         statement.close();
