@@ -1,6 +1,8 @@
 package com.goodworkalan.addendum.mysql;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -22,6 +24,44 @@ public class MySQLDialect implements Dialect
      */
     public MySQLDialect()
     {
+    }
+    
+    /**
+     * Create the table used to store the applied addenda.
+     * 
+     * @param connection
+     *            An SQL connection on the database.
+     * 
+     * @throws SQLException
+     *             For any SQL error.
+     */
+    public void createAddenda(Connection connection) throws SQLException
+    {
+        DatabaseMetaData metaData = connection.getMetaData();
+        ResultSet results = metaData.getTables(null, null, "Addenda", null);
+        boolean build = !results.next();
+        results.close();
+        if (build)
+        {
+            Statement statement = connection.createStatement();
+            statement.execute("CREATE TABLE Addenda (addendum INTEGER)");
+            statement.close();
+        }
+    }
+    
+    public int addendaCount(Connection connection) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+        ResultSet results = statement.executeQuery("SELECT COALESCE(MAX(addendum), 0) FROM Addenda");
+        int max = results.getInt(1);
+        results.close();
+        return max;
+    }
+    
+    public void addendum(Connection connection) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+        statement.execute("INSERT INTO Addenda(addendum) values(SELECT COALESCE(MAX(addendum), 0) + 1 FROM Addenda)");
     }
     
     /**
