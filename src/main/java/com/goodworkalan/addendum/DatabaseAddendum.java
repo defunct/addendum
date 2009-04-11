@@ -11,7 +11,6 @@ import java.util.List;
  *
  * @author Alan Gutierrez
  */
-@ReadBy(NothingToReadReader.class)
 public abstract class DatabaseAddendum implements Addendum
 {
     /**
@@ -40,7 +39,7 @@ public abstract class DatabaseAddendum implements Addendum
      * @throws SQLException
      *             For any SQL error.
      * @throws AddendumException
-     *             For any error occuring during the update.
+     *             For any error occurring during the update.
      */
     public void execute(Connection connection) throws SQLException, AddendumException
     {

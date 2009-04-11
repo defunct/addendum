@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  * @author Alan Gutierrez
  */
 public final class AddendumException
-extends Exception
+extends RuntimeException
 {
     /** The serial version id. */
     private static final long serialVersionUID = 20080620L;
@@ -24,6 +24,24 @@ extends Exception
 
     /** The requested generator type is not supported by the SQL dialect. */
     public final static int DIALECT_DOES_NOT_SUPPORT_GENERATOR = 101;
+    
+    /** Unable to open an SQL connection due to a JNI naming error. */
+    public final static int NAMING_EXCEPTION = 201;
+    
+    /** Unable to connect to an SQL data source. */
+    public final static int SQL_CONNECT = 301;
+    
+    /** Unable to create the update table to track updates. */
+    public final static int SQL_CREATE_ADDENDA = 302;
+    
+    /** Unable to determine the maximum value of the applied updates. */
+    public final static int SQL_ADDENDA_COUNT = 303;
+    
+    /** Unable to update the addenda table with a new addendum. */
+    public final static int SQL_ADDENDUM = 304;
+    
+    /** Unable to execute a SQL migration statement. */
+    public final static int SQL_EXECUTION = 308;
     
     /** A list of arguments to the formatted error message. */
     private final List<Object> arguments = new ArrayList<Object>();

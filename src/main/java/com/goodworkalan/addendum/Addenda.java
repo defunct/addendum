@@ -1,133 +1,95 @@
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO Document.
+/**
+ * A collection of {@link Addendum} instances with changes to apply to 
+ * an application's data structures.
+ * 
+ * @author Alan Gutierrez
+ */
 public class Addenda
 {
-    // TODO Document.
+    /** This logger is not currently in use. */
     static final Logger log = LoggerFactory.getLogger(Addenda.class);
     
-    // TODO Document.
-    private final List<Addendum> listOfBootstraps = new ArrayList<Addendum>();
+    /** A list of changes to apply to the database. */
+    private final List<Addendum> updates = new ArrayList<Addendum>();
     
-    // TODO Document.
-    private final List<Addendum> listOfChanges = new ArrayList<Addendum>();
-    
-    // TODO Document.
-    private final String updateTable;
-    
-    // TODO Document.
-    private final String updateColumn;
-    
-    // TODO Document.
-    public Addenda(String updateTable, String updateColumn)
+    /**
+     * Update versions are stored in the data sources return by this connection
+     * server.
+     */
+    private final Connector connector;
+
+    /**
+     * Create a collection of changes that tracks version updates in the data
+     * source returned by the given connection server.
+     * 
+     * @param connections
+     *            The database connection server.
+     */
+    public Addenda(Connector connector)
     {
-        this.updateTable = updateTable;
-        this.updateColumn = updateColumn;
+        this.connector = connector;
     }
-    
-    // TODO Document.
-    private String selectVersion()
+
+    /**
+     * Apply all of the addenda if they are not already recored in the
+     * addenda table in the database of the associated connector.  
+     */
+    public void amend()
     {
-        return "SELECT " + updateColumn + " FROM " + updateTable;
-    }
-    
-    // TODO Document.
-    private String updateVersion()
-    {
-        return "UPDATE " + updateTable + " SET " + updateColumn + " = ?";
-    }
-    
-    // TODO Document.
-    public void change(Connection connection) throws SQLException, AddendumException
-    {
-        tryChange(connection);
-    }
-    
-    // TODO Document.
-    public void tryChange(Connection connection) throws SQLException, AddendumException
-    {
-        DatabaseMetaData metaData = connection.getMetaData();
-        ResultSet results = metaData.getTables(null, null, updateTable, null);
-        if (results.next())
+        Connection connection = connector.open();
+        Dialect countDialect;
+        try
         {
-            results.close();
-
-            log.debug("Updating schema using version at " +
-                updateTable + "." + updateColumn + " as starting point.");
-
-            Statement st = connection.createStatement();
-            ResultSet versions = st.executeQuery(selectVersion());
-            if (versions.next())
-            {
-                int version = versions.getInt(1);
-                
-                versions.close();
-
-                log.debug("Updating schema starting at version " + version + ".");
-                
-                log.info("There are currently " + listOfChanges.size() + " patches.");
-                
-                for (int i = version; i < listOfChanges.size(); i++)
-                {
-                    listOfChanges.get(i).execute(connection);
-                    PreparedStatement statement = connection.prepareStatement(updateVersion());
-                    statement.setInt(1, i + 1);
-                    statement.execute();
-                    if (!connection.getAutoCommit())
-                    {
-                        connection.commit();
-                    }
-                }
-            }
+            countDialect = DialectLibrary.getInstance().getDialect(connection);
         }
-        else
+        catch (SQLException e)
         {
-            results.close();
-            
-            results = metaData.getTables(null, null, null, null);
-            
-            boolean next = results.next();
-            
-            results.close();
-
-            if (next)
+            throw new AddendumException(AddendumException.SQL_CREATE_ADDENDA, e);
+        }
+        int max;
+        try
+        {
+            max = countDialect.addendaCount(connection);
+        }
+        catch (SQLException e)
+        {
+            throw new AddendumException(AddendumException.SQL_ADDENDA_COUNT, e);
+        }
+        for (int i = max; i < updates.size(); i++)
+        {
+            updates.get(i).execute();
+            try
             {
-                log.info("Cannot find upgrade update number table " + updateTable + ".");
+                countDialect.addendum(connection);
             }
-            else
+            catch (SQLException e)
             {
-                for (Addendum addendum : listOfBootstraps)
-                {
-                    addendum.execute(connection);
-                }
-                
-                tryChange(connection);
+                throw new AddendumException(AddendumException.SQL_ADDENDUM, e);
             }
         }
     }
-    
-    // TODO Document.
-    public void addBootstrap(Addendum addendum)
-    {
-        listOfBootstraps.add(addendum);
-    }
-    
-    // TODO Document.
+
+    /**
+     * Add the given addendum to the set of addenda. The addendum will be
+     * executed in order, after any addenda added before this adendum, and
+     * before any addenda added after this addendum.
+     * 
+     * @param addendum
+     *            The addendum.
+     */
     public void add(Addendum addendum)
     {
-        listOfChanges.add(addendum);
+        updates.add(addendum);
     }
 }
 

@@ -6,37 +6,67 @@ import java.sql.Statement;
 
 
 /**
- * TODO ScriptAddendum that would call out to other addendum scripts, so
- * that you could provide scripts for different database languages, but 
- * keep common custom addendums.
+ * Executes any SQL statement against a JDBC database.
  * 
  * @author Alan Gutierrez
  */
-@ReadBy(SqlAddendumReader.class)
 public final class SqlAddendum
 implements Addendum
 {
-    // TODO Document.
-    private final String sql;
+    /** The connector to the relational database. */
+    private final Connector connector;
     
-    // TODO Document.
-    public SqlAddendum(String sql)
+    /** The SQL statement to execute. */
+    private final String sql;
+
+    /**
+     * Create an SQL addendum that will execute the given SQL statement on the
+     * database associated with the given connector.
+     * 
+     * @param connector
+     *            The connector to the relational database.
+     * @param sql
+     *            The SQL statement to execute.
+     */
+    public SqlAddendum(Connector connector, String sql)
     {
         if (sql == null)
         {
-            throw new IllegalStateException();
+            throw new NullPointerException();
         }
 
+        this.connector = connector;
         this.sql = sql;
     }
-    
-    // TODO Document.
-    public void execute(Connection connection) throws SQLException, AddendumException
+
+    /**
+     * Execute the SQL statement given by the sql property on the relational
+     * database associated with the connection property.
+     */
+    public void execute()
     {
-        Addenda.log.info("Executing SQL statement <" + sql + ">");
-        Statement statement = connection.createStatement();
-        statement.execute(sql);
-        statement.close();
+        Statement statement;
+        Connection connection = connector.open();
+        try
+        {
+            statement = connection.createStatement();
+            statement.execute(sql);
+        }
+        catch (SQLException e)
+        {
+            throw new AddendumException(AddendumException.SQL_EXECUTION, e);
+        }
+        finally
+        {
+            try
+            {
+                connection.close();
+            }
+            catch (SQLException e)
+            {
+                throw new AddendumException(AddendumException.SQL_EXECUTION, e);
+            }
+        }
     }
 }
 /* vim: set et sw=4 ts=4 ai tw=78 nowrap: */

@@ -9,18 +9,32 @@ application database schema.
 
 MOTIVATION
 
-Addendum was written after I was tripped up by automatic schema updates
-via JPA and Hiberate. The automatic updates were not magic enough to
-implement all of the changes I wanted to see in my underlying schema.
+Addendum was written after I was tripped up by automatic schema updates via JPA
+and Hiberate. The automatic updates were not magic enough to implement all of
+the changes I wanted to see in my underlying schema.
 
-Additionally, there was a time when changes to file system directory
-structures accompanied a schema update. I wanted to run some Java code
-to shuffle the files, based on the changes to the schema.
+Additionally, there was a time when changes to file system directory structures
+accompanied a schema update. I wanted to run some Java code to shuffle the
+files, based on the changes to the schema.
 
-Automatic building of schemas by Hibernate created more problems than it
-solved. Addendum builds a database from a bootstrap point, adding
-changes one after another.
+Automatic building of schemas by Hibernate created more problems than it solved.
+Addendum builds a database from a bootstrap point, adding changes one after
+another.
 
-Assuming a linear progression of changes, updates and not merges, you
-can deploy an application and have it patch the schema from where ever
-it last left off.
+Assuming a linear progression of changes, updates and not merges, you can deploy
+an application and have it patch the schema from where ever it last left off, or
+you can deploy an application for the first time, and have it build a database
+by applying patches from zero.
+
+Addendum delegates DDL to a dialect library that will generate SQL DDL based on
+a domain-specific language. You use the DSL to describe the tables that back the
+object in your application using either Java types or abstracted SQL types. The
+dialect will map your type definitions to the specific SQL type definitions of
+the underlying database.
+
+LIMITATIONS
+
+Unlike Ruby on Rails migrations, Addendum provides no facility for undoing an
+addendum. That adds a lot of code for something that never really works. If you
+want to be able to reset the database to a previous state, make sure to create a
+backup using the backup facilities of RDMS.
