@@ -43,6 +43,9 @@ extends RuntimeException
     /** Unable to execute a SQL migration statement. */
     public final static int SQL_EXECUTION = 308;
     
+    /** Insert statement DSL values count does not match column count. */
+    public final static int INSERT_VALUES = 401;
+    
     /** A list of arguments to the formatted error message. */
     private final List<Object> arguments = new ArrayList<Object>();
 

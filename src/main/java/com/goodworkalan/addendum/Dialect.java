@@ -71,4 +71,6 @@ public interface Dialect
      *            The list of primary key fields.
      */
     public void createTable(Connection connection, String name, List<Column<?, ?>> columns, List<String> primaryKey) throws SQLException, AddendumException;
+    
+    public void insert(Connection connection, String table, List<String> columns, List<String> values)throws SQLException;
 }

@@ -55,4 +55,16 @@ public class Schema
     {
         return new AddColumn(this, tableName, name, columnType);
     }
+
+    /**
+     * Create an insert statement that will insert values into the database.
+     * 
+     * @param table
+     *            The name of the table to update.
+     * @return An insert builder.
+     */
+    public Insert insert(String table)
+    {
+        return new Insert(this, new Insertion(table));
+    }
 }

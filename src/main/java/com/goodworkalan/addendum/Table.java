@@ -67,6 +67,7 @@ public class Table
         return this;
     }
 
+
     /**
      * Terminate the table definition and return the schema.
      * 

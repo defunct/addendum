@@ -91,6 +91,11 @@ public class Addenda
     {
         updates.add(addendum);
     }
+    
+    public Schema addendum()
+    {
+        return null;
+    }
 }
 
 /* vim: set et sw=4 ts=4 ai tw=78 nowrap: */

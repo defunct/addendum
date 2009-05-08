@@ -38,3 +38,8 @@ Unlike Ruby on Rails migrations, Addendum provides no facility for undoing an
 addendum. That adds a lot of code for something that never really works. If you
 want to be able to reset the database to a previous state, make sure to create a
 backup using the backup facilities of RDMS.
+
+There are helper methods for generating SQL in the DSL, but they do not ensure
+the type safety of the SQL statements. Addendum will not trap the use of the DSL
+to generate an insert statement to populate an SQL NUMBER column with a 'Hello,
+World!' string.
