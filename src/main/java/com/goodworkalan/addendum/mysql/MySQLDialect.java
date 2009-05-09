@@ -9,8 +9,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 
-import com.goodworkalan.addendum.AddendumException;
-import com.goodworkalan.addendum.Column;
 import com.goodworkalan.addendum.Dialect;
 
 /**
@@ -26,6 +24,19 @@ public class MySQLDialect extends Dialect
      */
     public MySQLDialect()
     {
+        super();
+        setType(Types.BIT, "BIT");
+        setType(Types.BOOLEAN, "BIT");
+        setType(Types.TINYINT, "TINYINT");
+        setType(Types.SMALLINT, "SMALLINT");
+        setType(Types.INTEGER, "INTEGER");
+        setType(Types.BIGINT, "BIGINT");
+        setType(Types.FLOAT, "FLOAT");
+        setType(Types.DOUBLE, "DOUBLE");
+        setType(Types.VARCHAR, "VARCHAR(%1$d)", 255);
+        setType(Types.VARCHAR, "TEXT");
+        setType(Types.TIMESTAMP, "TIMESTAMP");
+        setType(Types.NUMERIC, "NUMERIC(%2$d, %3%d)");
     }
     
     /**
