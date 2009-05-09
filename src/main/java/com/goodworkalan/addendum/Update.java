@@ -24,5 +24,5 @@ interface Update
      * @throws AddendumException
      *             For any error occurring during the update.
      */
-    public void execute(Connection connection, Dialect dialect) throws SQLException, AddendumException;
+    public void execute(Connection connection, Dialect dialect) throws SQLException;
 }

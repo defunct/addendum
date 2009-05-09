@@ -20,7 +20,7 @@ public class Addenda
     static final Logger log = LoggerFactory.getLogger(Addenda.class);
     
     /** A list of changes to apply to the database. */
-    private final List<Addendum> updates = new ArrayList<Addendum>();
+    private final List<Addendum> addenda = new ArrayList<Addendum>();
     
     /**
      * Update versions are stored in the data sources return by this connection
@@ -44,7 +44,7 @@ public class Addenda
      * Apply all of the addenda if they are not already recored in the
      * addenda table in the database of the associated connector.  
      */
-    public void amend()
+    public void amend() throws SQLException    
     {
         Connection connection = connector.open();
         Dialect countDialect;
@@ -65,9 +65,9 @@ public class Addenda
         {
             throw new AddendumException(AddendumException.SQL_ADDENDA_COUNT, e);
         }
-        for (int i = max; i < updates.size(); i++)
+        for (int i = max; i < addenda.size(); i++)
         {
-            updates.get(i).execute();
+            addenda.get(i).execute();
             try
             {
                 countDialect.addendum(connection);
@@ -81,7 +81,7 @@ public class Addenda
 
     /**
      * Add the given addendum to the set of addenda. The addendum will be
-     * executed in order, after any addenda added before this adendum, and
+     * executed in order, after any addenda added before this addendum, and
      * before any addenda added after this addendum.
      * 
      * @param addendum
@@ -89,12 +89,21 @@ public class Addenda
      */
     public void add(Addendum addendum)
     {
-        updates.add(addendum);
+        addenda.add(addendum);
     }
     
     public Schema addendum()
     {
-        return null;
+        return addendum(connector);
+    }
+
+    public Schema addendum(Connector connector)
+    {
+        List<Update> updates = new ArrayList<Update>();
+        Addendum addendum = new Addendum(connector, updates);
+        Schema schema = new Schema(updates);
+        addenda.add(addendum);
+        return schema;
     }
 }
 

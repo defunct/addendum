@@ -67,4 +67,8 @@ public class Schema
     {
         return new Insert(this, new Insertion(table));
     }
+    
+    public void commit()
+    {
+    }
 }

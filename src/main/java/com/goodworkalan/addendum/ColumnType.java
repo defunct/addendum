@@ -9,5 +9,5 @@ package com.goodworkalan.addendum;
  */
 public enum ColumnType
 {
-    TEXT, VARCHAR, NUMBER, INTEGER
+    TEXT, VARCHAR, NUMBER, INTEGER, LONG, DATE
 }

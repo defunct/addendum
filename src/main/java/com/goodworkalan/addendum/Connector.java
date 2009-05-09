@@ -2,7 +2,17 @@ package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 
+/**
+ * Opens and closes a connection to a JDBC data source.
+ * 
+ * @author Alan Gutierrez
+ */
 public interface Connector
 {
+    /**
+     * Open a connection to a JDBC data source.
+     * 
+     * @return A JDBC connection. 
+     */
     public Connection open();
 }
