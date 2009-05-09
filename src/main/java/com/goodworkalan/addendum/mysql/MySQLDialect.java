@@ -2,9 +2,11 @@ package com.goodworkalan.addendum.mysql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 
 import com.goodworkalan.addendum.AddendumException;
@@ -17,7 +19,7 @@ import com.goodworkalan.addendum.Dialect;
  * 
  * @author Alan Gutierrez
  */
-public class MySQLDialect implements Dialect
+public class MySQLDialect extends Dialect
 {
     /**
      * Create a new MySQL dialect.
@@ -74,107 +76,47 @@ public class MySQLDialect implements Dialect
         return connection.getMetaData().getDatabaseProductName().equals("MySQL");
     }
 
-    /**
-     * Create a table at the given connection with the given name, given columns
-     * and the given primary key fields.
-     * 
-     * @param connection
-     *            The database connection.
-     * @param name
-     *            The table name.
-     * @param columns
-     *            The list of column definitions.
-     * @param primaryKey
-     *            The list of primary key fields.
-     */
-    public void createTable(Connection connection, String name, List<Column<?, ?>> columns, List<String> primaryKey) throws SQLException, AddendumException
+    public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException
     {
         StringBuilder sql = new StringBuilder();
         
-        sql.append("CREATE TABLE ").append(name).append(" (\n");
+        sql.append("INSERT INTO ").append(table).append("(");
         
         String separator = "";
-        for (Column<?, ?> column : columns)
-        {
-            sql.append(separator);
-            sql.append(column.getName()).append(" ");
         
-            int length = 0;
-            boolean precision = false;
-            
-            switch (column.getColumnType())
-            {
-            case INTEGER:
-                sql.append("INTEGER");
-                break;
-            case VARCHAR:
-                sql.append("VARCHAR");
-                length = 255;
-                break;
-            case NUMBER:
-                sql.append("NUMBER");
-                length = 255;
-                precision = true;
-                break;
-            case TEXT:
-                sql.append("TEXT");
-                break;
-            }
-            
-            if (length != 0)
-            {
-                if (column.getLength() != 0)
-                {
-                    length = column.getLength();
-                }
-
-                if (precision)
-                {
-                    
-                }
-                else
-                {
-                    sql.append("(").append(length).append(")");
-                }
-            }
-            
-            if (column.isNotNull())
-            {
-                sql.append(" NOT NULL");
-            }
-            
-            switch (column.getGeneratorType())
-            {
-            case NONE:
-                break;
-            case PREFERRED:
-            case AUTO_INCREMENT:
-                sql.append(" AUTO_INCREMENT");
-                break;
-            case SEQUENCE:
-                throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
-            }
-            
-            separator = ",\n";
+        for (String column : columns)
+        {
+            sql.append(separator).append(column);
+            separator = ", ";
         }
         
-        if (!primaryKey.isEmpty())
-        {
-            sql.append(separator);
-            sql.append("PRIMARY KEY (");
-            String keySeparator = "";
-            for (String key : primaryKey)
-            {
-                sql.append(keySeparator).append(key);
-                keySeparator = ", ";
-            }
-            sql.append(")");
-        }
-
-        sql.append("\n)");
+        sql.append(")\n");
         
-        Statement statement = connection.createStatement();
-        statement.execute(sql.toString());
+        sql.append("VALUES(");
+        
+        separator = "";
+        for (int i = 0; i < values.size(); i++)
+        {
+            sql.append(separator).append("?");
+            separator = ", ";
+        }
+        
+        PreparedStatement statement = connection.prepareStatement(sql.toString());
+        
+        for (int i = 0; i < values.size(); i++)
+        {
+            String value = values.get(i);
+            if (value == null)
+            {
+                statement.setNull(i + 1, Types.VARCHAR);
+            }
+            else
+            {
+                statement.setString(i + 1, value);
+            }
+        }
+        
+        statement.execute();
         statement.close();
     }
 }
