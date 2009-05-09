@@ -23,9 +23,9 @@ public class AddColumn extends Column<Schema, AddColumn>
      * @param name
      *            The column name.
      * @param columnType
-     *            Type column type.
+     *            Type SQL column type.
      */
-    AddColumn(Schema schema, String tableName, String name, ColumnType columnType)
+    AddColumn(Schema schema, String tableName, String name, int columnType)
     {
         super(schema, name, columnType);
         this.tableName = tableName;

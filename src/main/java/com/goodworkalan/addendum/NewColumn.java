@@ -15,11 +15,11 @@ public class NewColumn extends Column<Table, NewColumn>
      * @param table
      *            The table language element.
      * @param name
-     *            The column name.
+     *            The  SQL column name.
      * @param columnType
      *            Type column type.
      */
-    public NewColumn(Table table, String name, ColumnType columnType)
+    public NewColumn(Table table, String name, int columnType)
     {
         super(table, name, columnType);
     }

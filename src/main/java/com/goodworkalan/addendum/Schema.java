@@ -49,9 +49,9 @@ public class Schema
      * @param name
      *            The column name.
      * @param columnType
-     *            Type column type.
+     *            Type SQL column type.
      */
-    public AddColumn addColumn(String tableName, String name, ColumnType columnType)
+    public AddColumn addColumn(String tableName, String name, int columnType)
     {
         return new AddColumn(this, tableName, name, columnType);
     }

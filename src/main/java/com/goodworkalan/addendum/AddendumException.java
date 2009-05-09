@@ -25,6 +25,9 @@ extends RuntimeException
     /** The requested generator type is not supported by the SQL dialect. */
     public final static int DIALECT_DOES_NOT_SUPPORT_GENERATOR = 101;
     
+    /** The dialog does not support a specific SQL type. */
+    public final static int DIALECT_DOES_NOT_SUPPORT_TYPE = 102;
+    
     /** Unable to open an SQL connection due to a JNI naming error. */
     public final static int NAMING_EXCEPTION = 201;
     

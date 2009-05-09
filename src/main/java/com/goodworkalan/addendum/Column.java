@@ -21,8 +21,8 @@ public abstract class Column<Container, Builder>
     /** The name of the column. */
     private String name;
     
-    /** The type of the column. */
-    private ColumnType columnType;
+    /** The SQL type of the column. */
+    private int columnType;
 
     /** The default value. */
     private String defaultValue;
@@ -35,6 +35,9 @@ public abstract class Column<Container, Builder>
 
     /** The column precision. */
     private int precision;
+    
+    /** The column scale. */
+    private int scale;
     
     /** The unique id generator type. */
     private GeneratorType generatorType;
@@ -49,7 +52,7 @@ public abstract class Column<Container, Builder>
      * @param columnType
      *            The column type.
      */
-    Column(Container container, String name, ColumnType columnType)
+    Column(Container container, String name, int columnType)
     {
         this.container = container;
         this.name = name;
@@ -75,11 +78,11 @@ public abstract class Column<Container, Builder>
     }
 
     /**
-     * Get the column type.
+     * Get the SQL column type.
      * 
-     * @return The column type.
+     * @return The SQL column type.
      */
-    public ColumnType getColumnType()
+    public int getColumnType()
     {
         return columnType;
     }
@@ -146,6 +149,28 @@ public abstract class Column<Container, Builder>
     public int getPrecision()
     {
         return precision;
+    }
+    
+    /**
+     * Set the column scale to the given precision.
+     * 
+     * @param precision
+     *            The column precision.
+     */
+    public void setScale(int scale)
+    {
+        this.scale = scale;
+    }
+    
+    
+    /**
+     * Get the column scale.
+     * 
+     * @return The column scale.
+     */
+    public int getScale()
+    {
+        return scale;
     }
 
     /**

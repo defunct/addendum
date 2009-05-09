@@ -1,7 +1,9 @@
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,8 +72,26 @@ class Insertion implements Update
     }
 
     public void execute(Connection connection, Dialect dialect) 
-        throws SQLException, AddendumException
+        throws SQLException
     {
-        dialect.insert(connection, table, columns, values);
+        String sql = dialect.insert(table, columns, values);
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        
+        for (int i = 0; i < values.size(); i++)
+        {
+            String value = values.get(i);
+            if (value == null)
+            {
+                statement.setNull(i + 1, Types.VARCHAR);
+            }
+            else
+            {
+                statement.setString(i + 1, value);
+            }
+        }
+        
+        statement.execute();
+        statement.close();
     }
 }
