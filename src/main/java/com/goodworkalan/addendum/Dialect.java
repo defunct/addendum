@@ -57,7 +57,7 @@ public abstract class Dialect
      */
     protected void setType(int type, String name, int maxLength)
     {
-        if (!typeNames.containsKey(name))
+        if (!typeNames.containsKey(type))
         {
             typeNames.put(type, new TreeMap<Integer, String>());
             setType(type, name, maxLength);
@@ -79,7 +79,7 @@ public abstract class Dialect
      * @throws SQLException
      *             For any SQL error.
      */
-    public abstract void createAddenda(Connection connection) throws SQLException;
+    public abstract void createAddendaTable(Connection connection) throws SQLException;
     
     /**
      * Get the maximum update applied.
@@ -147,6 +147,10 @@ public abstract class Dialect
             for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet())
             {
                 if (length > name.getKey())
+                {
+                    continue;
+                }
+                else if (pattern != null)
                 {
                     break;
                 }

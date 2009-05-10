@@ -56,6 +56,7 @@ public class Addenda
         {
             throw new AddendumException(AddendumException.SQL_CREATE_ADDENDA, e);
         }
+        countDialect.createAddendaTable(connection);
         int max;
         try
         {
