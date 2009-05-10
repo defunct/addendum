@@ -33,7 +33,7 @@ public class MySQLDialect extends Dialect
         setType(Types.BIGINT, "BIGINT");
         setType(Types.FLOAT, "FLOAT");
         setType(Types.DOUBLE, "DOUBLE");
-        setType(Types.VARCHAR, "VARCHAR(%1$d)", 255);
+        setType(Types.VARCHAR, "VARCHAR(%1$d)", 65535);
         setType(Types.VARCHAR, "TEXT");
         setType(Types.TIMESTAMP, "TIMESTAMP");
         setType(Types.NUMERIC, "NUMERIC(%2$d, %3%d)");
@@ -48,7 +48,7 @@ public class MySQLDialect extends Dialect
      * @throws SQLException
      *             For any SQL error.
      */
-    public void createAddenda(Connection connection) throws SQLException
+    public void createAddendaTable(Connection connection) throws SQLException
     {
         DatabaseMetaData metaData = connection.getMetaData();
         ResultSet results = metaData.getTables(null, null, "Addenda", null);
@@ -66,6 +66,7 @@ public class MySQLDialect extends Dialect
     {
         Statement statement = connection.createStatement();
         ResultSet results = statement.executeQuery("SELECT COALESCE(MAX(addendum), 0) FROM Addenda");
+        results.next();
         int max = results.getInt(1);
         results.close();
         return max;
@@ -74,7 +75,8 @@ public class MySQLDialect extends Dialect
     public void addendum(Connection connection) throws SQLException
     {
         Statement statement = connection.createStatement();
-        statement.execute("INSERT INTO Addenda(addendum) values(SELECT COALESCE(MAX(addendum), 0) + 1 FROM Addenda)");
+        statement.execute("INSERT INTO Addenda SELECT COALESCE(MAX(addendum), 0) + 1 FROM Addenda");
+        statement.close();
     }
     
     /**
