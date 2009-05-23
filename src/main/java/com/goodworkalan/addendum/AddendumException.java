@@ -8,8 +8,6 @@ import java.util.ResourceBundle;
 /**
  * A general purpose exception that indicates that an error occurred in one 
  * of the classes in the sheaf package.
- * <p>
- * FIXME Assign error codes to static constants.
  *   
  * @author Alan Gutierrez
  */
@@ -31,7 +29,7 @@ extends RuntimeException
     /** Unable to open an SQL connection due to a JNI naming error. */
     public final static int NAMING_EXCEPTION = 201;
     
-    /** Unable to connect to an SQL data source. */
+    /** Unable to connect to a JDBC data source. */
     public final static int SQL_CONNECT = 301;
     
     /** Unable to create the update table to track updates. */
@@ -45,6 +43,9 @@ extends RuntimeException
     
     /** Unable to execute a SQL migration statement. */
     public final static int SQL_EXECUTION = 308;
+    
+    /** Unable to close a JDBC data source. */
+    public final static int SQL_CLOSE = 399;
     
     /** Insert statement DSL values count does not match column count. */
     public final static int INSERT_VALUES = 401;

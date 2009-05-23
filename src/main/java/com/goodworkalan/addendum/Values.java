@@ -12,7 +12,17 @@ public class Values
     
     /** The update action that will insert the record. */
     private final Insertion insertion;
-    
+
+    /**
+     * Create a values element that will specify the values for the given
+     * insertion. The end method of the insert statement will return the given
+     * schema.
+     * 
+     * @param schema
+     *            The root language element for schema definitions.
+     * @param insertion
+     *            The update action that will insert the record.
+     */
     Values(Schema schema, Insertion insertion)
     {
         this.schema = schema;

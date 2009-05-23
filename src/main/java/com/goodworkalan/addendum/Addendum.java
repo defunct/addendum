@@ -4,10 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-
 /**
- * Performs a single update an aspect of a web applicaiton's configuration,
- * database or data files.
+ * A collection of updates to performed on an SQL database or on related data
+ * structures in an application.
  * 
  * @author Alan Gutierrez
  */
@@ -39,6 +38,7 @@ class Addendum
         {
             update.execute(connection, dialect);
         }
+        connector.close(connection);
     }
 }
 

@@ -92,12 +92,29 @@ public class Addenda
     {
         addenda.add(addendum);
     }
-    
+
+    /**
+     * Create a new addendum that will make zero, one or more changes to a the
+     * database associated with the connector of this addenda, or to any other
+     * data resources in the application.
+     * 
+     * @param connector
+     *            A database connection server.
+     * @return A domain-specific language element used to specify updates to the
+     *         database.
+     */
     public Schema addendum()
     {
         return addendum(connector);
     }
 
+    /**
+     * Create a new addendum that will make zero, one or more changes to a
+     * the database associated with the given connector.
+     *   
+     * @param connector A database connection server.
+     * @return A domain-specific language element used to specify updates to the database.
+     */
     public Schema addendum(Connector connector)
     {
         List<Update> updates = new ArrayList<Update>();

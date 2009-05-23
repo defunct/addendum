@@ -15,4 +15,12 @@ public interface Connector
      * @return A JDBC connection. 
      */
     public Connection open();
+
+    /**
+     * Close a JDBC connection created by this connector.
+     * 
+     * @param connection
+     *            A JDBC connection created by this connector.
+     */
+    public void close(Connection connection);
 }

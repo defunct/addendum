@@ -64,7 +64,18 @@ public abstract class Dialect
         }
         typeNames.get(type).put(maxLength, name);
     }
-    
+
+    /**
+     * Sets the default precision and scale for the given SQL type to the given
+     * precision and the given scale.
+     * 
+     * @param type
+     *            The SQL type.
+     * @param precision
+     *            The default precision.
+     * @param scale
+     *            The default scale.
+     */
     protected void setDefaultPrecisionScale(int type, int precision, int scale)
     {
         defaultPrecisionScale.put(type, new int[] { precision, scale });

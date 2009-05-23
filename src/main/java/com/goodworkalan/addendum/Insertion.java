@@ -71,6 +71,17 @@ class Insertion implements Update
         }
     }
 
+    /**
+     * Insert the record described by this insertion statement into the database
+     * at the given connection with the given database dialect.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param dialect
+     *            The SQL dialect.
+     * @throws SQLException
+     *             For any SQL error.
+     */
     public void execute(Connection connection, Dialect dialect) 
         throws SQLException
     {
