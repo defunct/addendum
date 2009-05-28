@@ -157,9 +157,10 @@ public abstract class Column<Container, Builder>
      * @param precision
      *            The column precision.
      */
-    public void setScale(int scale)
+    public Builder scale(int scale)
     {
         this.scale = scale;
+        return getBuilder();
     }
     
     

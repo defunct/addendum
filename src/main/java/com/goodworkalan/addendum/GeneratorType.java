@@ -4,6 +4,8 @@ package com.goodworkalan.addendum;
  * An enumeration to indicate the type of unique id generator for a key column.
  * 
  * @author Alan Gutierrez
+ * 
+ * FIXME Nix this. USE JTA?
  */
 public enum GeneratorType
 {
