@@ -36,7 +36,7 @@ public class MySQLDialect extends Dialect
         setType(Types.VARCHAR, "VARCHAR(%1$d)", 65535);
         setType(Types.VARCHAR, "TEXT");
         setType(Types.TIMESTAMP, "TIMESTAMP");
-        setType(Types.NUMERIC, "NUMERIC(%2$d, %3%d)");
+        setType(Types.NUMERIC, "NUMERIC(%2$d, %3$d)");
     }
     
     /**
