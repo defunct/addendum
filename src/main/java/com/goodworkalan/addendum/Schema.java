@@ -65,7 +65,9 @@ public class Schema
      */
     public Insert insert(String table)
     {
-        return new Insert(this, new Insertion(table));
+        Insertion insertion = new Insertion(table);
+        updates.add(insertion);
+        return new Insert(this, insertion);
     }
     
     public void commit()

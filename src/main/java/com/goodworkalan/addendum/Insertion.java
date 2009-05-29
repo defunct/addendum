@@ -67,7 +67,7 @@ class Insertion implements Update
         }
         for (String value : vals)
         {
-            columns.add(value);
+            values.add(value);
         }
     }
 
