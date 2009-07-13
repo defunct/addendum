@@ -70,6 +70,13 @@ public class Schema
         return new Insert(this, insertion);
     }
     
+    public Schema execute(Runnable runnable)
+    {
+        Execution execution = new Execution(runnable);
+        updates.add(execution);
+        return this;
+    }
+    
     public void commit()
     {
     }
