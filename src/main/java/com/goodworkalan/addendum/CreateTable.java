@@ -16,7 +16,7 @@ public class CreateTable implements Update
     private final String name;
     
     /** The list of column definitions. */
-    private final List<Column<?, ?>> columns;
+    private final List<DefineColumn<?, ?>> columns;
     
     /** The list of primary key fields. */
     private final List<String> primaryKey;
@@ -31,7 +31,7 @@ public class CreateTable implements Update
      * @param primaryKey
      *            The list of primary key fields.
      */
-    public CreateTable(String name, List<Column<?, ?>> columns, List<String> primaryKey)
+    public CreateTable(String name, List<DefineColumn<?, ?>> columns, List<String> primaryKey)
     {
         this.name = name;
         this.columns = columns;

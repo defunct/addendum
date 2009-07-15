@@ -1,97 +1,86 @@
 package com.goodworkalan.addendum;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A table in the domain-specific language used by {@link DatabaseAddendum} to
- * define database update actions.
- * 
- * @author Alan Gutierrez
- */
 public class Table
 {
-    /** The root language element. */
     private final Schema schema;
 
-    /** The list of column definitions. */
-    private final List<Column<?, ?>> columns;
+    private String tableName;
     
-    /** The primary key columns of the table. */
-    private final List<String> primaryKey;
+    private final List<Update> updates;
+    
+    private final List<DefineColumn<?, ?>> addColumns;
 
-    /**
-     * Create a table builder with the given root language element.
-     * 
-     * @param schema
-     *            The root language element.
-     * @param columns
-     *            The list of column definitions.
-     * @param primaryKey
-     *            The primary key columns.
-     */
-    Table(Schema schema, String name, List<Column<?, ?>> columns, List<String> primaryKey)
+    private final List<DefineColumn<?, ?>> verifyColumns;
+    
+    public Table(Schema schema, String name, List<Update> updates)
     {
         this.schema = schema;
-        this.columns = columns;
-        this.primaryKey = primaryKey;
+        this.tableName = name;
+        this.updates = updates;
+        this.addColumns  = new ArrayList<DefineColumn<?,?>>();
+        this.verifyColumns = new ArrayList<DefineColumn<?,?>>();
     }
-
-    /**
-     * Define a new column in the table with the given name and given column
-     * type.
-     * 
-     * @param name
-     *            The column name.
-     * @param columnType
-     *            The SQL column type.
-     * @return A column builder.
-     */
-    public NewColumn column(String name, int columnType)
+    
+    public Table rename(String newName)
     {
-        NewColumn newColumn =  new NewColumn(this, name, columnType);
-        columns.add(newColumn);
-        return newColumn;
-    }
-
-    /**
-     * Define a new column in the table with the given name and a column type
-     * appropriate for the given Java primitive.
-     * 
-     * @param name
-     *            The column name.
-     * @param columnType
-     *            The native column type.
-     * @return A column builder.
-     */
-    public NewColumn column(String name, Class<?> nativeType)
-    {
-        NewColumn newColumn =  new NewColumn(this, name, nativeType);
-        columns.add(newColumn);
-        return newColumn;
-    }
-
-    /**
-     * Define the primary key of the table.
-     * 
-     * @param columns
-     *            The primary key column names.
-     * @return This builder to continue building.
-     */
-    public Table primaryKey(String... columns)
-    {
-        primaryKey.addAll(Arrays.asList(columns));
+        updates.add(new RenameTable(tableName, newName));
+        tableName = newName;
         return this;
     }
-
-
+    
+    
     /**
-     * Terminate the table definition and return the schema.
+     * Add a new column to the table named by the given table name with the
+     * given name and given column type.
      * 
-     * @return The schema.
+     * @param tableName
+     *            The name of the table in which to add the new column.
+     * @param name
+     *            The column name.
+     * @param columnType
+     *            Type SQL column type.
      */
+    public AddColumn addColumn(String name, int columnType)
+    {
+        AddColumn column = new AddColumn(this, name, columnType);
+        addColumns.add(column);
+        return column;
+    }
+    
+    public AddColumn addColumn(String name, Class<?> columnType)
+    {
+        AddColumn column = new AddColumn(this, name, columnType);
+        addColumns.add(column);
+        return column;
+    }
+    
+    public AlterColumn alterColumn(String name)
+    {
+        AlterColumn column = new AlterColumn(this, name);
+        updates.add(new ColumnAlteration(tableName, name, column));
+        return column;
+    }
+    
+    public AlterColumn alterColumn(String oldName, String newName)
+    {
+        AlterColumn column = new AlterColumn(this, newName);
+        updates.add(new ColumnAlteration(tableName, oldName, column));
+        return column;
+    }
+    
+    public VerifyColumn verifyColumn(String name, Class<?> columnType)
+    {
+        VerifyColumn column = new VerifyColumn(this, name, columnType);
+        verifyColumns.add(column);
+        return column;
+    }
+    
     public Schema end()
     {
+        updates.add(new AlterTable(tableName, addColumns, verifyColumns));
         return schema;
     }
 }

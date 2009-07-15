@@ -7,17 +7,14 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AddColumn extends Column<Schema, AddColumn>
+public class AddColumn extends DefineColumn<Table, AddColumn>
 {
-    /** The name of the table in which to add the new column. */
-    private final String tableName;
-
     /**
      * Add a new column to the table named by the given table name with the
      * given name and given column type.
      * 
-     * @param schema
-     *            The root language element.
+     * @param table
+     *            The table language element.
      * @param tableName
      *            The name of the table in which to add the new column.
      * @param name
@@ -25,20 +22,14 @@ public class AddColumn extends Column<Schema, AddColumn>
      * @param columnType
      *            Type SQL column type.
      */
-    AddColumn(Schema schema, String tableName, String name, int columnType)
+    AddColumn(Table table, String name, int columnType)
     {
-        super(schema, name, columnType);
-        this.tableName = tableName;
+        super(table, name, columnType);
     }
     
-    /**
-     * Get the name of the table in which to add the new column.
-     * 
-     * @return The name of the table in which to add the new column.
-     */
-    public String getTableName()
+    AddColumn(Table schema, String name, Class<?> nativeType)
     {
-        return tableName;
+        this(schema, name, DefineColumn.getColumnType(nativeType));
     }
     
     /**

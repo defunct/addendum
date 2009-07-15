@@ -2,6 +2,7 @@ package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,14 +138,14 @@ public abstract class Dialect
      * @param primaryKey
      *            The list of primary key fields.
      */
-    public String createTable(String tableName, List<Column<?, ?>> columns, List<String> primaryKey) throws SQLException
+    public String createTable(String tableName, List<DefineColumn<?, ?>> columns, List<String> primaryKey) throws SQLException
     {
         StringBuilder sql = new StringBuilder();
         
         sql.append("CREATE TABLE ").append(tableName).append(" (\n");
         
         String separator = "";
-        for (Column<?, ?> column : columns)
+        for (DefineColumn<?, ?> column : columns)
         {
             sql.append(separator).append(column.getName()).append(" ");
         
@@ -205,6 +206,104 @@ public abstract class Dialect
 
         sql.append("\n)");
         
+        return sql.toString();
+    }
+    
+    public void columnDefinition(StringBuilder sql, DefineColumn<?, ?> column, boolean canNull)
+    {
+        sql.append(column.getName()).append(" ");
+        String pattern = null;
+        
+        int length = column.getLength();
+        
+        if (!typeNames.containsKey(column.getColumnType()))
+        {
+            throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
+        }
+
+        for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet())
+        {
+            if (length > name.getKey())
+            {
+                continue;
+            }
+            else if (pattern != null)
+            {
+                break;
+            }
+            pattern = name.getValue();
+        }
+        
+        sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
+        
+        if (canNull && column.isNotNull())
+        {
+            sql.append(" NOT NULL");
+        }
+        
+        switch (column.getGeneratorType())
+        {
+        case NONE:
+            break;
+        case PREFERRED:
+        case AUTO_INCREMENT:
+            sql.append(" AUTO_INCREMENT");
+            break;
+        case SEQUENCE:
+            throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+        }
+        
+        if (column.getDefaultValue() != null)
+        {
+            // FIXME Escape string values.
+            sql.append(" DEFAULT ").append(column.getDefaultValue());
+        }
+    }
+    
+    public void alterColumn(Connection connection, String tableName, String oldName, DefineColumn<?, ?> column) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+        StringBuilder sql = new StringBuilder();
+        sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");
+        columnDefinition(sql, column, true);
+        statement.execute(sql.toString());
+        statement.close();
+    }
+    
+    
+    public void addColumn(Connection connection, String tableName, DefineColumn<?, ?> column) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+        
+        StringBuilder addSql = new StringBuilder();
+        addSql.append("ALTER TABLE ").append(tableName).append(" ADD ");
+        columnDefinition(addSql, column, false);
+        
+        statement.execute(addSql.toString());
+        
+        if (column.isNotNull())
+        {
+            StringBuilder updateSql = new StringBuilder();
+            updateSql.append("UPDATE ").append(tableName).append(" SET ").append(column.getName()).append(" = ").append(column.getDefaultValue()).append(" ");
+            
+            statement.execute(updateSql.toString());
+            
+            StringBuilder alterSql = new StringBuilder();
+            alterSql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(column.getName()).append(" ").append(column.getName()).append(" ");
+            columnDefinition(alterSql, column, true);
+            
+            statement.execute(alterSql.toString());
+        }
+    }
+    
+    public void verifyColumn(Connection connection, String tableName, DefineColumn<?, ?> column) throws SQLException
+    {
+    }
+
+    public String renameTable(String oldName, String newName)
+    {
+        StringBuilder sql = new StringBuilder();
+        sql.append("RENAME TABLE ").append(oldName).append(" TO ").append(newName);
         return sql.toString();
     }
 

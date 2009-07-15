@@ -32,29 +32,19 @@ public class Schema
      *            The table name.
      * @return This schema to continue building.
      */
-    public Table createTable(String name)
+    public NewTable createTable(String name)
     {
-        List<Column<?, ?>> columns = new ArrayList<Column<?,?>>();
+        List<DefineColumn<?, ?>> columns = new ArrayList<DefineColumn<?,?>>();
         List<String> primaryKey = new ArrayList<String>();
         updates.add(new CreateTable(name, columns, primaryKey));
-        return new Table(this, name, columns, primaryKey);
+        return new NewTable(this, name, columns, primaryKey);
     }
 
-    /**
-     * Add a new column to the table named by the given table name with the
-     * given name and given column type.
-     * 
-     * @param tableName
-     *            The name of the table in which to add the new column.
-     * @param name
-     *            The column name.
-     * @param columnType
-     *            Type SQL column type.
-     */
-    public AddColumn addColumn(String tableName, String name, int columnType)
+    public Table alterTable(String name)
     {
-        return new AddColumn(this, tableName, name, columnType);
+        return new Table(this, name, updates);
     }
+
 
     /**
      * Create an insert statement that will insert values into the database.
@@ -75,6 +65,11 @@ public class Schema
         Execution execution = new Execution(runnable);
         updates.add(execution);
         return this;
+    }
+    
+    public <T> T run(T runnable)
+    {
+        return runnable;
     }
     
     public void commit()

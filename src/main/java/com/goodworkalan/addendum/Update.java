@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * 
  * @author Alan Gutierrez
  */
-interface Update
+public interface Update
 {
     /**
      * Perform a database update on the given JDBC connection using the given
