@@ -3,7 +3,7 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class ColumnAlteration implements Update
+class ColumnAlteration implements Update
 {
     private final String tableName;
     

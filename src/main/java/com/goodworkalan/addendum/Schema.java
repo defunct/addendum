@@ -36,7 +36,7 @@ public class Schema
     {
         List<DefineColumn<?, ?>> columns = new ArrayList<DefineColumn<?,?>>();
         List<String> primaryKey = new ArrayList<String>();
-        updates.add(new CreateTable(name, columns, primaryKey));
+        updates.add(new TableCreate(name, columns, primaryKey));
         return new NewTable(this, name, columns, primaryKey);
     }
 

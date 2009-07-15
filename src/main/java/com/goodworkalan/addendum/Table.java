@@ -80,7 +80,7 @@ public class Table
     
     public Schema end()
     {
-        updates.add(new AlterTable(tableName, addColumns, verifyColumns));
+        updates.add(new TableAlteration(tableName, addColumns, verifyColumns));
         return schema;
     }
 }

@@ -3,7 +3,7 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class RenameTable implements Update
+class RenameTable implements Update
 {
     private final String oldName;
     

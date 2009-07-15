@@ -1,8 +1,11 @@
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -262,6 +265,13 @@ public abstract class Dialect
     
     public void alterColumn(Connection connection, String tableName, String oldName, DefineColumn<?, ?> column) throws SQLException
     {
+        DatabaseMetaData meta = connection.getMetaData();
+        ResultSet rs = meta.getColumns(null, null, tableName, column.getName());
+        if (!rs.next())
+        {
+            throw new AddendumException(0);
+        }
+        int type = rs.getInt("TYPE_NAME");
         Statement statement = connection.createStatement();
         StringBuilder sql = new StringBuilder();
         sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");

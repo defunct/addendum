@@ -10,7 +10,7 @@ import java.util.List;
  *  
  * @author Alan Gutierrez
  */
-public class CreateTable implements Update
+class TableCreate implements Update
 {
     /** The table name. */
     private final String name;
@@ -31,7 +31,7 @@ public class CreateTable implements Update
      * @param primaryKey
      *            The list of primary key fields.
      */
-    public CreateTable(String name, List<DefineColumn<?, ?>> columns, List<String> primaryKey)
+    public TableCreate(String name, List<DefineColumn<?, ?>> columns, List<String> primaryKey)
     {
         this.name = name;
         this.columns = columns;

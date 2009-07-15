@@ -3,7 +3,7 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class Execution implements Update
+class Execution implements Update
 {
     private final Runnable runnable;
     

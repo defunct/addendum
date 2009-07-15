@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AlterTable implements Update
+class TableAlteration implements Update
 {
     private final String tableName;
 
@@ -12,7 +12,7 @@ public class AlterTable implements Update
     
     private final List<DefineColumn<?, ?>> verifyColumns;
 
-    public AlterTable(String tableName, List<DefineColumn<?, ?>> updateColumns,  List<DefineColumn<?, ?>> verifyColumns)
+    public TableAlteration(String tableName, List<DefineColumn<?, ?>> updateColumns,  List<DefineColumn<?, ?>> verifyColumns)
     {   
         this.tableName = tableName;
         this.addColumns = updateColumns;
