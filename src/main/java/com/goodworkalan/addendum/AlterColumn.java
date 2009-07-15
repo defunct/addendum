@@ -1,8 +1,8 @@
 package com.goodworkalan.addendum;
 
-public class AlterColumn extends DefineColumn<Table, AlterColumn>
+public class AlterColumn extends DefineColumn<AlterTable, AlterColumn>
 {
-    public AlterColumn(Table table, String name)
+    public AlterColumn(AlterTable table, String name)
     {
         super(table, name, 0);
     }

@@ -40,9 +40,9 @@ public class Schema
         return new NewTable(this, name, columns, primaryKey);
     }
 
-    public Table alterTable(String name)
+    public AlterTable alterTable(String name)
     {
-        return new Table(this, name, updates);
+        return new AlterTable(this, name, updates);
     }
 
 

@@ -3,7 +3,7 @@ package com.goodworkalan.addendum;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table
+public class AlterTable
 {
     private final Schema schema;
 
@@ -15,7 +15,7 @@ public class Table
 
     private final List<DefineColumn<?, ?>> verifyColumns;
     
-    public Table(Schema schema, String name, List<Update> updates)
+    public AlterTable(Schema schema, String name, List<Update> updates)
     {
         this.schema = schema;
         this.tableName = name;
@@ -24,7 +24,7 @@ public class Table
         this.verifyColumns = new ArrayList<DefineColumn<?,?>>();
     }
     
-    public Table rename(String newName)
+    public AlterTable rename(String newName)
     {
         updates.add(new RenameTable(tableName, newName));
         tableName = newName;

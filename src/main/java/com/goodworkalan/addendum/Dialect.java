@@ -5,7 +5,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -271,7 +270,7 @@ public abstract class Dialect
         {
             throw new AddendumException(0);
         }
-        int type = rs.getInt("TYPE_NAME");
+        rs.close();
         Statement statement = connection.createStatement();
         StringBuilder sql = new StringBuilder();
         sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");

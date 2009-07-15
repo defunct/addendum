@@ -7,7 +7,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AddColumn extends DefineColumn<Table, AddColumn>
+public class AddColumn extends DefineColumn<AlterTable, AddColumn>
 {
     /**
      * Add a new column to the table named by the given table name with the
@@ -22,12 +22,12 @@ public class AddColumn extends DefineColumn<Table, AddColumn>
      * @param columnType
      *            Type SQL column type.
      */
-    AddColumn(Table table, String name, int columnType)
+    AddColumn(AlterTable table, String name, int columnType)
     {
         super(table, name, columnType);
     }
     
-    AddColumn(Table schema, String name, Class<?> nativeType)
+    AddColumn(AlterTable schema, String name, Class<?> nativeType)
     {
         this(schema, name, DefineColumn.getColumnType(nativeType));
     }

@@ -1,13 +1,13 @@
 package com.goodworkalan.addendum;
 
-public class VerifyColumn extends FreshColumn<Table, VerifyColumn>
+public class VerifyColumn extends FreshColumn<AlterTable, VerifyColumn>
 {
-    public VerifyColumn(Table table, String name, int columnType)
+    public VerifyColumn(AlterTable table, String name, int columnType)
     {
         super(table, name, columnType);
     }
     
-    public VerifyColumn(Table table, String name, Class<?> columnType)
+    public VerifyColumn(AlterTable table, String name, Class<?> columnType)
     {
         this(table, name, DefineColumn.getColumnType(columnType));
     }
