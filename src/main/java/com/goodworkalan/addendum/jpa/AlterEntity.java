@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.goodworkalan.addendum.ExtensionElement;
 import com.goodworkalan.addendum.Schema;
-import com.goodworkalan.addendum.Table;
+import com.goodworkalan.addendum.AlterTable;
 import com.goodworkalan.addendum.VerifyColumn;
 
 public class AlterEntity extends ExtensionElement
@@ -56,7 +56,7 @@ public class AlterEntity extends ExtensionElement
         {
             update.update(schema);
         }
-        Table table = schema.alterTable(entityInfo.getName());
+        AlterTable table = schema.alterTable(entityInfo.getName());
         for (PropertyInfo prop : entityInfo.getProperties().values())
         {
             VerifyColumn column = table.verifyColumn(prop.getName(), prop.getType());

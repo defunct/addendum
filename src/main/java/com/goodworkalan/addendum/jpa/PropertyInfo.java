@@ -292,7 +292,7 @@ public class PropertyInfo
         }
         if (!isNullable())
         {
-            column.isNotNull();
+            column.notNull();
         }
     }
     

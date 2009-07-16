@@ -1,7 +1,7 @@
 package com.goodworkalan.addendum.jpa;
 
 import com.goodworkalan.addendum.Schema;
-import com.goodworkalan.addendum.Table;
+import com.goodworkalan.addendum.AlterTable;
 
 public class RenameEntity implements Update
 {
@@ -17,8 +17,8 @@ public class RenameEntity implements Update
     
     public void update(Schema schema)
     {
-        Table table = schema.alterTable(oldName);
-        table.rename(entityInfo.getName());
+        AlterTable table = schema.alterTable(entityInfo.getName());
+        table.renameFrom(oldName);
         table.end();
     }
 }
