@@ -2,14 +2,16 @@ package com.goodworkalan.addendum.mysql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.List;
 
-import com.goodworkalan.addendum.Dialect;
+import com.goodworkalan.addendum.AbstractDialect;
+import com.goodworkalan.addendum.Column;
+import com.goodworkalan.prattle.Log;
+import com.goodworkalan.prattle.Logger;
+import com.goodworkalan.prattle.LoggerFactory;
 
 /**
  * Perform the updates defined by the domain-specific language used by
@@ -17,8 +19,10 @@ import com.goodworkalan.addendum.Dialect;
  * 
  * @author Alan Gutierrez
  */
-public class MySQLDialect extends Dialect
+public class MySQLDialect extends AbstractDialect
 {
+    private final Logger logger = LoggerFactory.getLogger(MySQLDialect.class);
+    
     /**
      * Create a new MySQL dialect.
      */
@@ -37,6 +41,12 @@ public class MySQLDialect extends Dialect
         setType(Types.VARCHAR, "TEXT");
         setType(Types.TIMESTAMP, "TIMESTAMP");
         setType(Types.NUMERIC, "NUMERIC(%2$d, %3$d)");
+    }
+    
+    @Override
+    protected Logger getLogger()
+    {
+        return logger;
     }
     
     /**
@@ -88,48 +98,34 @@ public class MySQLDialect extends Dialect
     {
         return connection.getMetaData().getDatabaseProductName().equals("MySQL");
     }
-
-    public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException
+    
+    public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
     {
+        Log info = logger.info();
+        
+        info.message("Altering column %s in table %s.", column.getName(), tableName);
+        
+        info.string("tableName", tableName).string("oldName", oldName).bean("column", column);
+        
+        Column meta = getMetaColumn(connection, tableName, oldName);
+        
+        info.bean("meta", meta);
+        
+        inherit(column, meta);
+
         StringBuilder sql = new StringBuilder();
         
-        sql.append("INSERT INTO ").append(table).append("(");
+        sql.append("ALTER TABLE ").append(tableName)
+           .append(" CHANGE ").append(oldName).append(" ");
         
-        String separator = "";
+        columnDefinition(sql, column, true);
         
-        for (String column : columns)
-        {
-            sql.append(separator).append(column);
-            separator = ", ";
-        }
+        info.string("alter", sql);
         
-        sql.append(")\n");
-        
-        sql.append("VALUES(");
-        
-        separator = "";
-        for (int i = 0; i < values.size(); i++)
-        {
-            sql.append(separator).append("?");
-            separator = ", ";
-        }
-        
-        PreparedStatement statement = connection.prepareStatement(sql.toString());
-        
-        for (int i = 0; i < values.size(); i++)
-        {
-            String value = values.get(i);
-            if (value == null)
-            {
-                statement.setNull(i + 1, Types.VARCHAR);
-            }
-            else
-            {
-                statement.setString(i + 1, value);
-            }
-        }
-        
-        statement.execute();
+        Statement statement = connection.createStatement();
+        statement.execute(sql.toString());
         statement.close();
+        
+        info.send();
     }
 }
