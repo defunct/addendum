@@ -86,19 +86,6 @@ public class Addenda
     }
 
     /**
-     * Add the given addendum to the set of addenda. The addendum will be
-     * executed in order, after any addenda added before this addendum, and
-     * before any addenda added after this addendum.
-     * 
-     * @param addendum
-     *            The addendum.
-     */
-    public void add(Addendum addendum)
-    {
-        addenda.add(addendum);
-    }
-
-    /**
      * Create a new addendum that will make zero, one or more changes to a the
      * database associated with the connector of this addenda, or to any other
      * data resources in the application.

@@ -1,7 +1,12 @@
 package com.goodworkalan.addendum.api;
 
 import java.io.File;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import org.h2.tools.Server;
 import org.testng.annotations.AfterMethod;
@@ -10,6 +15,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.Addenda;
+import com.goodworkalan.addendum.Connector;
 import com.goodworkalan.addendum.DriverManagerConnector;
 
 
@@ -61,14 +67,9 @@ public class AddendaTest
         }
         database = null;
     }
-
-    @Test
-    public void addendum() throws ClassNotFoundException, SQLException
+    
+    private void createPersonAndAddress(Addenda addenda)
     {
-        Class.forName("org.h2.Driver");
-        
-        Addenda addenda = new Addenda(new DriverManagerConnector("jdbc:h2:" + getDatabasePath(), "test", ""));
-        
         addenda
             .addendum()
                 .createTable("Person")
@@ -84,9 +85,71 @@ public class AddendaTest
                .insert("Person")
                    .columns("firstName", "lastName").values("Alan", "Gutierrez")
                    .end();
-        
-        addenda.amend();
-        
+    }
+
+    private Connector newConnector()
+    {
+        return new DriverManagerConnector("jdbc:h2:" + getDatabasePath(), "test", "");
+    }
+
+    private Addenda newAddenda() throws ClassNotFoundException
+    {
+        Class.forName("org.h2.Driver");
+        return new Addenda(newConnector());
+    }
+
+    @Test
+    public void addendum() throws ClassNotFoundException, SQLException
+    {
+        Addenda addenda = newAddenda();
+        createPersonAndAddress(addenda);
         addenda.amend();
     }
+
+    @Test
+    public void addendaTableExists() throws ClassNotFoundException, SQLException
+    {
+        Addenda addenda = newAddenda();
+        createPersonAndAddress(addenda);
+        addenda.amend();
+        addenda.amend();
+    }
+    
+    private void assertTable(Connection connection, String tableName) throws SQLException
+    {
+        ResultSet rs = connection.getMetaData().getTables(null, null, "PERSON", null);
+        assertTrue(rs.next());
+        rs.close();
+    }
+
+    private void assertColumn(Connection connection, String tableName, String name, int type) throws SQLException
+    {
+        ResultSet rs = connection.getMetaData().getColumns(null, null, "PERSON", "FIRST_NAME");
+        assertTrue(rs.next());
+        assertEquals(rs.getInt("DATA_TYPE"), type);
+        rs.close();
+    }
+
+    @Test
+    public void alterPerson()  throws ClassNotFoundException, SQLException
+    {
+        Addenda addenda = newAddenda();
+        createPersonAndAddress(addenda);
+        addenda.amend();
+        addenda
+            .addendum()
+                .alterTable("Person")
+                    .renameColumn("firstName", "first_name").end()
+                    .renameColumn("lastName", "last_name").end()
+                    .end()
+                .commit();
+        addenda.amend();
+        Connector connector = newConnector();
+        Connection connection = connector.open();
+        assertTable(connection, "PERSON");
+        assertColumn(connection, "PERSON", "FIRST_NAME", Types.VARCHAR);
+        assertColumn(connection, "PERSON", "LAST_NAME", Types.VARCHAR);
+    }
 }
+
+/* vim: set nowrap: */

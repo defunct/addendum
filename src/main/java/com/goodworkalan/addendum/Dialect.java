@@ -3,14 +3,20 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import com.goodworkalan.prattle.Log;
+import com.goodworkalan.prattle.Logger;
+import com.goodworkalan.prattle.LoggerFactory;
 
 /**
  * An implementation of {@link DatabaseAddendeum} database update actions for a
@@ -20,6 +26,8 @@ import java.util.TreeMap;
  */
 public abstract class Dialect
 {
+    private final static Logger logger = LoggerFactory.getLogger(Dialect.class)
+    ;
     /** A map of SQL type flags to their SQL type names for the dialect. */
     private final Map<Integer, SortedMap<Integer, String>> typeNames;
     
@@ -247,16 +255,19 @@ public abstract class Dialect
             sql.append(" NOT NULL");
         }
         
-        switch (column.getGeneratorType())
+        if (column.getGeneratorType() != null)
         {
-        case NONE:
-            break;
-        case PREFERRED:
-        case AUTO_INCREMENT:
-            sql.append(" AUTO_INCREMENT");
-            break;
-        case SEQUENCE:
-            throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+            switch (column.getGeneratorType())
+            {
+            case NONE:
+                break;
+            case PREFERRED:
+            case AUTO_INCREMENT:
+                sql.append(" AUTO_INCREMENT");
+                break;
+            case SEQUENCE:
+                throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+            }
         }
         
         if (column.getDefaultValue() != null)
@@ -266,21 +277,112 @@ public abstract class Dialect
         }
     }
     
-    public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
+    protected Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException
     {
-        DatabaseMetaData meta = connection.getMetaData();
-        ResultSet rs = meta.getColumns(null, null, tableName, column.getName());
+        Column column = new Column(columnName);
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT " + column.getName() + " FROM " + tableName);
+        ResultSetMetaData meta = rs.getMetaData();
+        if (meta.isAutoIncrement(1))
+        {
+            column.setGeneratorType(GeneratorType.AUTO_INCREMENT);
+        }
+        column.setColumnType(meta.getColumnType(1));
+        column.setPrecision(meta.getPrecision(1));
+        column.setScale(meta.getScale(1));
+        rs.close();
+        statement.close();
+        
+        rs = connection.getMetaData().getColumns(null, null, tableName.toUpperCase(), columnName.toUpperCase());
         if (!rs.next())
         {
             throw new AddendumException(0);
         }
-        rs.close();
-        Statement statement = connection.createStatement();
-        StringBuilder sql = new StringBuilder();
-        sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");
-        columnDefinition(sql, column, true);
-        statement.execute(sql.toString());
-        statement.close();
+        column.setNotNull(rs.getInt("NULLABLE") == DatabaseMetaData.columnNoNulls);
+        column.setDefaultValue(rs.getString("COLUMN_DEF"));
+        switch (column.getColumnType())
+        {
+        case Types.CHAR:
+        case Types.VARCHAR:
+            column.setLength(rs.getInt("COLUMN_SIZE"));
+        }
+        return column;
+    }
+    
+    public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
+    {
+        Log debug = logger.debug();
+        
+        debug.message("Altering column %s in table %s.", column.getName(), tableName);
+        
+        debug.bean("tableName", tableName).bean("oldName", oldName).bean("column", column);
+        
+        if (!oldName.equals(column.getName()))
+        {
+            String sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + oldName + " RENAME TO " + column.getName();
+            
+            debug.bean("rename", sql);
+            
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+            statement.close();
+        }
+        
+        boolean altered = column.getColumnType() != null
+                       || column.getLength() != null
+                       || column.getPrecision() != null
+                       || column.getScale() != null
+                       || column.isNotNull() != null
+                       || column.getGeneratorType() != null
+                       || column.getDefaultValue() != null;
+
+        if (altered)
+        {
+            Column meta = getMetaColumn(connection, tableName, column.getName());
+            
+            debug.bean("meta", meta);
+            
+            if (column.getColumnType() == null)
+            {
+                column.setColumnType(meta.getColumnType());
+            }
+            if (column.getLength() == null)
+            {
+                column.setLength(meta.getLength());
+            }
+            if (column.getPrecision() == null)
+            {
+                column.setPrecision(meta.getPrecision());
+            }
+            if (column.getScale() == null)
+            {
+                column.setScale(meta.getScale());
+            }
+            if (column.getDefaultValue() == null)
+            {
+                column.setDefaultValue(column.getDefaultValue());
+            }
+            if (column.isNotNull() == null)
+            {
+                column.setNotNull(column.isNotNull());
+            }
+            if (column.getGeneratorType() == null)
+            {
+                column.setGeneratorType(column.getGeneratorType());
+            }
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");
+            columnDefinition(sql, column, true);
+            
+            debug.bean("alter", sql);
+            
+            Statement statement = connection.createStatement();
+            statement.execute(sql.toString());
+            statement.close();
+        }
+        
+        debug.send();
     }
     
     

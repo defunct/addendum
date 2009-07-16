@@ -167,6 +167,7 @@ public class Column
         this.length = length;
     }
     
+    // FIXME Merge with length.
     public Integer getPrecision()
     {
         return precision;
