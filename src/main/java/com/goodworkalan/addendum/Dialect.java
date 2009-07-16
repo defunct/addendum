@@ -5,6 +5,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,14 +141,14 @@ public abstract class Dialect
      * @param primaryKey
      *            The list of primary key fields.
      */
-    public String createTable(String tableName, List<DefineColumn<?, ?>> columns, List<String> primaryKey) throws SQLException
+    public String createTable(String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException
     {
         StringBuilder sql = new StringBuilder();
         
         sql.append("CREATE TABLE ").append(tableName).append(" (\n");
         
         String separator = "";
-        for (DefineColumn<?, ?> column : columns)
+        for (Column column : columns)
         {
             sql.append(separator).append(column.getName()).append(" ");
         
@@ -178,16 +179,19 @@ public abstract class Dialect
                 sql.append(" NOT NULL");
             }
             
-            switch (column.getGeneratorType())
+            if (column.getGeneratorType() != null)
             {
-            case NONE:
-                break;
-            case PREFERRED:
-            case AUTO_INCREMENT:
-                sql.append(" AUTO_INCREMENT");
-                break;
-            case SEQUENCE:
-                throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+                switch (column.getGeneratorType())
+                {
+                case NONE:
+                    break;
+                case PREFERRED:
+                case AUTO_INCREMENT:
+                    sql.append(" AUTO_INCREMENT");
+                    break;
+                case SEQUENCE:
+                    throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+                }
             }
             
             separator = ",\n";
@@ -211,7 +215,7 @@ public abstract class Dialect
         return sql.toString();
     }
     
-    public void columnDefinition(StringBuilder sql, DefineColumn<?, ?> column, boolean canNull)
+    public void columnDefinition(StringBuilder sql, Column column, boolean canNull)
     {
         sql.append(column.getName()).append(" ");
         String pattern = null;
@@ -262,7 +266,7 @@ public abstract class Dialect
         }
     }
     
-    public void alterColumn(Connection connection, String tableName, String oldName, DefineColumn<?, ?> column) throws SQLException
+    public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
     {
         DatabaseMetaData meta = connection.getMetaData();
         ResultSet rs = meta.getColumns(null, null, tableName, column.getName());
@@ -280,7 +284,7 @@ public abstract class Dialect
     }
     
     
-    public void addColumn(Connection connection, String tableName, DefineColumn<?, ?> column) throws SQLException
+    public void addColumn(Connection connection, String tableName, Column column) throws SQLException
     {
         Statement statement = connection.createStatement();
         
@@ -305,15 +309,17 @@ public abstract class Dialect
         }
     }
     
-    public void verifyColumn(Connection connection, String tableName, DefineColumn<?, ?> column) throws SQLException
+    public void verifyColumn(Connection connection, String tableName, Column column) throws SQLException
     {
     }
 
-    public String renameTable(String oldName, String newName)
+    public void renameTable(Connection connection, String oldName, String newName) throws SQLException
     {
+        Statement statement = connection.createStatement();
         StringBuilder sql = new StringBuilder();
         sql.append("RENAME TABLE ").append(oldName).append(" TO ").append(newName);
-        return sql.toString();
+        statement.execute(sql.toString());
+        statement.close();
     }
 
     /**

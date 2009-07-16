@@ -2,20 +2,20 @@ package com.goodworkalan.addendum;
 
 public class AlterColumn extends DefineColumn<AlterTable, AlterColumn>
 {
-    public AlterColumn(AlterTable table, String name)
+    public AlterColumn(AlterTable table, Column column)
     {
-        super(table, name, 0);
+        super(table, column);
     }
     
     public AlterColumn type(int columnType)
     {
-        setColumnType(columnType);
+        column.setColumnType(columnType);
         return this;
     }
     
-    public AlterColumn type(Class<?> columnType)
+    public AlterColumn type(Class<?> nativeType)
     {
-        setColumnType(DefineColumn.getColumnType(columnType));
+        column.setColumnType(nativeType);
         return this;
     }
 

@@ -2,9 +2,9 @@ package com.goodworkalan.addendum;
 
 public abstract class FreshColumn<Container, Builder> extends DefineColumn<Container, Builder>
 {
-    public FreshColumn(Container container, String name, int columnType)
+    public FreshColumn(Container container, Column column)
     {
-        super(container, name, columnType);
+        super(container, column);
     }
 
     /**
@@ -16,7 +16,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
      */
     public Builder generator(GeneratorType generatorType)
     {
-        setGeneratorType(generatorType);
+        column.setGeneratorType(generatorType);
         return getBuilder();
     }
     
@@ -27,7 +27,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
      */
     public Builder notNull()
     {
-        setNotNull(true);
+        column.setNotNull(true);
         return getBuilder();
     }
 
@@ -40,7 +40,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
      */
     public Builder defaultValue(String defaultValue)
     {
-        setDefaultValue(defaultValue);
+        column.setDefaultValue(defaultValue);
         return getBuilder();
     }
 }

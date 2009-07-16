@@ -1,7 +1,9 @@
 package com.goodworkalan.addendum;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The root object of the domain-specific language used by
@@ -13,6 +15,8 @@ public class Schema
 {
     /** A list of updates to perform. */
     private final List<Update> updates;
+    
+    private final LinkedList<Map<String, Table>> tables;
 
     /**
      * Create a new schema.
@@ -20,9 +24,10 @@ public class Schema
      * @param updates
      *            A list to record the updates to perform.
      */
-    Schema(List<Update> updates)
+    Schema(List<Update> updates, LinkedList<Map<String, Table>> tables)
     {
         this.updates = updates;
+        this.tables = tables;
     }
 
     /**
@@ -34,15 +39,25 @@ public class Schema
      */
     public NewTable createTable(String name)
     {
-        List<DefineColumn<?, ?>> columns = new ArrayList<DefineColumn<?,?>>();
+        if (tables.getFirst().containsKey(name))
+        {
+            throw new IllegalStateException();
+        }
+        Table table = new Table(name);
+        tables.getFirst().put(name, table);
         List<String> primaryKey = new ArrayList<String>();
-        updates.add(new TableCreate(name, columns, primaryKey));
-        return new NewTable(this, name, columns, primaryKey);
+        updates.add(new TableCreate(table, primaryKey));
+        return new NewTable(this, table, primaryKey);
     }
 
     public AlterTable alterTable(String name)
     {
-        return new AlterTable(this, name, updates);
+        if (!tables.getFirst().containsKey(name))
+        {
+            tables.getFirst().put(name, new Table(name));
+        }
+        // FIXME Do not allow rename during first addendum.
+        return new AlterTable(this, name, updates, tables);
     }
 
 

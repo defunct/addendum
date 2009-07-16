@@ -17,6 +17,6 @@ class RenameTable implements Update
 
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        dialect.renameTable(oldName, newName);
+        dialect.renameTable(connection, oldName, newName);
     }
 }

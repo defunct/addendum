@@ -13,9 +13,8 @@ public class NewTable
 {
     /** The root language element. */
     private final Schema schema;
-
-    /** The list of column definitions. */
-    private final List<DefineColumn<?, ?>> columns;
+    
+    private final Table table;
     
     /** The primary key columns of the table. */
     private final List<String> primaryKey;
@@ -30,11 +29,22 @@ public class NewTable
      * @param primaryKey
      *            The primary key columns.
      */
-    NewTable(Schema schema, String name, List<DefineColumn<?, ?>> columns, List<String> primaryKey)
+    NewTable(Schema schema, Table table, List<String> primaryKey)
     {
         this.schema = schema;
-        this.columns = columns;
+        this.table = table;
         this.primaryKey = primaryKey;
+    }
+    
+    public Column newColumn(String name)
+    {
+        if (table.getColumns().containsKey(name))
+        {
+            throw new AddendumException(0);
+        }
+        Column column = new Column(name);
+        table.getColumns().put(name, column);
+        return column;
     }
 
     /**
@@ -49,9 +59,9 @@ public class NewTable
      */
     public NewColumn column(String name, int columnType)
     {
-        NewColumn newColumn =  new NewColumn(this, name, columnType);
-        columns.add(newColumn);
-        return newColumn;
+        Column column = newColumn(name);
+        column.setDefaults(columnType);
+        return new NewColumn(this, column);
     }
 
     /**
@@ -66,9 +76,9 @@ public class NewTable
      */
     public NewColumn column(String name, Class<?> nativeType)
     {
-        NewColumn newColumn =  new NewColumn(this, name, nativeType);
-        columns.add(newColumn);
-        return newColumn;
+        Column column = newColumn(name);
+        column.setDefaults(nativeType);
+        return new NewColumn(this, column);
     }
 
     /**

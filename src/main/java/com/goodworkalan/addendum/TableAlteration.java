@@ -8,11 +8,11 @@ class TableAlteration implements Update
 {
     private final String tableName;
 
-    private final List<DefineColumn<?, ?>> addColumns;
+    private final List<Column> addColumns;
     
-    private final List<DefineColumn<?, ?>> verifyColumns;
+    private final List<Column> verifyColumns;
 
-    public TableAlteration(String tableName, List<DefineColumn<?, ?>> updateColumns,  List<DefineColumn<?, ?>> verifyColumns)
+    public TableAlteration(String tableName, List<Column> updateColumns,  List<Column> verifyColumns)
     {   
         this.tableName = tableName;
         this.addColumns = updateColumns;
@@ -21,11 +21,11 @@ class TableAlteration implements Update
     
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        for (DefineColumn<?, ?> column : addColumns)
+        for (Column column : addColumns)
         {
             dialect.addColumn(connection, tableName, column);
         }
-        for (DefineColumn<?, ?> column : verifyColumns)
+        for (Column column : verifyColumns)
         {
             dialect.verifyColumn(connection, tableName, column);
         }

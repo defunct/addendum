@@ -12,11 +12,7 @@ import java.util.List;
  */
 class TableCreate implements Update
 {
-    /** The table name. */
-    private final String name;
-    
-    /** The list of column definitions. */
-    private final List<DefineColumn<?, ?>> columns;
+    private final Table table;
     
     /** The list of primary key fields. */
     private final List<String> primaryKey;
@@ -24,17 +20,14 @@ class TableCreate implements Update
     /**
      * Create a new create table update action.
      * 
-     * @param name
-     *            The table name.
-     * @param columns
-     *            The list of column definitions.
+     * @param table
+     *            The table definition.
      * @param primaryKey
      *            The list of primary key fields.
      */
-    public TableCreate(String name, List<DefineColumn<?, ?>> columns, List<String> primaryKey)
+    public TableCreate(Table table, List<String> primaryKey)
     {
-        this.name = name;
-        this.columns = columns;
+        this.table = table;
         this.primaryKey = primaryKey;
     }
 
@@ -54,7 +47,7 @@ class TableCreate implements Update
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
         Statement statement = connection.createStatement();
-        statement.execute(dialect.createTable(name, columns, primaryKey));
+        statement.execute(dialect.createTable(table.getName(), table.getColumns().values(), primaryKey));
         statement.close();
     }
 }

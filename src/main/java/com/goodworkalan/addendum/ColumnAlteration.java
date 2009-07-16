@@ -9,9 +9,9 @@ class ColumnAlteration implements Update
     
     private final String oldName;
     
-    private final DefineColumn<?, ?> column;
+    private final Column column;
     
-    public ColumnAlteration(String tableName, String oldName, DefineColumn<?, ?> column)
+    public ColumnAlteration(String tableName, String oldName, Column column)
     {
         this.tableName = tableName;
         this.oldName = oldName;

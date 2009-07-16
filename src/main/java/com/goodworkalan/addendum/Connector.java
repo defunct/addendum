@@ -1,6 +1,7 @@
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Opens and closes a connection to a JDBC data source.
@@ -14,7 +15,7 @@ public interface Connector
      * 
      * @return A JDBC connection. 
      */
-    public Connection open();
+    public Connection open() throws SQLException;
 
     /**
      * Close a JDBC connection created by this connector.
@@ -22,5 +23,5 @@ public interface Connector
      * @param connection
      *            A JDBC connection created by this connector.
      */
-    public void close(Connection connection);
+    public void close(Connection connection) throws SQLException;
 }

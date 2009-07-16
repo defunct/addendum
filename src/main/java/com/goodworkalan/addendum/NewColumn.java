@@ -15,30 +15,12 @@ public class NewColumn extends FreshColumn<NewTable, NewColumn>
      * 
      * @param table
      *            The table language element.
-     * @param name
-     *            The  SQL column name.
-     * @param columnType
-     *            Type column type.
+     * @param column
+     *            The column.
      */
-    public NewColumn(NewTable table, String name, int columnType)
+    public NewColumn(NewTable table, Column column)
     {
-        super(table, name, columnType);
-    }
-
-    /**
-     * Create a new column in the given table builder with the given name and
-     * column type for the given Java native type.
-     * 
-     * @param table
-     *            The table language element.
-     * @param name
-     *            The SQL column name.
-     * @param columnType
-     *            Type column type.
-     */
-    public NewColumn(NewTable table, String name, Class<?> nativeType)
-    {
-        super(table, name, DefineColumn.getColumnType(nativeType));
+        super(table, column);
     }
     
     /**

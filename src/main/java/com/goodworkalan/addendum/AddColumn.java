@@ -15,21 +15,12 @@ public class AddColumn extends DefineColumn<AlterTable, AddColumn>
      * 
      * @param table
      *            The table language element.
-     * @param tableName
-     *            The name of the table in which to add the new column.
-     * @param name
-     *            The column name.
-     * @param columnType
-     *            Type SQL column type.
+     * @param column
+     *            The column object.
      */
-    AddColumn(AlterTable table, String name, int columnType)
+    AddColumn(AlterTable table, Column column)
     {
-        super(table, name, columnType);
-    }
-    
-    AddColumn(AlterTable schema, String name, Class<?> nativeType)
-    {
-        this(schema, name, DefineColumn.getColumnType(nativeType));
+        super(table, column);
     }
     
     /**
@@ -53,8 +44,8 @@ public class AddColumn extends DefineColumn<AlterTable, AddColumn>
      */
     public AddColumn notNull(String defaultValue)
     {
-        setNotNull(true);
-        setDefaultValue(defaultValue);
+        column.setNotNull(true);
+        column.setDefaultValue(defaultValue);
         return this;
     }
 }
