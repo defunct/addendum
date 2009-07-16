@@ -24,6 +24,7 @@ import com.goodworkalan.prattle.LoggerFactory;
  * 
  * @author Alan Gutierrez
  */
+// FIXME Make interface and then make AbstractDialect.
 public abstract class Dialect
 {
     private final static Logger logger = LoggerFactory.getLogger(Dialect.class)
