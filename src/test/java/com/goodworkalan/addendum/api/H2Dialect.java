@@ -7,10 +7,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import com.goodworkalan.addendum.Dialect;
+import com.goodworkalan.addendum.AbstractDialect;
+import com.goodworkalan.addendum.Column;
+import com.goodworkalan.prattle.Log;
+import com.goodworkalan.prattle.Logger;
+import com.goodworkalan.prattle.LoggerFactory;
 
-public class H2Dialect extends Dialect
+public class H2Dialect extends AbstractDialect
 {
+    private final static Logger logger = LoggerFactory.getLogger(H2Dialect.class);
+
     /**
      * Create a new MySQL dialect.
      */
@@ -29,6 +35,12 @@ public class H2Dialect extends Dialect
         setType(Types.VARCHAR, "TEXT");
         setType(Types.TIMESTAMP, "TIMESTAMP");
         setType(Types.NUMERIC, "NUMERIC(%2$d, %3$d)");
+    }
+    
+    @Override
+    protected Logger getLogger()
+    {
+        return logger;
     }
     
     /**
@@ -79,5 +91,54 @@ public class H2Dialect extends Dialect
     public boolean canTranslate(Connection connection) throws SQLException
     {
         return connection.getMetaData().getDatabaseProductName().equals("H2");
+    }
+
+    public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
+    {
+        Log debug = logger.debug();
+        
+        debug.message("Altering column %s in table %s.", column.getName(), tableName);
+        
+        debug.bean("tableName", tableName).bean("oldName", oldName).bean("column", column);
+        
+        if (!oldName.equals(column.getName()))
+        {
+            String sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + oldName + " RENAME TO " + column.getName();
+            
+            debug.bean("rename", sql);
+            
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+            statement.close();
+        }
+        
+        boolean altered = column.getColumnType() != null
+                       || column.getLength() != null
+                       || column.getPrecision() != null
+                       || column.getScale() != null
+                       || column.isNotNull() != null
+                       || column.getGeneratorType() != null
+                       || column.getDefaultValue() != null;
+
+        if (altered)
+        {
+            Column meta = getMetaColumn(connection, tableName, column.getName());
+            
+            debug.bean("meta", meta);
+            
+            inherit(column, meta);
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");
+            columnDefinition(sql, column, true);
+            
+            debug.bean("alter", sql);
+            
+            Statement statement = connection.createStatement();
+            statement.execute(sql.toString());
+            statement.close();
+        }
+        
+        debug.send();
     }
 }
