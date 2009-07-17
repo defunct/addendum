@@ -44,6 +44,18 @@ public class MySQLDialect extends AbstractDialect
     }
     
     @Override
+    protected String columnCase(String columnName)
+    {
+        return columnName;
+    }
+    
+    @Override
+    protected String tableCase(String tableName)
+    {
+        return tableName;
+    }
+    
+    @Override
     protected Logger getLogger()
     {
         return logger;
