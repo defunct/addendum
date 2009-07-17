@@ -38,6 +38,18 @@ public class H2Dialect extends AbstractDialect
     }
     
     @Override
+    protected String columnCase(String columnName)
+    {
+        return columnName.toUpperCase();
+    }
+    
+    @Override
+    protected String tableCase(String tableName)
+    {
+        return tableName.toUpperCase();
+    }
+    
+    @Override
     protected Logger getLogger()
     {
         return logger;

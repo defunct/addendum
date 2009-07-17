@@ -277,11 +277,15 @@ public abstract class AbstractDialect implements Dialect
         }
     }
     
+    protected abstract String tableCase(String tableName);
+    
+    protected abstract String columnCase(String columnName);
+    
     protected Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException
     {
         Column column = new Column(columnName);
         Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT " + column.getName() + " FROM " + tableName);
+        ResultSet rs = statement.executeQuery("SELECT " + columnCase(column.getName()) + " FROM " + tableCase(tableName));
         ResultSetMetaData meta = rs.getMetaData();
         if (meta.isAutoIncrement(1))
         {
@@ -293,10 +297,10 @@ public abstract class AbstractDialect implements Dialect
         rs.close();
         statement.close();
         
-        rs = connection.getMetaData().getColumns(null, null, tableName.toUpperCase(), columnName.toUpperCase());
+        rs = connection.getMetaData().getColumns(null, null, tableCase(tableName), columnCase(columnName));
         if (!rs.next())
         {
-            throw new AddendumException(0);
+            throw new RuntimeException("Table: " + tableName + ", column: " + columnName);
         }
         column.setNotNull(rs.getInt("NULLABLE") == DatabaseMetaData.columnNoNulls);
         column.setDefaultValue(rs.getString("COLUMN_DEF"));
