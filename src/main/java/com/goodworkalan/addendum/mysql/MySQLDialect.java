@@ -133,11 +133,12 @@ public class MySQLDialect extends AbstractDialect
         columnDefinition(sql, column, true);
         
         info.string("alter", sql);
+
+        info.send();
         
         Statement statement = connection.createStatement();
         statement.execute(sql.toString());
         statement.close();
         
-        info.send();
     }
 }
