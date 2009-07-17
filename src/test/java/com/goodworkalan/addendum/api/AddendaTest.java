@@ -87,15 +87,15 @@ public class AddendaTest
                    .end();
     }
 
-    private Connector newConnector()
+    private Connector newConnector(String database)
     {
-        return new DriverManagerConnector("jdbc:h2:" + getDatabasePath(), "test", "");
+        return new DriverManagerConnector("jdbc:h2:" + database, "test", "");
     }
 
     private Addenda newAddenda() throws ClassNotFoundException
     {
         Class.forName("org.h2.Driver");
-        return new Addenda(newConnector());
+        return new Addenda(newConnector(getDatabasePath()));
     }
 
     @Test
@@ -117,14 +117,14 @@ public class AddendaTest
     
     private void assertTable(Connection connection, String tableName) throws SQLException
     {
-        ResultSet rs = connection.getMetaData().getTables(null, null, "PERSON", null);
+        ResultSet rs = connection.getMetaData().getTables(null, null, tableName, null);
         assertTrue(rs.next());
         rs.close();
     }
 
     private void assertColumn(Connection connection, String tableName, String name, int type) throws SQLException
     {
-        ResultSet rs = connection.getMetaData().getColumns(null, null, "PERSON", "FIRST_NAME");
+        ResultSet rs = connection.getMetaData().getColumns(null, null, tableName, name);
         assertTrue(rs.next());
         assertEquals(rs.getInt("DATA_TYPE"), type);
         rs.close();
@@ -144,7 +144,7 @@ public class AddendaTest
                     .end()
                 .commit();
         addenda.amend();
-        Connector connector = newConnector();
+        Connector connector = newConnector(new File(database, "temp").toString());
         Connection connection = connector.open();
         assertTable(connection, "PERSON");
         assertColumn(connection, "PERSON", "FIRST_NAME", Types.VARCHAR);
