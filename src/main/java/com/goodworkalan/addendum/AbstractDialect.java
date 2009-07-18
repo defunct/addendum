@@ -19,8 +19,9 @@ import com.goodworkalan.prattle.Log;
 import com.goodworkalan.prattle.Logger;
 
 /**
- * An implementation of {@link DatabaseAddendeum} database update actions for a
- * specific SQL dialect.
+ * An abstract dialect with default implementations of create table and insert
+ * using standard SQL. The dialect includes methods for escaping SQL and
+ * obtaining column metadata.
  * 
  * @author Alan Gutierrez
  */
@@ -41,8 +42,13 @@ public abstract class AbstractDialect implements Dialect
         this.defaultPrecisionScale = new HashMap<Integer, int[]>();
     }
 
+    /**
+     * Get the logger used to log messages from the dialect.
+     * 
+     * @return The logger.
+     */
     protected abstract Logger getLogger();
-    
+
     /**
      * Maps the given SQL type to the given SQL type name in the dialect.
      * 
@@ -149,80 +155,111 @@ public abstract class AbstractDialect implements Dialect
      * @param primaryKey
      *            The list of primary key fields.
      */
-    public String createTable(String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException
+    public void createTable(Connection connection, String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException
     {
-        StringBuilder sql = new StringBuilder();
-        
-        sql.append("CREATE TABLE ").append(tableName).append(" (\n");
-        
-        String separator = "";
-        for (Column column : columns)
+        Log info = getLogger().info();
+        try
         {
-            sql.append(separator).append(column.getName()).append(" ");
-        
-            int length = column.getLength();
-            if (!typeNames.containsKey(column.getColumnType()))
+            info.message("Creating table %s.", tableName);
+            
+            info.bean("columns", columns);
+            
+            StringBuilder sql = new StringBuilder();
+            
+            sql.append("CREATE TABLE ").append(tableName).append(" (\n");
+            
+            String separator = "";
+            for (Column column : columns)
             {
-                throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
-            }
-
-            String pattern = null;
-            for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet())
-            {
-                if (length > name.getKey())
+                sql.append(separator).append(column.getName()).append(" ");
+            
+                int length = column.getLength();
+                if (!typeNames.containsKey(column.getColumnType()))
                 {
-                    continue;
+                    throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
                 }
-                else if (pattern != null)
-                {
-                    break;
-                }
-                pattern = name.getValue();
-            }
-            
-            sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
-            
-            if (column.isNotNull())
-            {
-                sql.append(" NOT NULL");
-            }
-            
-            if (column.getGeneratorType() != null)
-            {
-                switch (column.getGeneratorType())
-                {
-                case NONE:
-                    break;
-                case PREFERRED:
-                case AUTO_INCREMENT:
-                    sql.append(" AUTO_INCREMENT");
-                    break;
-                case SEQUENCE:
-                    throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
-                }
-            }
-            
-            separator = ",\n";
-        }
-        
-        if (!primaryKey.isEmpty())
-        {
-            sql.append(separator);
-            sql.append("PRIMARY KEY (");
-            String keySeparator = "";
-            for (String key : primaryKey)
-            {
-                sql.append(keySeparator).append(key);
-                keySeparator = ", ";
-            }
-            sql.append(")");
-        }
-
-        sql.append("\n)");
-        
-        return sql.toString();
-    }
     
+                String pattern = null;
+                for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet())
+                {
+                    if (length > name.getKey())
+                    {
+                        continue;
+                    }
+                    else if (pattern != null)
+                    {
+                        break;
+                    }
+                    pattern = name.getValue();
+                }
+                
+                sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
+                
+                if (column.isNotNull())
+                {
+                    sql.append(" NOT NULL");
+                }
+                
+                if (column.getGeneratorType() != null)
+                {
+                    switch (column.getGeneratorType())
+                    {
+                    case NONE:
+                        break;
+                    case PREFERRED:
+                    case AUTO_INCREMENT:
+                        sql.append(" AUTO_INCREMENT");
+                        break;
+                    case SEQUENCE:
+                        throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+                    }
+                }
+                
+                separator = ",\n";
+            }
+            
+            if (!primaryKey.isEmpty())
+            {
+                sql.append(separator);
+                sql.append("PRIMARY KEY (");
+                String keySeparator = "";
+                for (String key : primaryKey)
+                {
+                    sql.append(keySeparator).append(key);
+                    keySeparator = ", ";
+                }
+                sql.append(")");
+            }
+    
+            sql.append("\n)");
+            
+            info.string("sql", sql);
+            
+            Statement statement = connection.createStatement();
+            statement.execute(sql.toString());
+            statement.close();
+        }
+        finally
+        {
+            info.send();
+        }
+    }
+
+    /**
+     * Append the column definition SQL to the given string buffer. If the given
+     * <code>canNull</code> parameter is false, than the <strong>
+     * <code>NOT NULL</code></strong> modifier will not be added to the column
+     * definition SQL even if the column not null property is true.
+     * 
+     * @param sql
+     *            The string buffer to which the SQL is appended.
+     * @param column
+     *            The column definition.
+     * @param canNull
+     *            If false, <strong><code>NOT NULL</code></strong> modifier
+     *            will not be added to the column definition SQL even if the
+     *            column not null property is true.
+     */
     protected void columnDefinition(StringBuilder sql, Column column, boolean canNull)
     {
         sql.append(column.getName()).append(" ");
@@ -276,11 +313,43 @@ public abstract class AbstractDialect implements Dialect
             sql.append(" DEFAULT ").append(column.getDefaultValue());
         }
     }
-    
+
+    /**
+     * Perform a case transform on the given table name for use as a metadata
+     * selection critieria.
+     * 
+     * @param tableName
+     *            The table name.
+     * @return The table name with the correct case for use as a metadata
+     *         selection critieria.
+     */
     protected abstract String tableCase(String tableName);
-    
+
+    /**
+     * Perform a case transform on the given column name for use as a metadata
+     * selection critieria.
+     * 
+     * @param columnName
+     *            The table name.
+     * @return The column name with the correct case for use as a metadata
+     *         selection critieria.
+     */
     protected abstract String columnCase(String columnName);
-    
+
+    /**
+     * Create a column contianing the column metadata for the given column in
+     * the given table.
+     * 
+     * @param connection
+     *            The JDBC conneciton.
+     * @param tableName
+     *            The table name.
+     * @param columnName
+     *            The column name.
+     * @return A column containing the column metadata.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
     protected Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException
     {
         Column column = new Column(columnName);
@@ -312,7 +381,19 @@ public abstract class AbstractDialect implements Dialect
         }
         return column;
     }
-    
+
+    /**
+     * Add a the given column definition to the the given table.
+     * 
+     * @param connection
+     *            The JDBC conneciton.
+     * @param tableName
+     *            The table name.
+     * @param column
+     *            The column definition.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
     public void addColumn(Connection connection, String tableName, Column column) throws SQLException
     {
         Log info = getLogger().info();
@@ -360,7 +441,16 @@ public abstract class AbstractDialect implements Dialect
         
         info.send();
     }
-    
+
+    /**
+     * Inhert the properties of the given full column by assigning them to
+     * unspecified values in the partial column.
+     * 
+     * @param partial
+     *            The partial column that inherits.
+     * @param full
+     *            The full column to inherit from.
+     */
     protected void inherit(Column partial, Column full)
     {
         if (partial.getColumnType() == null)
@@ -392,16 +482,50 @@ public abstract class AbstractDialect implements Dialect
             partial.setGeneratorType(full.getGeneratorType());
         }
     }
-    
+
+    /**
+     * Verify that a column in the given table has the given column definition.
+     * 
+     * @param connection
+     *            The JDBC conneciton.
+     * @param tableName
+     *            The table name.
+     * @param column
+     *            The column definition.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
     public void verifyColumn(Connection connection, String tableName, Column column) throws SQLException
     {
     }
 
+    /**
+     * Rename a table form the given old name to the given new name.
+     * 
+     * @param connection
+     *            The JDBC conneciton.
+     * @param oldName
+     *            The old table name.
+     * @param newName
+     *            The new table name.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
     public void renameTable(Connection connection, String oldName, String newName) throws SQLException
     {
-        Statement statement = connection.createStatement();
+        Log info = getLogger().info();
+        
+        info.message("Renaming table %s to %s.", oldName, newName);
+        info.string("oldName", oldName).string("newName", newName);
+
         StringBuilder sql = new StringBuilder();
         sql.append("RENAME TABLE ").append(oldName).append(" TO ").append(newName);
+        
+        info.string("sql", sql);
+        
+        info.send();
+
+        Statement statement = connection.createStatement();
         statement.execute(sql.toString());
         statement.close();
     }
@@ -422,33 +546,63 @@ public abstract class AbstractDialect implements Dialect
      * @throws SQLException
      *             For any SQL error.
      */
-    public String insert(String table, List<String> columns, List<String> values) throws SQLException
+    public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException
     {
-        StringBuilder sql = new StringBuilder();
-        
-        sql.append("INSERT INTO ").append(table).append("(");
-        
-        String separator = "";
-        
-        for (String column : columns)
+        Log info = getLogger().info();
+        try
         {
-            sql.append(separator).append(column);
-            separator = ", ";
+            info.message("Inserting record into %s.", table);
+            
+            info.string("table", table).bean("columns", columns).bean("values", values);
+            
+            StringBuilder sql = new StringBuilder();
+            
+            sql.append("INSERT INTO ").append(table).append("(");
+            
+            String separator = "";
+            
+            for (String column : columns)
+            {
+                sql.append(separator).append(column);
+                separator = ", ";
+            }
+            
+            sql.append(")\n");
+            
+            sql.append("VALUES(");
+            
+            separator = "";
+            for (int i = 0; i < values.size(); i++)
+            {
+                sql.append(separator).append("?");
+                separator = ", ";
+            }
+            
+            sql.append(")\n");
+            
+            info.string("sql", sql);
+            
+            PreparedStatement statement = connection.prepareStatement(sql.toString());
+            
+            for (int i = 0; i < values.size(); i++)
+            {
+                String value = values.get(i);
+                if (value == null)
+                {
+                    statement.setNull(i + 1, Types.VARCHAR);
+                }
+                else
+                {
+                    statement.setString(i + 1, value);
+                }
+            }
+            
+            statement.execute();
+            statement.close();
         }
-        
-        sql.append(")\n");
-        
-        sql.append("VALUES(");
-        
-        separator = "";
-        for (int i = 0; i < values.size(); i++)
+        finally
         {
-            sql.append(separator).append("?");
-            separator = ", ";
+            info.send();
         }
-        
-        sql.append(")\n");
-        
-        return sql.toString();
     }
 }

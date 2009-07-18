@@ -29,7 +29,7 @@ public class NewColumn extends FreshColumn<NewTable, NewColumn>
      * @return The builder.
      */
     @Override
-    protected NewColumn getBuilder()
+    protected NewColumn getElement()
     {
         return this;
     }

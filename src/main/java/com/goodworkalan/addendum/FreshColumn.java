@@ -17,7 +17,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
     public Builder generator(GeneratorType generatorType)
     {
         column.setGeneratorType(generatorType);
-        return getBuilder();
+        return getElement();
     }
     
     /**
@@ -28,7 +28,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
     public Builder notNull()
     {
         column.setNotNull(true);
-        return getBuilder();
+        return getElement();
     }
 
     /**
@@ -41,6 +41,6 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
     public Builder defaultValue(String defaultValue)
     {
         column.setDefaultValue(defaultValue);
-        return getBuilder();
+        return getElement();
     }
 }

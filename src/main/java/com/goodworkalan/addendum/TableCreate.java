@@ -1,6 +1,5 @@
 package com.goodworkalan.addendum;
 
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -46,8 +45,6 @@ class TableCreate implements Update
      */
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        Statement statement = connection.createStatement();
-        statement.execute(dialect.createTable(table.getName(), table.getColumns().values(), primaryKey));
-        statement.close();
+        dialect.createTable(connection, table.getName(), table.getColumns().values(), primaryKey);
     }
 }

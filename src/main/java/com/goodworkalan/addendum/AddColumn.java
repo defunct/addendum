@@ -1,9 +1,8 @@
 package com.goodworkalan.addendum;
 
 /**
- * A column builder that adds columns to an existing table in the
- * domain-specific language used by {@link DatabaseAddendeum} to define database
- * update actions.
+ * An element in the domain-specific language that adds columns to an existing
+ * table.
  * 
  * @author Alan Gutierrez
  */
@@ -29,7 +28,7 @@ public class AddColumn extends DefineColumn<AlterTable, AddColumn>
      * @return The builder.
      */
     @Override
-    protected AddColumn getBuilder()
+    protected AddColumn getElement()
     {
         return this;
     }

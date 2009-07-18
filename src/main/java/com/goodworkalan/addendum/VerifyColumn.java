@@ -8,7 +8,7 @@ public class VerifyColumn extends FreshColumn<AlterTable, VerifyColumn>
     }
 
     @Override
-    protected VerifyColumn getBuilder()
+    protected VerifyColumn getElement()
     {
         return this;
     }

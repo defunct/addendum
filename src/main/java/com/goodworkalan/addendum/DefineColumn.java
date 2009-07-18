@@ -1,34 +1,33 @@
 package com.goodworkalan.addendum;
 
-
 /**
- * A generic column builder in the domain-specific language used by
- * {@link DatabaseAddendeum} to define database update actions. There are
- * separate subclasses for column definitions for a new table and for adding
- * columns to an existing table.
+ * A generic column specification language element in the domain-specific
+ * language used to define database update actions. There are separate
+ * subclasses for column definitions for a new table, for adding columns to
+ * an existing table, and for altering existing columns.
  * 
  * @param <Container>
  *            The type of the containing domain-specific language element.
- * @param <Builder>
- *            The type of the subclassed column builder.
+ * @param <Element>
+ *            The type of the subclassed column specification language element.
  * 
  * @author Alan Gutierrez
  */
-public abstract class DefineColumn<Container, Builder>
+public abstract class DefineColumn<Container, Element>
 {
     /** The containing domain-specific language element. */
     private Container container;
     
+    /** The column definition bean. */
     protected final Column column;
+
     /**
      * Create a column with the given name and given column type.
      * 
      * @param container
-     *            The contianing language element.
-     * @param name
-     *            The column name.
-     * @param columnType
-     *            The column type.
+     *            The containing language element.
+     * @param column
+     *            The column definition bean.
      */
     DefineColumn(Container container, Column column)
     {
@@ -37,21 +36,22 @@ public abstract class DefineColumn<Container, Builder>
     }
 
     /**
-     * Return the builder to continue construction.
+     * Return the column specification language element to continue the
+     * domain-specific language statement.
      * 
-     * @return The builder.
+     * @return The column specification language element.
      */
-    protected abstract Builder getBuilder();
+    protected abstract Element getElement();
 
     /**
      * Set the column length to the given length.
      * 
      * @param length The column length.
      */
-    public Builder length(int length)
+    public Element length(int length)
     {
         column.setLength(length);
-        return getBuilder();
+        return getElement();
     }
 
     /**
@@ -60,10 +60,10 @@ public abstract class DefineColumn<Container, Builder>
      * @param precision
      *            The column precision.
      */
-    public Builder precision(int precision)
+    public Element precision(int precision)
     {
         column.setPrecision(precision);
-        return getBuilder();
+        return getElement();
     }
     
     /**
@@ -72,14 +72,15 @@ public abstract class DefineColumn<Container, Builder>
      * @param precision
      *            The column precision.
      */
-    public Builder scale(int scale)
+    public Element scale(int scale)
     {
         column.setScale(scale);
-        return getBuilder();
+        return getElement();
     }
-    
+
     /**
-     * Terminate the column definition and return the containing domain-specific langauge element.
+     * Terminate the column definition and return the containing domain-specific
+     * language element.
      * 
      * @return The table builder.
      */

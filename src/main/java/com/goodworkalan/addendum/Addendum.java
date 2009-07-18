@@ -12,11 +12,21 @@ import java.util.List;
  */
 class Addendum
 {
+    /** A factory for JDBC connections. */
     private final Connector connector;
     
     /** A list of updates to perform. */
     private final List<Update> updates;
-    
+
+    /**
+     * Create a new addendum. The given list of updates is unique to this
+     * addendum.
+     * 
+     * @param connector
+     *            A factory for JDBC connections.
+     * @param updates
+     *            A list of updates to perform.
+     */
     public Addendum(Connector connector, List<Update> updates)
     {
         this.connector = connector;

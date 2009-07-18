@@ -1,12 +1,7 @@
 package com.goodworkalan.addendum.api;
 
 import java.io.File;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertEquals;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 
 import org.h2.tools.Server;
 import org.testng.annotations.AfterMethod;
@@ -114,21 +109,6 @@ public class AddendaTest
         addenda.amend();
         addenda.amend();
     }
-    
-    private void assertTable(Connection connection, String tableName) throws SQLException
-    {
-        ResultSet rs = connection.getMetaData().getTables(null, null, tableName, null);
-        assertTrue(rs.next());
-        rs.close();
-    }
-
-    private void assertColumn(Connection connection, String tableName, String name, int type) throws SQLException
-    {
-        ResultSet rs = connection.getMetaData().getColumns(null, null, tableName, name);
-        assertTrue(rs.next());
-        assertEquals(rs.getInt("DATA_TYPE"), type);
-        rs.close();
-    }
 
     @Test
     public void alterPerson()  throws ClassNotFoundException, SQLException
@@ -144,11 +124,6 @@ public class AddendaTest
                     .end()
                 .commit();
         addenda.amend();
-        Connector connector = newConnector(new File(database, "temp").toString());
-        Connection connection = connector.open();
-        assertTable(connection, "PERSON");
-        assertColumn(connection, "PERSON", "FIRST_NAME", Types.VARCHAR);
-        assertColumn(connection, "PERSON", "LAST_NAME", Types.VARCHAR);
     }
 }
 
