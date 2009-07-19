@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A collection of {@link ApplyAddendum} instances with changes to apply to 
- * an application's data structures.
+ * A collection of {@link Addendum} instances with changes to apply to an
+ * application's data structures.
  * 
  * @author Alan Gutierrez
  */
@@ -41,7 +41,7 @@ public class Addenda
      * Create a collection of changes that tracks version updates in the data
      * source returned by the given connection server.
      * 
-     * @param connections
+     * @param connector
      *            The database connection server.
      */
     public Addenda(Connector connector)

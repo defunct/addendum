@@ -50,7 +50,7 @@ public class AssertTable
         this.columns = new ArrayList<Column>();
         this.tableName = tableName;
     }
-    
+
     /**
      * Verify that a column in the table exists and matches a specific column
      * definition. If the column does not exist in the table or that column's
@@ -63,6 +63,7 @@ public class AssertTable
      * @param name
      *            The column name.
      * @param nativeType
+     *            The native Java type.
      * @return A {@link AssertColumn} element to specify properties to verify.
      */
     public AssertColumn verifyColumn(String name)

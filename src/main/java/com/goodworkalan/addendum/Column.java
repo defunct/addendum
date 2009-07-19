@@ -186,7 +186,6 @@ public class Column
      * 
      * @param name
      *            The column name.
-     * @param name
      */
     public void setName(String name)
     {

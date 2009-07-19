@@ -206,7 +206,7 @@ public class AlterTable
      * 
      * @param name
      *            The column name.
-     * @param columnType
+     * @param nativeType
      *            The native column type.
      * @return An add column language element to define the column.
      */
