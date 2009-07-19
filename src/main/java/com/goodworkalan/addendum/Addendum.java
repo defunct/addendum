@@ -37,7 +37,7 @@ public class Addendum
      *            The table name.
      * @return This schema to continue building.
      */
-    public NewTable createTable(String name)
+    public CreateTable createTable(String name)
     {
         if (tables.getFirst().containsKey(name))
         {
@@ -47,7 +47,7 @@ public class Addendum
         tables.getFirst().put(name, table);
         List<String> primaryKey = new ArrayList<String>();
         updates.add(new TableCreate(table, primaryKey));
-        return new NewTable(this, table, primaryKey);
+        return new CreateTable(this, table, primaryKey);
     }
 
     public AlterTable alterTable(String name)
