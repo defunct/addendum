@@ -103,6 +103,8 @@ public interface Dialect
      */
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException;
 
+    public void verifyTable(Connection connection, String tableName);
+    
     /**
      * Verify that a column in the given table has the given column definition.
      * 

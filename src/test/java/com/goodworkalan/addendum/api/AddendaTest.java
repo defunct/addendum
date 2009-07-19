@@ -119,8 +119,8 @@ public class AddendaTest
         addenda
             .addendum()
                 .alterTable("Person")
-                    .renameColumn("firstName", "first_name").end()
-                    .renameColumn("lastName", "last_name").end()
+                    .alterColumn("firstName").rename("first_name").end()
+                    .alterColumn("lastName").rename("last_name").end()
                     .end()
                 .commit();
         addenda.amend();

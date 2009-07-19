@@ -6,10 +6,10 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AlterColumn extends DefineColumn<AlterTable, AlterColumn>
+public class AlterColumn extends ExistingColumn<AlterTable, AlterColumn>
 {
     /**
-     * Create an alter column elemnet that alters the given column in the given
+     * Create an alter column element that alters the given column in the given
      * table.
      * 
      * @param table
@@ -23,32 +23,16 @@ public class AlterColumn extends DefineColumn<AlterTable, AlterColumn>
     }
 
     /**
-     * Set the column type to the given column type according to
-     * <code>java.sql.Types</code>.
+     * Rename the column to the given name.
      * 
-     * @param columnType
-     *            The column type.
+     * @param name
+     *            The new column name.
      * @return This alter column element to continue the domain-specific
      *         language statement.
      */
-    public AlterColumn type(int columnType)
+    public AlterColumn rename(String name)
     {
-        column.setColumnType(columnType);
-        return this;
-    }
-
-    /**
-     * Set the column type to the given to the <code>java.sql.Types</code>
-     * column type mapped to the given native type.
-     * 
-     * @param columnType
-     *            The column type.
-     * @return This alter column element to continue the domain-specific
-     *         language statement.
-     */
-    public AlterColumn type(Class<?> nativeType)
-    {
-        column.setColumnType(nativeType);
+        column.setName(name);
         return this;
     }
 

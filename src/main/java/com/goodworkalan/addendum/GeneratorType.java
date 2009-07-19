@@ -5,11 +5,11 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  * 
- * FIXME Nix this. USE JTA?
+ * FIXME Nix this. USE JTA? No, make just like JTA.
  */
 public enum GeneratorType
 {
-    /** No unique id generation for the column. */
+    /** No generator. */
     NONE,
     /** The preferred unique id generation strategy for the SQL dialect. */
     PREFERRED,

@@ -62,7 +62,7 @@ public abstract class DefineColumn<Container, Element>
      */
     public Element precision(int precision)
     {
-        column.setPrecision(precision);
+        column.setLength(precision);
         return getElement();
     }
     

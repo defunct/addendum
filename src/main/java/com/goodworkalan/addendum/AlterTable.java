@@ -80,8 +80,8 @@ public class AlterTable
 
     /**
      * Rename the table from the given old name to the current name. This method
-     * will update all references to the name specified in the alter table
-     * statement to the given old name.
+     * will update all references to the name property of the alter table element
+     * in previous addenda to the given old name.
      * <p>
      * This method is used when definitions are driven by a library that uses
      * reflection to introspect Java objects to create table definitions. If the
@@ -217,22 +217,34 @@ public class AlterTable
         addColumns.add(column);
         return new AddColumn(this, column);
     }
-    
+
+    /**
+     * Begin an alter column statement to alter the column with the given name.
+     * 
+     * @param name
+     *            The name of the column to alter.
+     * @return An alter column language element to define the column changes.
+     */
     public AlterColumn alterColumn(String name)
     {
         Column column = newColumn(name, 0);
         updates.add(new ColumnAlteration(tableName, name, column));
         return new AlterColumn(this, column);
     }
-    
-    public AlterColumn renameColumn(String oldName, String newName)
-    {
-        Column column = newColumn(oldName, 0);
-        column.setName(newName);
-        updates.add(new ColumnAlteration(tableName, oldName, column));
-        return new AlterColumn(this, column);
-    }
-    
+
+    /**
+     * Test to see if the given column is not null and that the column name
+     * matches the old name before setting it to the new name. Returns true if
+     * the column name was set.
+     * 
+     * @param column
+     *            The column.
+     * @param newName
+     *            The new name.
+     * @param oldName
+     *            The old name.
+     * @return True if the column name was set.
+     */
     private boolean renameColumnFrom(Column column, String newName, String oldName)
     {
         if (column != null)
@@ -248,11 +260,32 @@ public class AlterTable
         }
         return false;
     }
-    
+
+    /**
+     * Rename the column from the given old name to the given new name. This
+     * method will update all references to the new name in previous addenda to
+     * the old name.
+     * <p>
+     * This method is used when definitions are driven by a library that uses
+     * reflection to introspect Java objects to create table definitions. If the
+     * Java object property is renamed, and the library is using the Java
+     * property name to generate a column name, then any place where the
+     * property name is used to define a column name for the table that maps to
+     * the Java class is updated with the old property name.
+     * <p>
+     * It is difficult to illustrate with columns, since the use case involves
+     * the Java reflection API. See {@link #renameFrom} for an example of
+     * "renaming from" with tables.
+     * 
+     * @param newName
+     *            The new column name.
+     * @param oldName
+     *            The old column name.
+     */
     public AlterColumn renameColumnFrom(String newName, String oldName)
     {
         Column alter = newColumn(newName, 0);
-        for (Map<String, Table> addendum : tables)
+        for (Map<String, Table> addendum : tables.subList(1, tables.size()))
         {
             Table table = addendum.get(tableName);
             if (table != null)
@@ -276,8 +309,6 @@ public class AlterTable
         updates.add(new ColumnAlteration(tableName, oldName, alter));
         return new AlterColumn(this, alter);
     }
-
-
 
     /**
      * Terminate the alter column statement and return the addendum parent

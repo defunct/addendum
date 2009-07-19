@@ -50,6 +50,10 @@ public class TestDialect implements Dialect
     public void renameTable(Connection connection, String oldName, String newName) throws SQLException
     {
     }
+    
+    public void verifyTable(Connection connection, String tableName)
+    {
+    }
 
     public void verifyColumn(Connection connection, String tableName, Column column) throws SQLException
     {

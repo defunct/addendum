@@ -193,7 +193,7 @@ public abstract class AbstractDialect implements Dialect
                     pattern = name.getValue();
                 }
                 
-                sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
+                sql.append(String.format(pattern, length, column.getScale()));
                 
                 if (column.isNotNull())
                 {
@@ -204,8 +204,6 @@ public abstract class AbstractDialect implements Dialect
                 {
                     switch (column.getGeneratorType())
                     {
-                    case NONE:
-                        break;
                     case PREFERRED:
                     case AUTO_INCREMENT:
                         sql.append(" AUTO_INCREMENT");
@@ -285,7 +283,7 @@ public abstract class AbstractDialect implements Dialect
             pattern = name.getValue();
         }
         
-        sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
+        sql.append(String.format(pattern, length, column.getScale()));
         
         if (canNull && column.isNotNull())
         {
@@ -296,8 +294,6 @@ public abstract class AbstractDialect implements Dialect
         {
             switch (column.getGeneratorType())
             {
-            case NONE:
-                break;
             case PREFERRED:
             case AUTO_INCREMENT:
                 sql.append(" AUTO_INCREMENT");
@@ -361,7 +357,6 @@ public abstract class AbstractDialect implements Dialect
             column.setGeneratorType(GeneratorType.AUTO_INCREMENT);
         }
         column.setColumnType(meta.getColumnType(1));
-        column.setPrecision(meta.getPrecision(1));
         column.setScale(meta.getScale(1));
         rs.close();
         statement.close();
@@ -377,6 +372,8 @@ public abstract class AbstractDialect implements Dialect
         {
         case Types.CHAR:
         case Types.VARCHAR:
+        case Types.NUMERIC:
+        case Types.DECIMAL:
             column.setLength(rs.getInt("COLUMN_SIZE"));
         }
         return column;
@@ -424,7 +421,7 @@ public abstract class AbstractDialect implements Dialect
                     .end();
             
             PreparedStatement prepared = connection.prepareStatement(updateSql.toString());
-            prepared.setString(1, column.getDefaultValue());
+            prepared.setObject(1, column.getDefaultValue());
             prepared.execute();
             
             StringBuilder alterSql = new StringBuilder();
@@ -460,10 +457,6 @@ public abstract class AbstractDialect implements Dialect
         if (partial.getLength() == null)
         {
             partial.setLength(full.getLength());
-        }
-        if (partial.getPrecision() == null)
-        {
-            partial.setPrecision(full.getPrecision());
         }
         if (partial.getScale() == null)
         {

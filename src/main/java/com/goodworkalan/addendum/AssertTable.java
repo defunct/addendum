@@ -5,6 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Begin an assert table statement to specify column assertions
+ * on a table in the database.
+ * 
+ * @author Alan Gutierrez
+ */
 public class AssertTable
 {
     /**
@@ -66,7 +72,13 @@ public class AssertTable
         columns.add(column);
         return new AssertColumn(this, column);
     }
-    
+
+    /**
+     * Terminate the assert table statement and return the assert interface of
+     * the addendum to allow further assertions or population statements.
+     * 
+     * @return The assert parent element.
+     */
     public Assert end()
     {
         return addendum;

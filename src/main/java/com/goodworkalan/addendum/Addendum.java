@@ -21,6 +21,9 @@ public class Addendum implements Execute
      * addendum.
      */
     private final LinkedList<Map<String, Table>> tables;
+    
+    /** The type of actions being defined on the addendum. */
+    private AddendumState state;
 
     /**
      * Create a new schema.
@@ -32,6 +35,7 @@ public class Addendum implements Execute
     {
         this.updates = updates;
         this.tables = tables;
+        this.state = AddendumState.WAITING;
     }
 
     /**
@@ -43,6 +47,11 @@ public class Addendum implements Execute
      */
     public CreateTable createTable(String name)
     {
+        if (state.ordinal() > AddendumState.CREATING.ordinal())
+        {
+            throw new AddendumException(0);
+        }
+        state = AddendumState.CREATING;
         if (tables.getFirst().containsKey(name))
         {
             throw new IllegalStateException();
@@ -63,12 +72,28 @@ public class Addendum implements Execute
      */
     public AlterTable alterTable(String name)
     {
+        if (state.ordinal() > AddendumState.ALTERING.ordinal())
+        {
+            throw new AddendumException(0);
+        }
+        state = AddendumState.ALTERING;
         if (!tables.getFirst().containsKey(name))
         {
             tables.getFirst().put(name, new Table(name));
         }
         // FIXME Do not allow rename during first addendum.
         return new AlterTable(this, name, updates, tables);
+    }
+
+    public AssertTable assertTable(String name)
+    {
+        if (state.ordinal() > AddendumState.ASSERTING.ordinal())
+        {
+            throw new AddendumException(0);
+        }
+        state = AddendumState.ASSERTING;
+    
+        return null;
     }
 
     /**
@@ -80,6 +105,11 @@ public class Addendum implements Execute
      */
     public Insert insert(String table)
     {
+        if (state.ordinal() > AddendumState.POPULATING.ordinal())
+        {
+            throw new AddendumException(0);
+        }
+        state = AddendumState.POPULATING;
         Insertion insertion = new Insertion(table);
         updates.add(insertion);
         return new Insert(this, insertion);
@@ -100,16 +130,12 @@ public class Addendum implements Execute
         return this;
     }
     
-    public AssertTable verifyTable(String name)
-    {
-        return null;
-    }
-
     /**
      * Terminates the addendum specification statement in the domain specific
      * language.
      */
     public void commit()
     {
+        state = AddendumState.COMMITTED;
     }
 }

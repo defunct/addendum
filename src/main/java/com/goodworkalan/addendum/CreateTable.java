@@ -37,7 +37,7 @@ public class CreateTable
         this.primaryKey = primaryKey;
     }
     
-    public Column newColumn(String name)
+    private Column newColumn(String name)
     {
         if (table.getColumns().containsKey(name))
         {
@@ -66,12 +66,13 @@ public class CreateTable
     }
 
     /**
-     * Define a new column in the table with the given name and a column type
-     * appropriate for the given Java primitive.
+     * Define a new column in the table with the given name and a
+     * <code>java.sql.Types</code> column type appropriate for the given native
+     * Java type.
      * 
      * @param name
      *            The column name.
-     * @param columnType
+     * @param nativeType
      *            The native column type.
      * @return A column builder.
      */
