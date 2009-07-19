@@ -58,11 +58,11 @@ public class CreateTable
      *            The SQL column type.
      * @return A column builder.
      */
-    public NewColumn column(String name, int columnType)
+    public CreateColumn column(String name, int columnType)
     {
         Column column = newColumn(name);
         column.setDefaults(columnType);
-        return new NewColumn(this, column);
+        return new CreateColumn(this, column);
     }
 
     /**
@@ -75,11 +75,11 @@ public class CreateTable
      *            The native column type.
      * @return A column builder.
      */
-    public NewColumn column(String name, Class<?> nativeType)
+    public CreateColumn column(String name, Class<?> nativeType)
     {
         Column column = newColumn(name);
         column.setDefaults(nativeType);
-        return new NewColumn(this, column);
+        return new CreateColumn(this, column);
     }
 
     /**

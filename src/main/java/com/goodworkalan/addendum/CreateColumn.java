@@ -7,7 +7,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class NewColumn extends FreshColumn<CreateTable, NewColumn>
+public class CreateColumn extends FreshColumn<CreateTable, CreateColumn>
 {
     /**
      * Create a new column in the given table builder with the given name and
@@ -18,7 +18,7 @@ public class NewColumn extends FreshColumn<CreateTable, NewColumn>
      * @param column
      *            The column.
      */
-    public NewColumn(CreateTable table, Column column)
+    public CreateColumn(CreateTable table, Column column)
     {
         super(table, column);
     }
@@ -29,7 +29,7 @@ public class NewColumn extends FreshColumn<CreateTable, NewColumn>
      * @return The builder.
      */
     @Override
-    protected NewColumn getElement()
+    protected CreateColumn getElement()
     {
         return this;
     }
