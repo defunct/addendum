@@ -6,16 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The root object of the domain-specific language used to define database
- * update actions.
+ * The root object of the domain-specific language used to define a database
+ * migration.
  * 
  * @author Alan Gutierrez
  */
-public class Addendum
+public class Addendum implements Execute
 {
     /** A list of updates to perform. */
     private final List<Update> updates;
     
+    /**
+     * A list of maps of table definitions by table name, one map for each
+     * addendum.
+     */
     private final LinkedList<Map<String, Table>> tables;
 
     /**
@@ -35,7 +39,7 @@ public class Addendum
      * 
      * @param name
      *            The table name.
-     * @return This schema to continue building.
+     * @return A create table element to define the new table.
      */
     public CreateTable createTable(String name)
     {
@@ -50,6 +54,13 @@ public class Addendum
         return new CreateTable(this, table, primaryKey);
     }
 
+    /**
+     * Alter an existing table with the given name.
+     * 
+     * @param name
+     *            The table name.
+     * @return An alter table element to specifiy changes to the table.
+     */
     public AlterTable alterTable(String name)
     {
         if (!tables.getFirst().containsKey(name))
@@ -60,13 +71,12 @@ public class Addendum
         return new AlterTable(this, name, updates, tables);
     }
 
-
     /**
      * Create an insert statement that will insert values into the database.
      * 
      * @param table
      *            The name of the table to update.
-     * @return An insert builder.
+     * @return An insert element to define the insert statement.
      */
     public Insert insert(String table)
     {
@@ -83,16 +93,21 @@ public class Addendum
      * @return This schema element to continue the domain-specific language
      *         statement.
      */
-    public Addendum execute(Executable executable)
+    public Execute execute(Executable executable)
     {
         Execution execution = new Execution(executable);
         updates.add(execution);
         return this;
     }
+    
+    public AssertTable verifyTable(String name)
+    {
+        return null;
+    }
 
     /**
      * Terminates the addendum specification statement in the domain specific
-     * langauge.
+     * language.
      */
     public void commit()
     {

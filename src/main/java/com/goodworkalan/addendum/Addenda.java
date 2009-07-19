@@ -25,7 +25,10 @@ public class Addenda
     /** A list of changes to apply to the database. */
     private final List<ApplyAddendum> addenda = new ArrayList<ApplyAddendum>();
     
-    /** A list of column definitions. */
+    /**
+     * A list of maps of table definitions by table name, one map for each
+     * addendum.
+     */
     private final LinkedList<Map<String, Table>> tables = new LinkedList<Map<String, Table>>();
     
     /**

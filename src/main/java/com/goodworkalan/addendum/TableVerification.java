@@ -4,23 +4,23 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-class TableAlteration implements Update
+public class TableVerification
 {
     private final String tableName;
 
-    private final List<Column> addColumns;
+    private final List<Column> verifyColumns;
 
-    public TableAlteration(String tableName, List<Column> updateColumns)
+    public TableVerification(String tableName, List<Column> updateColumns)
     {   
         this.tableName = tableName;
-        this.addColumns = updateColumns;
+        this.verifyColumns = updateColumns;
     }
     
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        for (Column column : addColumns)
+        for (Column column : verifyColumns)
         {
-            dialect.addColumn(connection, tableName, column);
+            dialect.verifyColumn(connection, tableName, column);
         }
     }
 }

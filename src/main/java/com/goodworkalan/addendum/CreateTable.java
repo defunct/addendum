@@ -12,7 +12,7 @@ import java.util.List;
 public class CreateTable
 {
     /** The root language element. */
-    private final Addendum schema;
+    private final Addendum addendum;
     
     /** The table definition bean. */
     private final Table table;
@@ -32,7 +32,7 @@ public class CreateTable
      */
     CreateTable(Addendum schema, Table table, List<String> primaryKey)
     {
-        this.schema = schema;
+        this.addendum = schema;
         this.table = table;
         this.primaryKey = primaryKey;
     }
@@ -101,8 +101,8 @@ public class CreateTable
      * 
      * @return The schema.
      */
-    public Addendum end()
+    public Create end()
     {
-        return schema;
+        return addendum;
     }
 }
