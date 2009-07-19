@@ -97,7 +97,7 @@ public class Addenda
      *         database.
      */
     // FIXME You could mix or match with a descriminator. They would still run in order.
-    public Schema addendum()
+    public Addendum addendum()
     {
         return addendum(connector);
     }
@@ -109,12 +109,12 @@ public class Addenda
      * @param connector A database connection server.
      * @return A domain-specific language element used to specify updates to the database.
      */
-    public Schema addendum(Connector connector)
+    public Addendum addendum(Connector connector)
     {
         List<Update> updates = new ArrayList<Update>();
         tables.addFirst(new HashMap<String, Table>());
         ApplyAddendum addendum = new ApplyAddendum(connector, updates);
-        Schema schema = new Schema(updates, tables);
+        Addendum schema = new Addendum(updates, tables);
         addenda.add(addendum);
         return schema;
     }

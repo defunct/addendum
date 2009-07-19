@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class AlterTable
 {
-    private final Schema schema;
+    private final Addendum schema;
 
     private String tableName;
     
@@ -26,7 +26,7 @@ public class AlterTable
     
     private final LinkedList<Map<String, Table>> tables;
     
-    public AlterTable(Schema schema, String name, List<Update> updates, LinkedList<Map<String, Table>> tables)
+    public AlterTable(Addendum schema, String name, List<Update> updates, LinkedList<Map<String, Table>> tables)
     {
         this.schema = schema;
         this.tableName = name;
@@ -171,7 +171,7 @@ public class AlterTable
         return new VerifyColumn(this, column);
     }
     
-    public Schema end()
+    public Addendum end()
     {
         updates.add(new TableAlteration(tableName, addColumns, verifyColumns));
         return schema;

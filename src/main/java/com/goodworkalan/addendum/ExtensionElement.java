@@ -2,17 +2,17 @@ package com.goodworkalan.addendum;
 
 public class ExtensionElement
 {
-    private Schema schema;
+    private Addendum schema;
     
     public ExtensionElement()
     {
     }
     
-    protected void ending(Schema schema)
+    protected void ending(Addendum schema)
     {
     }
     
-    public void setSchema(Schema schema)
+    public void setSchema(Addendum schema)
     {
         if (schema != null)
         {
@@ -21,7 +21,7 @@ public class ExtensionElement
         this.schema = schema;
     }
     
-    public Schema end()
+    public Addendum end()
     {
         ending(schema);
         return schema;

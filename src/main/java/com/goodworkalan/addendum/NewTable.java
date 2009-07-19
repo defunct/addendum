@@ -12,7 +12,7 @@ import java.util.List;
 public class NewTable
 {
     /** The root language element. */
-    private final Schema schema;
+    private final Addendum schema;
     
     /** The table definition bean. */
     private final Table table;
@@ -30,7 +30,7 @@ public class NewTable
      * @param primaryKey
      *            The primary key columns.
      */
-    NewTable(Schema schema, Table table, List<String> primaryKey)
+    NewTable(Addendum schema, Table table, List<String> primaryKey)
     {
         this.schema = schema;
         this.table = table;
@@ -101,7 +101,7 @@ public class NewTable
      * 
      * @return The schema.
      */
-    public Schema end()
+    public Addendum end()
     {
         return schema;
     }

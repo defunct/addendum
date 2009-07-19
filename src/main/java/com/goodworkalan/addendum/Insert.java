@@ -8,7 +8,7 @@ package com.goodworkalan.addendum;
 public class Insert
 {
     /** The root language element for schema definitions. */
-    private final Schema schema;
+    private final Addendum schema;
     
     /** The update action that will insert the record. */
     private final Insertion insertion;
@@ -23,7 +23,7 @@ public class Insert
      * @param insertion
      *            The update action that will insert the record.
      */
-    Insert(Schema schema, Insertion insertion)
+    Insert(Addendum schema, Insertion insertion)
     {
         this.schema = schema;
         this.insertion = insertion;

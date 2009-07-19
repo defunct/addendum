@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The root object of the domain-specific language used by
- * {@link DatabaseAddendum} to define database update actions.
+ * The root object of the domain-specific language used to define database
+ * update actions.
  * 
  * @author Alan Gutierrez
  */
-public class Schema
+public class Addendum
 {
     /** A list of updates to perform. */
     private final List<Update> updates;
@@ -24,7 +24,7 @@ public class Schema
      * @param updates
      *            A list to record the updates to perform.
      */
-    Schema(List<Update> updates, LinkedList<Map<String, Table>> tables)
+    Addendum(List<Update> updates, LinkedList<Map<String, Table>> tables)
     {
         this.updates = updates;
         this.tables = tables;
@@ -83,7 +83,7 @@ public class Schema
      * @return This schema element to continue the domain-specific language
      *         statement.
      */
-    public Schema execute(Executable executable)
+    public Addendum execute(Executable executable)
     {
         Execution execution = new Execution(executable);
         updates.add(execution);
