@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A collection of {@link Addendum} instances with changes to apply to 
+ * A collection of {@link ApplyAddendum} instances with changes to apply to 
  * an application's data structures.
  * 
  * @author Alan Gutierrez
@@ -23,7 +23,7 @@ public class Addenda
     static final Logger log = LoggerFactory.getLogger(Addenda.class);
     
     /** A list of changes to apply to the database. */
-    private final List<Addendum> addenda = new ArrayList<Addendum>();
+    private final List<ApplyAddendum> addenda = new ArrayList<ApplyAddendum>();
     
     /** A list of column definitions. */
     private final LinkedList<Map<String, Table>> tables = new LinkedList<Map<String, Table>>();
@@ -113,7 +113,7 @@ public class Addenda
     {
         List<Update> updates = new ArrayList<Update>();
         tables.addFirst(new HashMap<String, Table>());
-        Addendum addendum = new Addendum(connector, updates);
+        ApplyAddendum addendum = new ApplyAddendum(connector, updates);
         Schema schema = new Schema(updates, tables);
         addenda.add(addendum);
         return schema;

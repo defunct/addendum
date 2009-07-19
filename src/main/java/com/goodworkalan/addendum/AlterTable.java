@@ -6,6 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * An element in the domain-specific language that specifies the alteration of
+ * an existing table.
+ * 
+ * @author Alan Gutierrez
+ */
 public class AlterTable
 {
     private final Schema schema;

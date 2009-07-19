@@ -75,7 +75,7 @@ public interface Dialect
      * Add a the given column definition to the the given table.
      * 
      * @param connection
-     *            The JDBC conneciton.
+     *            The JDBC connection.
      * @param tableName
      *            The table name.
      * @param column
@@ -84,15 +84,22 @@ public interface Dialect
      *             For any reason, any reason at all.
      */
     public void addColumn(Connection connection, String tableName, Column column) throws SQLException;
-    
+
     /**
-     * Alter the column in the given table with the given name according to the given
-     * column 
+     * Alter the column in the given table with the given exiting column name
+     * according to the given column definition. This method can both rename and
+     * redefine columns.
+     * 
      * @param connection
+     *            The JDBC connection.
      * @param tableName
+     *            The table name.
      * @param oldName
+     *            The exiting column name.
      * @param column
+     *            The column definition.
      * @throws SQLException
+     *             For any reason, any reason at all.
      */
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException;
 
@@ -100,7 +107,7 @@ public interface Dialect
      * Verify that a column in the given table has the given column definition.
      * 
      * @param connection
-     *            The JDBC conneciton.
+     *            The JDBC connection.
      * @param tableName
      *            The table name.
      * @param column
@@ -114,7 +121,7 @@ public interface Dialect
      * Rename a table form the given old name to the given new name.
      * 
      * @param connection
-     *            The JDBC conneciton.
+     *            The JDBC connection.
      * @param oldName
      *            The old table name.
      * @param newName

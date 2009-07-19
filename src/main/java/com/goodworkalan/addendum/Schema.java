@@ -74,19 +74,26 @@ public class Schema
         updates.add(insertion);
         return new Insert(this, insertion);
     }
-    
-    public Schema execute(Runnable runnable)
+
+    /**
+     * Performs updates using application specific SQL statements.
+     * 
+     * @param executable
+     *            An exeuctable to execute.
+     * @return This schema element to continue the domain-specific language
+     *         statement.
+     */
+    public Schema execute(Executable executable)
     {
-        Execution execution = new Execution(runnable);
+        Execution execution = new Execution(executable);
         updates.add(execution);
         return this;
     }
-    
-    public <T> T run(T runnable)
-    {
-        return runnable;
-    }
-    
+
+    /**
+     * Terminates the addendum specification statement in the domain specific
+     * langauge.
+     */
     public void commit()
     {
     }

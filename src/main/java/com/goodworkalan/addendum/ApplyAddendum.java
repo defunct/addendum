@@ -10,7 +10,7 @@ import java.util.List;
  * 
  * @author Alan Gutierrez
  */
-class Addendum
+class ApplyAddendum
 {
     /** A factory for JDBC connections. */
     private final Connector connector;
@@ -27,7 +27,7 @@ class Addendum
      * @param updates
      *            A list of updates to perform.
      */
-    public Addendum(Connector connector, List<Update> updates)
+    public ApplyAddendum(Connector connector, List<Update> updates)
     {
         this.connector = connector;
         this.updates = updates;

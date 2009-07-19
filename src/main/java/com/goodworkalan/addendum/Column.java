@@ -6,6 +6,11 @@ import java.sql.Types;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * A mutable object that models a column specification.
+ * 
+ * @author Alan Gutierrez
+ */
 public class Column
 {
     /** The name of the column. */

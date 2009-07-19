@@ -1,11 +1,11 @@
 package com.goodworkalan.addendum;
 
 /**
- * Represents and end method for statements that cannot be continued. The insert
- * statement is followed by a columns specification then a values specification
- * then the statement ends. The values specification returns this class since
- * the only acceptable method after values is end.
- *  
+ * An end element for statements that cannot be continued. The insert statement
+ * is followed by a columns specification then a values specification then the
+ * statement ends. The values specification returns this class since the only
+ * acceptable method after values is end.
+ * 
  * @author Alan Gutierrez
  */
 public class End

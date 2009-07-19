@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A table in the domain-specific language used by {@link DatabaseAddendum} to
+ * Begins a create table statement in the domain-specific language used to
  * define database update actions.
  * 
  * @author Alan Gutierrez
@@ -14,6 +14,7 @@ public class NewTable
     /** The root language element. */
     private final Schema schema;
     
+    /** The table definition bean. */
     private final Table table;
     
     /** The primary key columns of the table. */
