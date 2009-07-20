@@ -11,7 +11,7 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
-public class Addendum implements Execute
+public class Addendum implements Extend
 {
     /** A list of updates to perform. */
     private final List<Update> updates;
@@ -36,6 +36,21 @@ public class Addendum implements Execute
         this.updates = updates;
         this.tables = tables;
         this.state = AddendumState.WAITING;
+    }
+
+    /**
+     * Begin an extension element.
+     * 
+     * @param <T>
+     *            The extension element type.
+     * @param extension
+     *            An instance of the extension element.
+     * @return The extension element.
+     */
+    public <T extends ExtensionElement> T run(T extension) 
+    {
+        extension.setAddendum(this);
+        return extension;
     }
 
     /**

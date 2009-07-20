@@ -1,29 +1,34 @@
 package com.goodworkalan.addendum;
 
+/**
+ * Sub-classes of this element extend the domain-specific language.
+ *  
+ * @author Alan Gutierrez
+ */
 public class ExtensionElement
 {
-    private Addendum schema;
+    private Addendum addendum;
     
     public ExtensionElement()
     {
     }
     
-    protected void ending(Addendum schema)
+    protected void ending(Addendum addendum)
     {
     }
     
-    public void setSchema(Addendum schema)
+    public void setAddendum(Addendum addendum)
     {
-        if (schema != null)
+        if (addendum != null)
         {
             throw new IllegalStateException();
         }
-        this.schema = schema;
+        this.addendum = addendum;
     }
     
-    public Addendum end()
+    public Extend end()
     {
-        ending(schema);
-        return schema;
+        ending(addendum);
+        return addendum;
     }
 }
