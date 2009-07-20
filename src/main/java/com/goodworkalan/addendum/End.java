@@ -11,7 +11,7 @@ package com.goodworkalan.addendum;
 public class End
 {
     /** The root language element for schema definition. */
-    private final Addendum schema;
+    private final Addendum addendum;
 
     /**
      * Create an end token.
@@ -21,7 +21,7 @@ public class End
      */
     End(Addendum schema)
     {
-        this.schema = schema;
+        this.addendum = schema;
     }
     
     /**
@@ -29,8 +29,8 @@ public class End
      * 
      * @return The schema.
      */
-    public Addendum end()
+    public Populate end()
     {
-        return schema;
+        return addendum;
     }
 }

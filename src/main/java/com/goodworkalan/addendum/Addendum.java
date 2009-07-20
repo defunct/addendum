@@ -11,7 +11,7 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
-public class Addendum implements Extend
+public class Addendum implements Execute
 {
     /** A list of updates to perform. */
     private final List<Update> updates;
@@ -39,21 +39,6 @@ public class Addendum implements Extend
     }
 
     /**
-     * Begin an extension element.
-     * 
-     * @param <T>
-     *            The extension element type.
-     * @param extension
-     *            An instance of the extension element.
-     * @return The extension element.
-     */
-    public <T extends ExtensionElement> T run(T extension) 
-    {
-        extension.setAddendum(this);
-        return extension;
-    }
-
-    /**
      * Performs updates using application specific SQL statements.
      * 
      * @param executable
@@ -66,6 +51,21 @@ public class Addendum implements Extend
         Execution execution = new Execution(executable);
         updates.add(execution);
         return this;
+    }
+
+    /**
+     * Begin a creation extension element.
+     * 
+     * @param <T>
+     *            The extension element type.
+     * @param extension
+     *            An instance of the extension element.
+     * @return The extension element.
+     */
+    public <T extends ExtensionElement<Create>> T create(T extension)
+    {
+        extension.setAddendum(this, this);
+        return extension;
     }
 
     /**

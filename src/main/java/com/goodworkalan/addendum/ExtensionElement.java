@@ -5,8 +5,10 @@ package com.goodworkalan.addendum;
  *  
  * @author Alan Gutierrez
  */
-public class ExtensionElement
+public class ExtensionElement<A>
 {
+    private A end;
+    
     /** The root domain-specific language element for this addendum. */
     private Addendum addendum;
     
@@ -35,7 +37,7 @@ public class ExtensionElement
      * @param addendum
      *            The addendum.
      */
-    void setAddendum(Addendum addendum)
+    void setAddendum(A end, Addendum addendum)
     {
         if (addendum != null)
         {
@@ -50,9 +52,9 @@ public class ExtensionElement
      * 
      * @return The {@link Extend} interface of the {@link Addendum}.
      */
-    public Extend end()
+    public A end()
     {
         ending(addendum);
-        return addendum;
+        return end;
     }
 }

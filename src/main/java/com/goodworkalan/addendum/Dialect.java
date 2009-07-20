@@ -103,6 +103,16 @@ public interface Dialect
      */
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException;
 
+    /**
+     * Verify that a table with the given table name exists in the database.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param tableName
+     *            The table name.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
     public void verifyTable(Connection connection, String tableName);
     
     /**

@@ -22,7 +22,7 @@ public abstract class DefineColumn<Container, Element>
     protected final Column column;
 
     /**
-     * Create a column with the given name and given column type.
+     * Create a column specifier with the given name and given column type.
      * 
      * @param container
      *            The containing language element.

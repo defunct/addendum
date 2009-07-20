@@ -477,6 +477,20 @@ public abstract class AbstractDialect implements Dialect
     }
 
     /**
+     * Verify that a table with the given table name exists in the database.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param tableName
+     *            The table name.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
+    public void verifyTable(Connection connection, String tableName)
+    {
+    }
+
+    /**
      * Verify that a column in the given table has the given column definition.
      * 
      * @param connection
