@@ -17,29 +17,67 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.goodworkalan.addendum.DefineColumn;
+import com.goodworkalan.addendum.ExistingColumn;
 import com.goodworkalan.addendum.FreshColumn;
 import com.goodworkalan.addendum.GeneratorType;
 
-public class PropertyInfo
+/**
+ * The database column information for a property in a JPA entity. 
+ * 
+ * @author Alan Gutierrez
+ */
+class PropertyInfo
 {
+    /** The property name. */
     private final String name;
     
+    /** The property column name. */
     private final String columnName;
     
+    /** The property Java type. */
     private final Class<?> type;
     
+    /** If true, the property is an identifier. */
     private final boolean id;
 
+    /** The property length. */
     private final int length;
     
+    /** The property precision. */
     private final int precision;
     
+    /** The property scale. */
     private final int scale;
     
+    /** If true, the property is nullable. */
     private final boolean nullable;
     
+    /** The property generation type. */
     private final GenerationType generationType;
-    
+
+    /**
+     * Create a property information.
+     * 
+     * @param name
+     *            The property name.
+     * @param columnName
+     *            The property column name.
+     * @param type
+     *            The property Java type.
+     * @param id
+     *            If true, the property is an identifier.
+     * @param length
+     *            The property length.
+     * @param precision
+     *            The property precision.
+     * @param scale
+     *            The property scale.
+     * @param nullable
+     *            If true, the property is nullable.
+     * @param generationType
+     *            The property generation type.
+     */
     public PropertyInfo(String name, String columnName, Class<?> type, boolean id, int length, int precision, int scale, boolean nullable, GenerationType generationType)
     {
         this.name = name;
@@ -53,6 +91,174 @@ public class PropertyInfo
         this.generationType = generationType;
     }
 
+    /**
+     * Get the property name.
+     * 
+     * @return The property name.
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * Get the column name.
+     * 
+     * @return The column name.
+     */
+    public String getColumnName()
+    {
+        return columnName;
+    }
+
+    /**
+     * Get the Java type.
+     * 
+     * @return The Java type.
+     */
+    public Class<?> getType()
+    {
+        return type;
+    }
+
+    /**
+     * If true, the column is an identifier.
+     * 
+     * @return True if the column is an identifier.
+     */
+    public boolean isId()
+    {
+        return id;
+    }
+
+    /**
+     * If true, the column is nullable.
+     * 
+     * @return True if the column is nullable.
+     */
+    public boolean isNullable()
+    {
+        return nullable;
+    }
+
+    /**
+     * Get the column length.
+     * 
+     * @return The column length.
+     */
+    public int getLength()
+    {
+        return length;
+    }
+    
+    /**
+     * Get the column precision.
+     * 
+     * @return The column precision.
+     */
+    public int getPrecision()
+    {
+        return precision;
+    }
+
+    /**
+     * Get the column scale.
+     * 
+     * @return The column scale.
+     */
+    public int getScale()
+    {
+        return scale;
+    }
+
+    /**
+     * Get the column generation type.
+     * 
+     * @return The column generation type.
+     */
+    public GenerationType getGenerationType()
+    {
+        return generationType;
+    }
+   
+    /**
+     * Define the column in the given column definition, setting the properties
+     * of the column definition using this property information.
+     * 
+     * @param column
+     *            A column definition.
+     */
+    public void define(FreshColumn<?, ?> column)
+    {
+        define((DefineColumn<?, ?>) column);
+        if (getGenerationType() != null)
+        {
+            switch (getGenerationType())
+            {
+            case AUTO:
+                column.generator(GeneratorType.AUTO);
+                break;
+            case IDENTITY:
+                column.generator(GeneratorType.IDENTITY);
+                break;
+            case SEQUENCE:
+                column.generator(GeneratorType.SEQUENCE);
+                break;
+            }
+        }
+        if (!isNullable())
+        {
+            column.notNull();
+        }
+    }
+    
+//    public void define(AddColumn column)
+//    {
+//        define((DefineColumn<?, ?>) column);
+        // column.notNull(defaultValue);
+//    }
+
+    /**
+     * Define the column in the given column definition, setting the properties
+     * of the column definition using this property information.
+     * 
+     * @param column
+     *            A column definition.
+     */
+    public void define(DefineColumn<?, ?> column)
+    {
+        column.length(getLength());
+        column.precision(getPrecision());
+        column.scale(getScale());
+    }
+
+    /**
+     * Define the column in the given column definition, setting the properties
+     * of the column definition using this property information.
+     * 
+     * @param column
+     *            A column definition.
+     */
+    public void define(ExistingColumn<?, ?> column)
+    {
+        define((DefineColumn<?, ?>) column);
+        column.type(type);
+    }
+
+    /**
+     * Return an array of one or two property information instances, two being
+     * created when the types for the field and the property descriptor are not
+     * equal.
+     * 
+     * @param name
+     *            The property name.
+     * @param field
+     *            The field or null if there is no field with the property name.
+     * @param desc
+     *            The property descriptor or null if there is no property
+     *            descriptor with the property name.
+     * @return An array of one or two property information instances.
+     */
     static PropertyInfo[] getInstances(String name, Field field, PropertyDescriptor desc)
     {
         if (field == null || desc == null || desc.getPropertyType().equals(field.getType()))
@@ -61,7 +267,16 @@ public class PropertyInfo
         }
         return new PropertyInfo[] { introspect(name, field, null), introspect(name, null, desc) };
     }
-    
+
+    /**
+     * Get the type of the id for a given entity class. Used to determine the
+     * types in many-to-one and one-to-one properties.
+     * 
+     * @param entityClass
+     *            The entity class.
+     * @return The type of the entity class id, or null if the entity class has
+     *         no id.
+     */
     private static Class<?> getId(Class<?> entityClass)
     {
         Class<?> current = entityClass;
@@ -99,6 +314,19 @@ public class PropertyInfo
         return null;
     }
 
+    /**
+     * Create property information based on the annotations attached to given
+     * field and property descriptor.
+     * 
+     * @param name
+     *            The property name.
+     * @param field
+     *            The field or null if there is no field with the property name.
+     * @param desc
+     *            The property descriptor or null if there is no property
+     *            descriptor with the property name.
+     * @return The property information.
+     */
     private static PropertyInfo introspect(String name, Field field, PropertyDescriptor desc)
     {
         Class<?> type = null;
@@ -223,83 +451,5 @@ public class PropertyInfo
             }
         }
         return new PropertyInfo(name, columnName, type, id, length, precision, scale, nullable, generationType);
-    }
-    
-    public String getName()
-    {
-        return name;
-    }
-    
-    public String getColumnName()
-    {
-        return columnName;
-    }
-    
-    public Class<?> getType()
-    {
-        return type;
-    }
-    
-    public boolean isId()
-    {
-        return id;
-    }
-    
-    public boolean isNullable()
-    {
-        return nullable;
-    }
-    
-    public int getLength()
-    {
-        return length;
-    }
-    
-    public int getPrecision()
-    {
-        return precision;
-    }
-    
-    public int getScale()
-    {
-        return scale;
-    }
-    
-    public GenerationType getGenerationType()
-    {
-        return generationType;
-    }
-   
-    public void setColumn(FreshColumn<?, ?> column)
-    {
-        column.length(getLength());
-        column.precision(getPrecision());
-        column.scale(getScale());
-        if (getGenerationType() != null)
-        {
-            switch (getGenerationType())
-            {
-            case AUTO:
-                column.generator(GeneratorType.PREFERRED);
-                break;
-            case IDENTITY:
-                column.generator(GeneratorType.AUTO_INCREMENT);
-                break;
-            case SEQUENCE:
-                column.generator(GeneratorType.SEQUENCE);
-                break;
-            }
-        }
-        if (!isNullable())
-        {
-            column.notNull();
-        }
-    }
-    
-    public void setColumn(com.goodworkalan.addendum.DefineColumn<?, ?> column)
-    {
-        column.length(getLength());
-        column.precision(getPrecision());
-        column.scale(getScale());
     }
 }

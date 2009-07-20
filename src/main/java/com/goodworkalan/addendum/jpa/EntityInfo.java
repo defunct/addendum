@@ -11,16 +11,39 @@ import java.util.Map;
 
 import javax.persistence.Table;
 
-public class EntityInfo
+/**
+ * Reflects upon a Java class to determine the entity information as defined by
+ * JPA annotations.
+ * 
+ * @author Alan Gutierrez
+ */
+class EntityInfo
 {
+    /** The entity name. */
     private final String name;
     
+    /** The table name mapped to the entity. */
     private final String tableName;
     
+    /** The entity class. */
     private final Class<?> entityClass;
     
+    /** The entity properties. */
     private final Map<String, PropertyInfo> properties;
-    
+
+    /**
+     * Create a new entity information with the given entity name, table name,
+     * entity class and properties.
+     * 
+     * @param name
+     *            The entity name.
+     * @param tableName
+     *            The table name mapped to the entity.
+     * @param entityClass
+     *            The entity class.
+     * @param properties
+     *            The entity properties.
+     */
     public EntityInfo(String name, String tableName, Class<?> entityClass, Map<String, PropertyInfo> properties)
     {
         this.name = name;
@@ -28,22 +51,58 @@ public class EntityInfo
         this.entityClass = entityClass;
         this.properties = Collections.unmodifiableMap(properties);
     }
-    
+
+    /**
+     * Get the entity class.
+     * 
+     * @return The entity class.
+     */
+    public Class<?> getEntityClass()
+    {
+        return entityClass;
+    }
+
+    /**
+     * Get the entity name.
+     * 
+     * @return The entity name.
+     */
     public String getName()
     {
         return name;
     }
-    
+
+    /**
+     * Get the table name mapped to the entity.
+     * 
+     * @return The table name mapped to the entity.
+     */
     public String getTableName()
     {
         return tableName;
     }
-    
+
+    /**
+     * Get an unmodifiable map of the entity properties.
+     * 
+     * @return An unmodifiable map of the entity properties.
+     */
     public Map<String, PropertyInfo> getProperties()
     {
         return properties;
     }
-    
+
+    /**
+     * A add the fields in the given entity class to the given map of fields,
+     * then call the this method on the super class. If the entity class is the
+     * <code>Object</code> class no reflection is performed and recursion
+     * terminates.
+     * 
+     * @param entityClass
+     *            The entity class.
+     * @param fields
+     *            A map of fields indexed by field name.
+     */
     private static void addFields(Class<?> entityClass, Map<String, Field> fields)
     {
         if (!entityClass.equals(Object.class))
@@ -55,7 +114,14 @@ public class EntityInfo
             addFields(entityClass.getSuperclass(), fields);
         }
     }
-    
+
+    /**
+     * Create an instance of entity information for the given entity class.
+     * 
+     * @param entityClass
+     *            The entity class.
+     * @return The entity information for the entity class.
+     */
     public static EntityInfo getInstance(Class<?> entityClass)
     {
         BeanInfo beanInfo;
@@ -103,10 +169,5 @@ public class EntityInfo
             tableName = table.name();
         }
         return new EntityInfo(name, tableName, entityClass, properties);
-    }
-    
-    public Class<?> getEntityClass()
-    {
-        return entityClass;
     }
 }

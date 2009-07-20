@@ -10,15 +10,15 @@ public class AddendumJpaPublic
     {
         addenda
             .addendum()
-                .run(new CreateEntity(Person.class)).end()
+                .create(new CreateEntity(Person.class)).end()
                 .commit();
         addenda
             .addendum()
-                .run(new AlterEntity(Person.class)).renameFrom("Employee").end()
+                .alter(new AlterEntity(Person.class)).renameFrom("Employee").end()
                 .commit();
         addenda
             .addendum()
-                .run(new AlterEntity(Person.class)).addProperty("socialSecurityNumber").end()
+                .alter(new AlterEntity(Person.class)).addProperty("socialSecurityNumber").end()
                 .commit();
     }
 }
