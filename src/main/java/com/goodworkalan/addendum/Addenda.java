@@ -97,8 +97,6 @@ public class Addenda
      * database associated with the connector of this addenda, or to any other
      * data resources in the application.
      * 
-     * @param connector
-     *            A database connection server.
      * @return A domain-specific language element used to specify updates to the
      *         database.
      */

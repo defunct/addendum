@@ -11,7 +11,7 @@ package com.goodworkalan.addendum;
  * @param <Element>
  *            The type of the sub-classed column element.
  */
-public abstract class FreshColumn<Container, Builder> extends DefineColumn<Container, Builder>
+public abstract class FreshColumn<Container, Element> extends DefineColumn<Container, Element>
 {
     /**
      * Create a column specifier with the given name and given column type.
@@ -33,7 +33,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
      *            The unique id generator type.
      * @return This column builder to continue construction.
      */
-    public Builder generator(GeneratorType generatorType)
+    public Element generator(GeneratorType generatorType)
     {
         column.setGeneratorType(generatorType);
         return getElement();
@@ -44,7 +44,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
      * 
      * @return This column builder to continue construction.
      */
-    public Builder notNull()
+    public Element notNull()
     {
         column.setNotNull(true);
         return getElement();
@@ -57,7 +57,7 @@ public abstract class FreshColumn<Container, Builder> extends DefineColumn<Conta
      *            The default column value.
      * @return This column builder to continue construction.
      */
-    public Builder defaultValue(String defaultValue)
+    public Element defaultValue(String defaultValue)
     {
         column.setDefaultValue(defaultValue);
         return getElement();

@@ -32,7 +32,7 @@ public class Values
     /**
      * Set the insert statement values.
      * 
-     * @param vals
+     * @param values
      *            The column values in the insert statement.
      * @return An end element with which to end the statement.
      * @exception AddendumException

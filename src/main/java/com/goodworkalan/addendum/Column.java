@@ -29,7 +29,7 @@ public class Column
     private Boolean notNull;
     
     /** The column length. */
-    private Integer length;
+    private Integer lengthOrPrecision;
     
     /** The column scale. */
     private Integer scale;
@@ -91,7 +91,7 @@ public class Column
     {
         setColumnType(columnType);
         setNotNull(false);
-        setLength(0);
+        setLengthOrPrecision(0);
         setScale(0);
         setDefaultValue(null);
         setGeneratorType(GeneratorType.NONE);
@@ -251,19 +251,20 @@ public class Column
      * 
      * @return The column length.
      */
-    public Integer getLength()
+    public Integer getLengthOrPrecision()
     {
-        return length;
+        return lengthOrPrecision;
     }
-    
+
     /**
-     * Set the column length.
+     * Set the column length or precision.
      * 
-     * @param length The column length.
+     * @param lengthOrPrecision
+     *            The column length or precision.
      */
-    public void setLength(Integer length)
+    public void setLengthOrPrecision(Integer lengthOrPrecision)
     {
-        this.length = length;
+        this.lengthOrPrecision = lengthOrPrecision;
     }
     
     /**
@@ -321,11 +322,12 @@ public class Column
     {
         return defaultValue;
     }
-    
+
     /**
      * Set the default value.
      * 
-     * @param defaultValue The default value.
+     * @param defaultValue
+     *            The default value.
      */
     public void setDefaultValue(Object defaultValue)
     {
@@ -342,11 +344,12 @@ public class Column
     {
         return generatorType;
     }
-    
+
     /**
      * Set the generator type.
      * 
      * @param generatorType
+     *            The generator type.
      */
     public void setGeneratorType(GeneratorType generatorType)
     {

@@ -64,8 +64,6 @@ public class VerifyTable
      * 
      * @param name
      *            The column name.
-     * @param nativeType
-     *            The native Java type.
      * @return A {@link VerifyColumn} element to specify properties to verify.
      */
     public VerifyColumn verifyColumn(String name)

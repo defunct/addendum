@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Element for a verify table statement begun by
- * {@link Addenda#verifyTable(String)} to specify a table verification performed
+ * {@link Schema#verifyTable(String)} to specify a table verification performed
  * after all addenda are applied.
  * 
  * @author Alan Gutierrez
@@ -51,9 +51,7 @@ public class SchemaTable
      * 
      * @param name
      *            The column name.
-     * @param nativeType
-     *            The native Java type.
-     * @return A {@link VerifyColumn} element to specify properties to verify.
+     * @return A {@link SchemaColumn} element to specify properties to verify.
      */
     public SchemaColumn column(String name)
     {

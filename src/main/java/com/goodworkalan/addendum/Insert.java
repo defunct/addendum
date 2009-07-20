@@ -32,7 +32,7 @@ public class Insert
     /**
      * Set the insert statement columns.
      * 
-     * @param cols
+     * @param columns
      *            The column names in the insert statement.
      * @return A values element with which to specify the insert values.
      */

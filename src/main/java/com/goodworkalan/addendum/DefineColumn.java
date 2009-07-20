@@ -50,7 +50,7 @@ public abstract class DefineColumn<Container, Element>
      */
     public Element length(int length)
     {
-        column.setLength(length);
+        column.setLengthOrPrecision(length);
         return getElement();
     }
 
@@ -62,15 +62,15 @@ public abstract class DefineColumn<Container, Element>
      */
     public Element precision(int precision)
     {
-        column.setLength(precision);
+        column.setLengthOrPrecision(precision);
         return getElement();
     }
     
     /**
      * Set the column scale to the given precision.
      * 
-     * @param precision
-     *            The column precision.
+     * @param scale
+     *            The column scale.
      */
     public Element scale(int scale)
     {

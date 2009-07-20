@@ -19,7 +19,7 @@ public class ExtensionElement<Parent>
 
     /**
      * Called when the end of the statement is called so that the extension
-     * element can define actions using the addendum.
+     * element can define actions using the parent.
      * 
      * @param parent
      *            The parent.
@@ -29,11 +29,11 @@ public class ExtensionElement<Parent>
     }
 
     /**
-     * Called from the addendum when the extension statement begins to set the
-     * addendum that is passed to {@link #ending(Addendum) ending}.
+     * Called from the parent element when the extension statement begins to set
+     * the parent that is passed to {@link #ending(Parent) ending}.
      * 
      * @param parent
-     *            The addendum.
+     *            The parent element.
      */
     void setAddendum(Parent parent)
     {
@@ -45,10 +45,9 @@ public class ExtensionElement<Parent>
     }
 
     /**
-     * Terminate the extension statement by returning the {@link Extend}
-     * interface of the addendum.
+     * Terminate the extension statement by returning the parent element.
      * 
-     * @return The {@link Extend} interface of the {@link Addendum}.
+     * @return The parent element.
      */
     public Parent end()
     {

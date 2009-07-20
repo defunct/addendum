@@ -173,7 +173,7 @@ public abstract class AbstractDialect implements Dialect
             {
                 sql.append(separator).append(column.getName()).append(" ");
             
-                int length = column.getLength();
+                int length = column.getLengthOrPrecision();
                 if (!typeNames.containsKey(column.getColumnType()))
                 {
                     throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
@@ -263,7 +263,7 @@ public abstract class AbstractDialect implements Dialect
         sql.append(column.getName()).append(" ");
         String pattern = null;
         
-        int length = column.getLength();
+        int length = column.getLengthOrPrecision();
         
         if (!typeNames.containsKey(column.getColumnType()))
         {
@@ -374,7 +374,7 @@ public abstract class AbstractDialect implements Dialect
         case Types.VARCHAR:
         case Types.NUMERIC:
         case Types.DECIMAL:
-            column.setLength(rs.getInt("COLUMN_SIZE"));
+            column.setLengthOrPrecision(rs.getInt("COLUMN_SIZE"));
         }
         return column;
     }
@@ -454,9 +454,9 @@ public abstract class AbstractDialect implements Dialect
         {
             partial.setColumnType(full.getColumnType());
         }
-        if (partial.getLength() == null)
+        if (partial.getLengthOrPrecision() == null)
         {
-            partial.setLength(full.getLength());
+            partial.setLengthOrPrecision(full.getLengthOrPrecision());
         }
         if (partial.getScale() == null)
         {
