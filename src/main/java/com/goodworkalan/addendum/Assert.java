@@ -10,6 +10,17 @@ package com.goodworkalan.addendum;
 public interface Assert extends Populate
 {
     /**
+     * Begin an assert extension element.
+     * 
+     * @param <T>
+     *            The extension element type.
+     * @param extension
+     *            An instance of the extension element.
+     * @return The extension element.
+     */
+    public <T extends ExtensionElement<Assert>> T assertX(T extension);
+    
+    /**
      * Assert that the table definition for the given table name matches an
      * expected table definition.
      * 

@@ -10,6 +10,17 @@ package com.goodworkalan.addendum;
 public interface Execute extends Create
 {
     /**
+     * Begin a execute extension element.
+     * 
+     * @param <T>
+     *            The extension element type.
+     * @param extension
+     *            An instance of the extension element.
+     * @return The extension element.
+     */
+    public <T extends ExtensionElement<Execute>> T execute(T extension);
+    
+    /**
      * Performs updates using application specific SQL statements.
      * 
      * @param executable

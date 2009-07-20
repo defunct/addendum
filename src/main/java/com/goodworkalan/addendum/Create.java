@@ -21,5 +21,12 @@ public interface Create extends Alter
      */
     public <T extends ExtensionElement<Create>> T create(T extension);
     
+    /**
+     * Create a new table with the given name.
+     * 
+     * @param name
+     *            The table name.
+     * @return A create table element to define the new table.
+     */
     public CreateTable createTable(String name);
 }

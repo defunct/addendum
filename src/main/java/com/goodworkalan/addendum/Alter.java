@@ -9,6 +9,17 @@ package com.goodworkalan.addendum;
 public interface Alter extends Assert
 {
     /**
+     * Begin an alter extension element.
+     * 
+     * @param <T>
+     *            The extension element type.
+     * @param extension
+     *            An instance of the extension element.
+     * @return The extension element.
+     */
+    public <T extends ExtensionElement<Alter>> T alter(T extension);
+    
+    /**
      * Alter an existing table with the given name.
      * 
      * @param name

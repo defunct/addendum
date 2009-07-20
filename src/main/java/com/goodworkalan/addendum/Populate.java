@@ -10,6 +10,17 @@ package com.goodworkalan.addendum;
 public interface Populate extends Commit
 {
     /**
+     * Begin an insert extension element.
+     * 
+     * @param <T>
+     *            The extension element type.
+     * @param extension
+     *            An instance of the extension element.
+     * @return The extension element.
+     */
+    public <T extends ExtensionElement<Populate>> T insert(T extension);
+
+    /**
      * Create an insert statement that will insert values into the database.
      * 
      * @param table
