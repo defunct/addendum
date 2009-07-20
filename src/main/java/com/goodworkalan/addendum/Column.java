@@ -29,7 +29,10 @@ public class Column
     private Boolean notNull;
     
     /** The column length. */
-    private Integer lengthOrPrecision;
+    private Integer length;
+    
+    /** The column precision. */
+    private Integer precision;
     
     /** The column scale. */
     private Integer scale;
@@ -91,7 +94,8 @@ public class Column
     {
         setColumnType(columnType);
         setNotNull(false);
-        setLengthOrPrecision(0);
+        setLength(0);
+        setPrecision(0);
         setScale(0);
         setDefaultValue(null);
         setGeneratorType(GeneratorType.NONE);
@@ -251,22 +255,43 @@ public class Column
      * 
      * @return The column length.
      */
-    public Integer getLengthOrPrecision()
+    public Integer getLength()
     {
-        return lengthOrPrecision;
+        return length;
     }
 
     /**
-     * Set the column length or precision.
+     * Set the column length.
      * 
-     * @param lengthOrPrecision
-     *            The column length or precision.
+     * @param length
+     *            The column length.
      */
-    public void setLengthOrPrecision(Integer lengthOrPrecision)
+    public void setLength(Integer length)
     {
-        this.lengthOrPrecision = lengthOrPrecision;
+        this.length = length;
     }
-    
+
+    /**
+     * Get the column precision.
+     * 
+     * @return The column precision.
+     */
+    public Integer getPrecision()
+    {
+        return precision;
+    }
+
+    /**
+     * Set the column precision.
+     * 
+     * @param precision
+     *            The column precision.
+     */
+    public void setPrecision(Integer precision)
+    {
+        this.precision = precision;
+    }
+     
     /**
      * Get the column scale.
      * 
