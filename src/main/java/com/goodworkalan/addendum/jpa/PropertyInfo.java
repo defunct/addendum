@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.goodworkalan.addendum.AddColumn;
 import com.goodworkalan.addendum.DefineColumn;
 import com.goodworkalan.addendum.ExistingColumn;
 import com.goodworkalan.addendum.FreshColumn;
@@ -180,17 +181,19 @@ class PropertyInfo
     {
         return generationType;
     }
-   
+
     /**
      * Define the column in the given column definition, setting the properties
      * of the column definition using this property information.
      * 
      * @param column
      *            A column definition.
+     * @param defaultValue
+     *            The default value reference.
      */
-    public void define(FreshColumn<?, ?> column)
+    public void define(FreshColumn<?, ?> column, DefaultValue defaultValue)
     {
-        define((DefineColumn<?, ?>) column);
+        define((DefineColumn<?, ?>) column, defaultValue);
         if (getGenerationType() != null)
         {
             switch (getGenerationType())
@@ -212,24 +215,13 @@ class PropertyInfo
         }
     }
     
-//    public void define(AddColumn column)
-//    {
-//        define((DefineColumn<?, ?>) column);
-        // column.notNull(defaultValue);
-//    }
-
-    /**
-     * Define the column in the given column definition, setting the properties
-     * of the column definition using this property information.
-     * 
-     * @param column
-     *            A column definition.
-     */
-    public void define(DefineColumn<?, ?> column)
+    public void define(AddColumn column, DefaultValue defaultValue)
     {
-        column.length(getLength());
-        column.precision(getPrecision());
-        column.scale(getScale());
+        define((DefineColumn<?, ?>) column, defaultValue);
+        if (!isNullable() && defaultValue.isSpecified())
+        {
+            column.notNull(defaultValue.getValue());
+        }
     }
 
     /**
@@ -238,10 +230,32 @@ class PropertyInfo
      * 
      * @param column
      *            A column definition.
+     * @param defaultValue
+     *            The default value reference.
      */
-    public void define(ExistingColumn<?, ?> column)
+    public void define(DefineColumn<?, ?> column, DefaultValue defaultValue)
     {
-        define((DefineColumn<?, ?>) column);
+        column.length(getLength());
+        column.precision(getPrecision());
+        column.scale(getScale());
+        if (defaultValue.isSpecified())
+        {
+            column.defaultValue(defaultValue.getValue());
+        }
+    }
+
+    /**
+     * Define the column in the given column definition, setting the properties
+     * of the column definition using this property information.
+     * 
+     * @param column
+     *            A column definition.
+     * @param defaultValue
+     *            The default value reference.
+     */
+    public void define(ExistingColumn<?, ?> column, DefaultValue defaultValue)
+    {
+        define((DefineColumn<?, ?>) column, defaultValue);
         column.type(type);
     }
 

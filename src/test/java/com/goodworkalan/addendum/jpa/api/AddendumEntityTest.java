@@ -10,15 +10,21 @@ public class AddendumEntityTest
     {
         addenda
             .addendum()
-                .create(new CreateEntity(Person.class)).end()
+                .create(new CreateEntity(Person.class))
+                    .property("hasSize").defaultValue(7).end()
+                    .end()
                 .commit();
         addenda
             .addendum()
-                .alter(new AlterEntity(Person.class)).renameFrom("Employee").end()
+                .alter(new AlterEntity(Person.class))
+                    .renameFrom("Employee")
+                    .end()
                 .commit();
         addenda
             .addendum()
-                .alter(new AlterEntity(Person.class)).addProperty("socialSecurityNumber").end()
+                .alter(new AlterEntity(Person.class))
+                    .addProperty("socialSecurityNumber").end()
+                    .end()
                 .commit();
     }
 }

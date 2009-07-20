@@ -44,14 +44,15 @@ public class AlterEntity extends ExtensionElement<Alter>
      * 
      * @param name
      *            The property name.
-     * @return This alter entity element to continue the specification of the
-     *         alteration.
+     * @return A property element to define additional database column
+     *         attributes.
      */
-    public AlterEntity addProperty(String name)
+    public Property<AlterEntity> addProperty(String name)
     {
-        alterations.add(new AddProperty(entityInfo, name));
+        DefaultValue defaultValue = new DefaultValue();
+        alterations.add(new AddProperty(entityInfo, name, defaultValue));
         propertySeen.add(name);
-        return this;
+        return new Property<AlterEntity>(this, defaultValue);
     }
 
     /**
@@ -60,14 +61,15 @@ public class AlterEntity extends ExtensionElement<Alter>
      * 
      * @param name
      *            The property name.
-     * @return This alter entity element to continue the specification of the
-     *         alteration.
+     * @return A property element to define additional database column
+     *         attributes.
      */
-    public AlterEntity alterProperty(String name)
+    public Property<AlterEntity> alterProperty(String name)
     {
-        alterations.add(new AlterProperty(entityInfo, name));
+        DefaultValue defaultValue = new DefaultValue();
+        alterations.add(new AlterProperty(entityInfo, name, defaultValue));
         propertySeen.add(name);
-        return this;
+        return new Property<AlterEntity>(this, defaultValue);
     }
 
     /**
@@ -79,13 +81,15 @@ public class AlterEntity extends ExtensionElement<Alter>
      *            The property name.
      * @param oldName
      *            The existing column name to rename from.
-     * @return This alter entity element to continue the specification of the
-     *         alteration.
+     * @return A property element to define additional database column
+     *         attributes.
      */
-    public AlterEntity renamePropertyFrom(String name, String oldName)
+    public Property<AlterEntity> renamePropertyFrom(String name, String oldName)
     {
+        DefaultValue defaultValue = new DefaultValue();
+        alterations.add(new RenameProperty(entityInfo, name, oldName, defaultValue));
         propertySeen.add(name);
-        return this;
+        return new Property<AlterEntity>(this, defaultValue);
     }
     
     /**

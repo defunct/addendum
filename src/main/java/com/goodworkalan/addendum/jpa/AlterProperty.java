@@ -16,6 +16,9 @@ class AlterProperty implements Alteration
     
     /** The property name. */
     private final String propertyName;
+    
+    /** The default value reference. */
+    private final DefaultValue defaultValue;
 
     /**
      * Create an alteration that will update the column mapped to the given
@@ -25,11 +28,14 @@ class AlterProperty implements Alteration
      *            The entity information.
      * @param propertyName
      *            The property name.
+     * @param defaultValue
+     *            The default value reference.
      */
-    public AlterProperty(EntityInfo entityInfo, String propertyName)
+    public AlterProperty(EntityInfo entityInfo, String propertyName, DefaultValue defaultValue)
     {
         this.entityInfo = entityInfo;
         this.propertyName = propertyName;
+        this.defaultValue = defaultValue;
     }
     
     
@@ -45,7 +51,7 @@ class AlterProperty implements Alteration
         AlterColumn column = alter
             .alterTable(entityInfo.getTableName())
                 .alterColumn(propertyInfo.getColumnName());
-        propertyInfo.define(column);
+        propertyInfo.define(column, defaultValue);
         column.end();
     }
 }

@@ -20,6 +20,9 @@ class RenameProperty implements Alteration
     
     /** The existing column name. */
     private final String columnName;
+    
+    /** The default value reference. */
+    private final DefaultValue defaultValue;
 
     /**
      * Create an alteration that renames the column for the given property in
@@ -32,12 +35,15 @@ class RenameProperty implements Alteration
      *            The property name.
      * @param columnName
      *            The existing column name.
+     * @param defaultValue
+     *            The default value reference.
      */
-    public RenameProperty(EntityInfo entityInfo, String propertyName, String columnName)
+    public RenameProperty(EntityInfo entityInfo, String propertyName, String columnName, DefaultValue defaultValue)
     {
         this.entityInfo = entityInfo;
         this.propertyName = propertyName;
         this.columnName = columnName;
+        this.defaultValue = defaultValue;
     }
     
     /**
@@ -53,7 +59,7 @@ class RenameProperty implements Alteration
             alter
                 .alterTable(entityInfo.getTableName())
                     .renameColumnFrom(propertyInfo.getColumnName(), columnName);
-        propertyInfo.define(alterColumn);
+        propertyInfo.define(alterColumn, defaultValue);
         alterColumn.end();
     }
 }
