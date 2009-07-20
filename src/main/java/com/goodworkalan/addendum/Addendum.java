@@ -39,6 +39,21 @@ public class Addendum implements Execute
     }
 
     /**
+     * Performs updates using application specific SQL statements.
+     * 
+     * @param executable
+     *            An {@link Executable} to execute.
+     * @return This schema element to continue the domain-specific language
+     *         statement.
+     */
+    public Execute execute(Executable executable)
+    {
+        Execution execution = new Execution(executable);
+        updates.add(execution);
+        return this;
+    }
+
+    /**
      * Create a new table with the given name.
      * 
      * @param name
@@ -115,21 +130,6 @@ public class Addendum implements Execute
         return new Insert(this, insertion);
     }
 
-    /**
-     * Performs updates using application specific SQL statements.
-     * 
-     * @param executable
-     *            An exeuctable to execute.
-     * @return This schema element to continue the domain-specific language
-     *         statement.
-     */
-    public Execute execute(Executable executable)
-    {
-        Execution execution = new Execution(executable);
-        updates.add(execution);
-        return this;
-    }
-    
     /**
      * Terminates the addendum specification statement in the domain specific
      * language.

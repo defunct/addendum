@@ -1,9 +1,9 @@
 package com.goodworkalan.addendum;
 
-
 /**
- * A column builder for columns in a new table in the domain-specific language
- * used by {@link DatabaseAddendeum} to define database update actions.
+ * An element in the domain-specific language that specifies the properties of a
+ * column in a create table statement.
+ * 
  * 
  * @author Alan Gutierrez
  */

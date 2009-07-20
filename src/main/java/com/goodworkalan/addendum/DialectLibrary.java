@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import com.goodworkalan.furnish.Furnish;
 
 /**
- * The library of available SQL dialects, genrated using the service loader
+ * The library of available SQL dialects, generated using the service loader
  * pattern.
  * 
  * @author Alan Gutierrez
