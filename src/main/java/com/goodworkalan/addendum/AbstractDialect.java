@@ -204,8 +204,8 @@ public abstract class AbstractDialect implements Dialect
                 {
                     switch (column.getGeneratorType())
                     {
-                    case PREFERRED:
-                    case AUTO_INCREMENT:
+                    case IDENTITY:
+                    case AUTO:
                         sql.append(" AUTO_INCREMENT");
                         break;
                     case SEQUENCE:
@@ -294,8 +294,8 @@ public abstract class AbstractDialect implements Dialect
         {
             switch (column.getGeneratorType())
             {
-            case PREFERRED:
-            case AUTO_INCREMENT:
+            case IDENTITY:
+            case AUTO:
                 sql.append(" AUTO_INCREMENT");
                 break;
             case SEQUENCE:
@@ -354,7 +354,7 @@ public abstract class AbstractDialect implements Dialect
         ResultSetMetaData meta = rs.getMetaData();
         if (meta.isAutoIncrement(1))
         {
-            column.setGeneratorType(GeneratorType.AUTO_INCREMENT);
+            column.setGeneratorType(GeneratorType.IDENTITY);
         }
         column.setColumnType(meta.getColumnType(1));
         column.setScale(meta.getScale(1));
