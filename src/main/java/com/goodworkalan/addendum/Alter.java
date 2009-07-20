@@ -1,7 +1,7 @@
 package com.goodworkalan.addendum;
 
 /**
- * An alter element in the domain specific language that prevents the creation
+ * An alter element in the domain-specific language that prevents the creation
  * of new tables in an addendum after alterations have been defined.
  * 
  * @author Alan Gutierrez
