@@ -4,7 +4,7 @@ import com.goodworkalan.addendum.Addenda;
 import com.goodworkalan.addendum.jpa.AlterEntity;
 import com.goodworkalan.addendum.jpa.CreateEntity;
 
-public class AddendumJpaPublic
+public class AddendumEntityTest
 {
     public void test(Addenda addenda)
     {
