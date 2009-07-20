@@ -6,7 +6,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AssertColumn extends ExistingColumn<AssertTable, AssertColumn>
+public class VerifyColumn extends ExistingColumn<VerifyTable, VerifyColumn>
 {
     /**
      * Create an assert column element with the given assert table parent
@@ -17,7 +17,7 @@ public class AssertColumn extends ExistingColumn<AssertTable, AssertColumn>
      * @param column
      *            The column definition.
      */
-    public AssertColumn(AssertTable table, Column column)
+    public VerifyColumn(VerifyTable table, Column column)
     {
         super(table, column);
     }
@@ -29,7 +29,7 @@ public class AssertColumn extends ExistingColumn<AssertTable, AssertColumn>
      * @return This assert column element.
      */
     @Override
-    protected AssertColumn getElement()
+    protected VerifyColumn getElement()
     {
         return this;
     }

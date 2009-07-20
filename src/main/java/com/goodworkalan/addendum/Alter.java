@@ -6,7 +6,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public interface Alter extends Assert
+public interface Alter extends Verify
 {
     /**
      * Begin an alter extension element.

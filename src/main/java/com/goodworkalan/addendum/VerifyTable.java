@@ -11,7 +11,7 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
-public class AssertTable
+public class VerifyTable
 {
     /**
      * The domain-specific language element that defines a single database
@@ -43,7 +43,7 @@ public class AssertTable
      * @param tableName
      *            The name of the table to verify.
      */
-    public AssertTable(Addendum addendum, Map<String, Table> tables, String tableName)
+    public VerifyTable(Addendum addendum, Map<String, Table> tables, String tableName)
     {
         this.addendum = addendum;
         this.tables = tables;
@@ -58,20 +58,20 @@ public class AssertTable
      * statement, an exception is raised at update.
      * <p>
      * Those properties that are unspecified by the verify column statement,
-     * using the {@link AssertColumn} element are untested and ignored.
+     * using the {@link VerifyColumn} element are untested and ignored.
      * 
      * @param name
      *            The column name.
      * @param nativeType
      *            The native Java type.
-     * @return A {@link AssertColumn} element to specify properties to verify.
+     * @return A {@link VerifyColumn} element to specify properties to verify.
      */
-    public AssertColumn verifyColumn(String name)
+    public VerifyColumn verifyColumn(String name)
     {
         Column column = new Column(name);
         tables.get(tableName).getVerifications().add(Collections.singletonMap(name, column));
         columns.add(column);
-        return new AssertColumn(this, column);
+        return new VerifyColumn(this, column);
     }
 
     /**
@@ -80,7 +80,7 @@ public class AssertTable
      * 
      * @return The assert parent element.
      */
-    public Assert end()
+    public Verify end()
     {
         return addendum;
     }

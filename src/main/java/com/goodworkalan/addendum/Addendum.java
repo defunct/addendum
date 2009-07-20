@@ -154,7 +154,7 @@ public class Addendum implements Execute
      *            An instance of the extension element.
      * @return The extension element.
      */
-    public <T extends ExtensionElement<Assert>> T assertX(T extension)
+    public <T extends ExtensionElement<Verify>> T verify(T extension)
     {
         extension.setAddendum(this, this);
         return extension;
@@ -167,7 +167,7 @@ public class Addendum implements Execute
      *            The table name.
      * @return An assert table element to specify the table definition.
      */
-    public AssertTable assertTable(String name)
+    public VerifyTable verifyTable(String name)
     {
         if (state.ordinal() > AddendumState.ASSERTING.ordinal())
         {
