@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.goodworkalan.addendum.Column;
 import com.goodworkalan.addendum.Dialect;
+import com.goodworkalan.addendum.Table;
 
 public class TestDialect implements Dialect
 {
@@ -51,11 +52,7 @@ public class TestDialect implements Dialect
     {
     }
     
-    public void verifyTable(Connection connection, String tableName)
-    {
-    }
-
-    public void verifyColumn(Connection connection, String tableName, Column column) throws SQLException
+    public void verifyTable(Connection connection, Table table)
     {
     }
 }

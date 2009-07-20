@@ -5,12 +5,10 @@ package com.goodworkalan.addendum;
  *  
  * @author Alan Gutierrez
  */
-public class ExtensionElement<A>
+public class ExtensionElement<Parent>
 {
-    private A end;
-    
     /** The root domain-specific language element for this addendum. */
-    private Addendum addendum;
+    private Parent parent;
     
     /**
      * Create a new extension element.
@@ -23,10 +21,10 @@ public class ExtensionElement<A>
      * Called when the end of the statement is called so that the extension
      * element can define actions using the addendum.
      * 
-     * @param addendum
-     *            The addendum.
+     * @param parent
+     *            The parent.
      */
-    protected void ending(Addendum addendum)
+    protected void ending(Parent parent)
     {
     }
 
@@ -34,27 +32,27 @@ public class ExtensionElement<A>
      * Called from the addendum when the extension statement begins to set the
      * addendum that is passed to {@link #ending(Addendum) ending}.
      * 
-     * @param addendum
+     * @param parent
      *            The addendum.
      */
-    void setAddendum(A end, Addendum addendum)
+    void setAddendum(Parent parent)
     {
-        if (addendum != null)
+        if (parent != null)
         {
             throw new IllegalStateException();
         }
-        this.addendum = addendum;
+        this.parent = parent;
     }
 
     /**
      * Terminate the extension statement by returning the {@link Extend}
-     * interface of the addedmum.
+     * interface of the addendum.
      * 
      * @return The {@link Extend} interface of the {@link Addendum}.
      */
-    public A end()
+    public Parent end()
     {
-        ending(addendum);
-        return end;
+        ending(parent);
+        return parent;
     }
 }

@@ -49,7 +49,7 @@ public class Addendum implements Execute
      */
     public <T extends ExtensionElement<Execute>> T execute(T extension)
     {
-        extension.setAddendum(this, this);
+        extension.setAddendum(this);
         return extension;
     }
 
@@ -79,7 +79,7 @@ public class Addendum implements Execute
      */
     public <T extends ExtensionElement<Create>> T create(T extension)
     {
-        extension.setAddendum(this, this);
+        extension.setAddendum(this);
         return extension;
     }
 
@@ -119,7 +119,7 @@ public class Addendum implements Execute
      */
     public <T extends ExtensionElement<Alter>> T alter(T extension)
     {
-        extension.setAddendum(this, this);
+        extension.setAddendum(this);
         return extension;
     }
 
@@ -156,7 +156,7 @@ public class Addendum implements Execute
      */
     public <T extends ExtensionElement<Verify>> T verify(T extension)
     {
-        extension.setAddendum(this, this);
+        extension.setAddendum(this);
         return extension;
     }
 
@@ -174,8 +174,7 @@ public class Addendum implements Execute
             throw new AddendumException(0);
         }
         state = AddendumState.ASSERTING;
-    
-        return null;
+        return new VerifyTable(this, updates, tables.getFirst(), name);
     } 
     
     /**
@@ -189,7 +188,7 @@ public class Addendum implements Execute
      */
     public <T extends ExtensionElement<Populate>> T insert(T extension)
     {
-        extension.setAddendum(this, this);
+        extension.setAddendum(this);
         return extension;
     }
 

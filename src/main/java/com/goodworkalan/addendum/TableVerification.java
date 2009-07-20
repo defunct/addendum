@@ -2,25 +2,43 @@ package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
-public class TableVerification
+/**
+ * Verify the existence of a table definition in the database.
+ * 
+ * @author Alan Gutierrez
+ */
+public class TableVerification implements Update
 {
-    private final String tableName;
+    /** The table defintion. */
+    private final Table table;
 
-    private final List<Column> verifyColumns;
-
-    public TableVerification(String tableName, List<Column> updateColumns)
+    /**
+     * Create a new table verification.
+     * 
+     * @param table
+     *            The table definition.
+     */
+    public TableVerification(Table table)
     {   
-        this.tableName = tableName;
-        this.verifyColumns = updateColumns;
+        this.table = table;
     }
-    
+
+    /**
+     * Perform a verification of the existence of a table definition in the
+     * database.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param dialect
+     *            The SQL dialect.
+     * @throws SQLException
+     *             For any SQL error.
+     * @throws AddendumException
+     *             For any error occurring during the update.
+     */
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        for (Column column : verifyColumns)
-        {
-            dialect.verifyColumn(connection, tableName, column);
-        }
+        dialect.verifyTable(connection, table);
     }
 }

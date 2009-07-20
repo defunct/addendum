@@ -31,6 +31,9 @@ public class Addenda
      */
     private final LinkedList<Map<String, Table>> tables = new LinkedList<Map<String, Table>>();
     
+    /** A list of verifications to perform after all addenda are complete. */
+    private final List<Update> verifications = new ArrayList<Update>();
+    
     /**
      * Update versions are stored in the data sources return by this connection
      * server.
@@ -106,11 +109,13 @@ public class Addenda
     }
 
     /**
-     * Create a new addendum that will make zero, one or more changes to a
-     * the database associated with the given connector.
-     *   
-     * @param connector A database connection server.
-     * @return A domain-specific language element used to specify updates to the database.
+     * Create a new addendum that will make zero, one or more changes to a the
+     * database associated with the given connector.
+     * 
+     * @param connector
+     *            A database connection server.
+     * @return A domain-specific language element used to specify updates to the
+     *         database.
      */
     public Addendum addendum(Connector connector)
     {
@@ -120,6 +125,18 @@ public class Addenda
         Addendum schema = new Addendum(updates, tables);
         addenda.add(addendum);
         return schema;
+    }
+
+    /**
+     * After all addenda are applied, verify that the schema matches schema
+     * definition specified by a domain-specific language.
+     * 
+     * @return The root element of a domain-specific language use to specify a
+     *         schema verification.
+     */
+    public Schema verifySchema()
+    {
+        return new Schema(verifications);
     }
 }
 

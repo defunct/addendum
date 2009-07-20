@@ -1,13 +1,12 @@
 package com.goodworkalan.addendum;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Begin an assert table statement to specify column assertions
- * on a table in the database.
+ * Begin an assert table statement to specify column assertions on a table in
+ * the database.
  * 
  * @author Alan Gutierrez
  */
@@ -24,10 +23,13 @@ public class VerifyTable
      * names for the rename form methods.
      */
     private final Map<String, Table> tables;
-    
-    /** A list of column definitions to verify. */
-    private final List<Column> columns;
-    
+
+    /**
+     * The list of updates for the addendum that defines this verify table
+     * statement.
+     */
+    private final List<Update> updates;
+
     /** The name of the table to verify. */
     private final String tableName;
 
@@ -43,11 +45,11 @@ public class VerifyTable
      * @param tableName
      *            The name of the table to verify.
      */
-    public VerifyTable(Addendum addendum, Map<String, Table> tables, String tableName)
+    public VerifyTable(Addendum addendum, List<Update> updates, Map<String, Table> tables, String tableName)
     {
         this.addendum = addendum;
+        this.updates = updates;
         this.tables = tables;
-        this.columns = new ArrayList<Column>();
         this.tableName = tableName;
     }
 
@@ -70,18 +72,18 @@ public class VerifyTable
     {
         Column column = new Column(name);
         tables.get(tableName).getVerifications().add(Collections.singletonMap(name, column));
-        columns.add(column);
         return new VerifyColumn(this, column);
     }
 
     /**
-     * Terminate the assert table statement and return the assert interface of
-     * the addendum to allow further assertions or population statements.
+     * Terminate the verify table statement and return the verify interface of
+     * the addendum to allow further verifications or population statements.
      * 
      * @return The assert parent element.
      */
     public Verify end()
     {
+        updates.add(new TableVerification(tables.get(tableName)));
         return addendum;
     }
 }
