@@ -49,17 +49,4 @@ public abstract class FreshColumn<Container, Element> extends DefineColumn<Conta
         column.setNotNull(true);
         return getElement();
     }
-
-    /**
-     * Set the default column value.
-     * 
-     * @param defaultValue
-     *            The default column value.
-     * @return This column builder to continue construction.
-     */
-    public Element defaultValue(String defaultValue)
-    {
-        column.setDefaultValue(defaultValue);
-        return getElement();
-    }
 }

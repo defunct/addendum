@@ -484,28 +484,12 @@ public abstract class AbstractDialect implements Dialect
      * 
      * @param connection
      *            The JDBC connection.
-     * @param tableName
-     *            The table name.
+     * @param table
+     *            The table definition.
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    public void verifyTable(Connection connection, String tableName)
-    {
-    }
-
-    /**
-     * Verify that a column in the given table has the given column definition.
-     * 
-     * @param connection
-     *            The JDBC conneciton.
-     * @param tableName
-     *            The table name.
-     * @param column
-     *            The column definition.
-     * @throws SQLException
-     *             For any reason, any reason at all.
-     */
-    public void verifyColumn(Connection connection, String tableName, Column column) throws SQLException
+    public void verifyTable(Connection connection, Table table)
     {
     }
 

@@ -41,7 +41,7 @@ public class AddColumn extends DefineColumn<AlterTable, AddColumn>
      *            The default not null value.
      * @return This column builder to continue construction.
      */
-    public AddColumn notNull(String defaultValue)
+    public AddColumn notNull(Object defaultValue)
     {
         column.setNotNull(true);
         column.setDefaultValue(defaultValue);

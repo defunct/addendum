@@ -79,6 +79,19 @@ public abstract class DefineColumn<Container, Element>
     }
 
     /**
+     * Set the default column value.
+     * 
+     * @param defaultValue
+     *            The default column value.
+     * @return This column builder to continue construction.
+     */
+    public Element defaultValue(Object defaultValue)
+    {
+        column.setDefaultValue(defaultValue);
+        return getElement();
+    }
+
+    /**
      * Terminate the column definition and return the containing domain-specific
      * language element.
      * 
