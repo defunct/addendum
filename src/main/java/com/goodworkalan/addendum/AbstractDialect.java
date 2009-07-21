@@ -162,7 +162,7 @@ public abstract class AbstractDialect implements Dialect
         {
             info.message("Creating table %s.", tableName);
             
-            info.bean("columns", columns);
+            info.object("columns", columns);
             
             StringBuilder sql = new StringBuilder();
             
@@ -396,7 +396,7 @@ public abstract class AbstractDialect implements Dialect
         
         info.message("Adding column %s to table %s.", column.getName(), tableName);
         
-        info.string("tableName", tableName).bean("column", column);
+        info.string("tableName", tableName).object("column", column);
         
         StringBuilder addSql = new StringBuilder();
         addSql.append("ALTER TABLE ").append(tableName).append(" ADD ");
@@ -547,7 +547,7 @@ public abstract class AbstractDialect implements Dialect
         {
             info.message("Inserting record into %s.", table);
             
-            info.string("table", table).bean("columns", columns).bean("values", values);
+            info.string("table", table).object("columns", columns).object("values", values);
             
             StringBuilder sql = new StringBuilder();
             
