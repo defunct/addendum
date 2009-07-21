@@ -306,7 +306,7 @@ public abstract class AbstractDialect implements Dialect
         if (column.getDefaultValue() != null)
         {
             // FIXME Escape string values.
-            sql.append(" DEFAULT ").append(column.getDefaultValue());
+            sql.append(" DEFAULT ").append("'" + column.getDefaultValue().toString().replace("'", "''") + "'");
         }
     }
 
