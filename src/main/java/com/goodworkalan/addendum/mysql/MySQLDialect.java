@@ -117,11 +117,11 @@ public class MySQLDialect extends AbstractDialect
         
         info.message("Altering column %s in table %s.", column.getName(), tableName);
         
-        info.string("tableName", tableName).string("oldName", oldName).bean("column", column);
+        info.string("tableName", tableName).string("oldName", oldName).object("column", column);
         
         Column meta = getMetaColumn(connection, tableName, oldName);
         
-        info.bean("meta", meta);
+        info.object("meta", meta);
         
         inherit(column, meta);
 
