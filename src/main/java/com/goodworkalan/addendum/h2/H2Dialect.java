@@ -108,49 +108,54 @@ public class H2Dialect extends AbstractDialect
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
     {
         Log debug = logger.debug();
-        
-        debug.message("Altering column %s in table %s.", column.getName(), tableName);
-        
-        debug.bean("tableName", tableName).bean("oldName", oldName).bean("column", column);
-        
-        if (!oldName.equals(column.getName()))
+        try
         {
-            String sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + oldName + " RENAME TO " + column.getName();
+            debug.message("Altering column %s in table %s.", column.getName(), tableName);
             
-            debug.bean("rename", sql);
+            debug.string("tableName", tableName).string("oldName", oldName).freeze("column", column);
             
-            Statement statement = connection.createStatement();
-            statement.execute(sql);
-            statement.close();
+            if (!oldName.equals(column.getName()))
+            {
+                String sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + oldName + " RENAME TO " + column.getName();
+                
+                debug.object("rename", sql);
+                
+                Statement statement = connection.createStatement();
+                statement.execute(sql);
+                statement.close();
+            }
+            
+            boolean altered = column.getColumnType() != null
+                           || column.getLength() != null
+                           || column.getPrecision() != null
+                           || column.getScale() != null
+                           || column.isNotNull() != null
+                           || column.getGeneratorType() != null
+                           || column.getHasDefaultValue();
+    
+            if (altered)
+            {
+                Column meta = getMetaColumn(connection, tableName, column.getName());
+                
+                debug.object("meta", meta);
+                
+                inherit(column, meta);
+    
+                StringBuilder sql = new StringBuilder();
+                sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");
+                columnDefinition(sql, column, true);
+                
+                debug.string("alter", sql);
+                
+                Statement statement = connection.createStatement();
+                statement.execute(sql.toString());
+                statement.close();
+            }
+        }
+        finally
+        {
+            debug.send();
         }
         
-        boolean altered = column.getColumnType() != null
-                       || column.getLength() != null
-                       || column.getPrecision() != null
-                       || column.getScale() != null
-                       || column.isNotNull() != null
-                       || column.getGeneratorType() != null
-                       || column.getHasDefaultValue();
-
-        if (altered)
-        {
-            Column meta = getMetaColumn(connection, tableName, column.getName());
-            
-            debug.bean("meta", meta);
-            
-            inherit(column, meta);
-
-            StringBuilder sql = new StringBuilder();
-            sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");
-            columnDefinition(sql, column, true);
-            
-            debug.bean("alter", sql);
-            
-            Statement statement = connection.createStatement();
-            statement.execute(sql.toString());
-            statement.close();
-        }
-        
-        debug.send();
     }
 }
