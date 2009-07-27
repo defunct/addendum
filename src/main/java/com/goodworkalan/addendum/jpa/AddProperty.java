@@ -1,7 +1,10 @@
 package com.goodworkalan.addendum.jpa;
 
+import static com.goodworkalan.addendum.jpa.AddendumJpaException.PROPERTY_NOT_FOUND;
+
 import com.goodworkalan.addendum.AddColumn;
 import com.goodworkalan.addendum.Alter;
+import com.goodworkalan.addendum.AlterTable;
 
 /**
  * An alteration that adds a column mapped to a property for an entity whose
@@ -48,10 +51,14 @@ class AddProperty implements Alteration
     public void alter(Alter alter)
     {
         PropertyInfo propertyInfo = entityInfo.getProperties().get(propertyName);
-        AddColumn column = alter
-            .alterTable(entityInfo.getTableName())
-                .addColumn(propertyInfo.getColumnName(), propertyInfo.getType());
+        if (propertyInfo == null)
+        {
+            throw new AddendumJpaException(PROPERTY_NOT_FOUND).add(entityInfo.getName(), propertyName);
+        }
+        AlterTable alterTable = alter.alterTable(entityInfo.getTableName());
+        AddColumn column = alterTable.addColumn(propertyInfo.getColumnName(), propertyInfo.getType());
         propertyInfo.define(column, defaultValue);
         column.end();
+        alterTable.end();
     }
 }

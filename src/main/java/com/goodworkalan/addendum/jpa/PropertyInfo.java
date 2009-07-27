@@ -367,9 +367,9 @@ class PropertyInfo
         int length = 255, precision = 0, scale = 0;
         boolean nullable = true, joinColumnSeen = false, id = false;
         GenerationType generationType = null;
-        for (Annotation[] annotated : annotations)
+        for (int i = 0; i < annotations.length && annotations[i] != null; i++)
         {
-            for (Annotation annotation : annotated)
+            for (Annotation annotation : annotations[i])
             {
                 if (annotation.annotationType().equals(Column.class))
                 {
@@ -391,6 +391,7 @@ class PropertyInfo
                 else if (annotation.annotationType().equals(Id.class))
                 {
                     id = true;
+                    nullable = false;
                 }
                 else if (annotation.annotationType().equals(Transient.class))
                 {
@@ -414,12 +415,7 @@ class PropertyInfo
                         {
                             referrantType = oneToOne.targetEntity();
                         }
-                        String referrantName = referrantType.getName();
-                        columnName = referrantName.substring(0, 1).toLowerCase();
-                        if (referrantName.length() > 1)
-                        {
-                            columnName += referrantName.substring(1);
-                        }
+                        columnName = name + "_id";
                         type = getId(referrantType);
                     }
                     if (!oneToOne.optional())
@@ -437,12 +433,7 @@ class PropertyInfo
                         {
                             referrantType = manyToOne.targetEntity();
                         }
-                        String referrantName = referrantType.getName();
-                        columnName = referrantName.substring(0, 1).toLowerCase();
-                        if (referrantName.length() > 1)
-                        {
-                            columnName += referrantName.substring(1);
-                        }
+                        columnName = name + "_id";
                         type = getId(referrantType);
                     }
                     if (!manyToOne.optional())
@@ -465,5 +456,15 @@ class PropertyInfo
             }
         }
         return new PropertyInfo(name, columnName, type, id, length, precision, scale, nullable, generationType);
+    }
+    
+    /**
+     * Return a string representation of this property.
+     * 
+     * @return The property as a string.
+     */
+    public String toString()
+    {
+        return type.toString() + " " + getName();
     }
 }

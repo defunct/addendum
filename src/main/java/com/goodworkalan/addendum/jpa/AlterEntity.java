@@ -106,7 +106,22 @@ public class AlterEntity extends ExtensionElement<Alter>
         alterations.add(new RenameEntity(entityInfo, oldName));
         return this;
     }
-    
+
+    /**
+     * Add a discriminator column to the table based on the
+     * <code>@DiscriminatorColumn</code> annotation of the entity.
+     * 
+     * @param initialize
+     *            The initialization value to use to populate the column.
+     * @return This alter entity element to continue the specification of the
+     *         alteration.
+     */
+    public AlterEntity addDescriminator(Object initialize)
+    {
+        alterations.add(new AddDiscriminator(entityInfo, initialize));
+        return this;
+    }
+
     /**
      * Define the table mapped to the entity class property.
      * 

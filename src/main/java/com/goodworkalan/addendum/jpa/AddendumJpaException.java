@@ -20,6 +20,9 @@ extends RuntimeException
     /** The error code. */
     private final int code;
     
+    /** The specified property was not found in the entity. */
+    public final static int PROPERTY_NOT_FOUND = 101;
+    
     /** A list of arguments to the formatted error message. */
     private final List<Object> arguments = new ArrayList<Object>();
 
@@ -64,13 +67,16 @@ extends RuntimeException
      * Add an argument to the list of arguments to provide the formatted error
      * message associated with the error code.
      * 
-     * @param argument
-     *            The format argument.
+     * @param arguments
+     *            The format arguments.
      * @return This sheaf exception for chained invocation of add.
      */
-    public AddendumJpaException add(Object argument)
+    public AddendumJpaException add(Object...arguments)
     {
-        arguments.add(argument);
+        for (Object argument : arguments)
+        {
+            this.arguments.add(argument);
+        }
         return this;
     }
 
@@ -84,7 +90,7 @@ extends RuntimeException
     public String getMessage()
     {
         String key = Integer.toString(code);
-        ResourceBundle exceptions = ResourceBundle.getBundle("com.goodworkalan.addendum.exceptions");
+        ResourceBundle exceptions = ResourceBundle.getBundle("com.goodworkalan.addendum.jpa.exceptions");
         String format;
         try
         {

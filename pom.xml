@@ -38,6 +38,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.6</version> 
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.4.2</version>
@@ -54,6 +60,12 @@
             <version>0.7${version.suffix}</version>
         </dependency>
         <dependency>
+            <groupId>com.goodworkalan</groupId>
+            <artifactId>addendum</artifactId>
+            <version>0.1${version.suffix}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.14</version>
@@ -66,6 +78,12 @@
             <classifier>jdk15</classifier>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.1.115</version>
+            <scope>test</scope>
+        </dependency> 
     </dependencies>
 
     <distributionManagement>

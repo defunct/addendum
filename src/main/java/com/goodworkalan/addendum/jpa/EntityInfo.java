@@ -5,11 +5,16 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.sql.Types;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.goodworkalan.addendum.Column;
 
 /**
  * Reflects upon a Java class to determine the entity information as defined by
@@ -24,6 +29,9 @@ class EntityInfo
     
     /** The table name mapped to the entity. */
     private final String tableName;
+    
+    /** The discriminator column for the discriminator inheritance strategy. */
+    private final Column discriminator;
     
     /** The entity class. */
     private final Class<?> entityClass;
@@ -41,14 +49,17 @@ class EntityInfo
      *            The table name mapped to the entity.
      * @param entityClass
      *            The entity class.
+     * @param discriminator
+     *            The discriminator column.
      * @param properties
      *            The entity properties.
      */
-    public EntityInfo(String name, String tableName, Class<?> entityClass, Map<String, PropertyInfo> properties)
+    public EntityInfo(String name, String tableName, Class<?> entityClass, Column discriminator, Map<String, PropertyInfo> properties)
     {
         this.name = name;
         this.tableName = tableName;
         this.entityClass = entityClass;
+        this.discriminator = discriminator;
         this.properties = Collections.unmodifiableMap(properties);
     }
 
@@ -83,6 +94,16 @@ class EntityInfo
     }
 
     /**
+     * Get the discriminator column for the discriminator inheritance strategy.
+     * 
+     * @return The discriminator column.
+     */
+    public Column getDiscriminator()
+    {
+        return discriminator;
+    }
+
+    /**
      * Get an unmodifiable map of the entity properties.
      * 
      * @return An unmodifiable map of the entity properties.
@@ -113,6 +134,28 @@ class EntityInfo
             }
             addFields(entityClass.getSuperclass(), fields);
         }
+    }
+
+    /**
+     * Find the discriminator column annotation for the given entity class, if
+     * any.
+     * 
+     * @param entityClass
+     *            The entity class.
+     * @return The discriminator column annotation or null if none exists.
+     */
+    private static DiscriminatorColumn findDiscriminatorColumn(Class<?> entityClass)
+    {
+        if (entityClass.getAnnotation(Entity.class) != null)
+        {
+            DiscriminatorColumn discriminatorColumn = entityClass.getAnnotation(DiscriminatorColumn.class);
+            if (discriminatorColumn == null)
+            {
+                return findDiscriminatorColumn(entityClass.getSuperclass());
+            }
+            return discriminatorColumn;
+        }
+        return null;
     }
 
     /**
@@ -161,13 +204,35 @@ class EntityInfo
                 }
             }
         }
+        Column discriminator = null;
+        DiscriminatorColumn discriminatorColumn = findDiscriminatorColumn(entityClass);
+        if (discriminatorColumn != null)
+        {
+            discriminator = new Column(discriminatorColumn.name());
+            switch (discriminatorColumn.discriminatorType())
+            {
+            case STRING:
+                discriminator.setDefaults(Types.VARCHAR);
+                discriminator.setLength(discriminatorColumn.length());
+                break;
+            case CHAR:
+                discriminator.setDefaults(Types.CHAR);
+                discriminator.setLength(discriminatorColumn.length());
+                break;
+            default: // INTEGER
+                discriminator.setDefaults(Types.INTEGER);
+                break;
+            }
+            
+        }
         String name = entityClass.getName();
+        name = name.substring(name.lastIndexOf('.') + 1);
         String tableName = name;
         Table table = entityClass.getAnnotation(Table.class);
         if (table != null)
         {
             tableName = table.name();
         }
-        return new EntityInfo(name, tableName, entityClass, properties);
+        return new EntityInfo(name, tableName, entityClass, discriminator, properties);
     }
 }

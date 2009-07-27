@@ -68,7 +68,7 @@ public class CreateEntity extends ExtensionElement<Create>
         for (Map.Entry<String, PropertyInfo> entry : entityInfo.getProperties().entrySet())
         {
             PropertyInfo prop = entry.getValue();
-            CreateColumn newColumn = newTable.column(prop.getName(), prop.getType());
+            CreateColumn newColumn = newTable.column(prop.getColumnName(), prop.getType());
             if (prop.isId())
             {
                 pk.add(prop.getName());
