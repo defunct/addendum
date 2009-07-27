@@ -15,6 +15,9 @@ class ApplyAddendum
     /** A factory for JDBC connections. */
     private final Connector connector;
     
+    /** A provider for the dialect to use for this addendum. */
+    private final DialectProvider dialectProvider;
+    
     /** A list of updates to perform. */
     private final List<Update> updates;
 
@@ -24,12 +27,15 @@ class ApplyAddendum
      * 
      * @param connector
      *            A factory for JDBC connections.
+     * @param dialectProvider
+     *            A provider for the dialect to use for this addendum.
      * @param updates
      *            A list of updates to perform.
      */
-    public ApplyAddendum(Connector connector, List<Update> updates)
+    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<Update> updates)
     {
         this.connector = connector;
+        this.dialectProvider = dialectProvider;
         this.updates = updates;
     }
 
@@ -43,7 +49,7 @@ class ApplyAddendum
     public void execute() throws SQLException
     {
         Connection connection = connector.open();
-        Dialect dialect = DialectLibrary.getInstance().getDialect(connection);
+        Dialect dialect = dialectProvider.getDialect(connection);
         for (Update update : updates)
         {
             update.execute(connection, dialect);

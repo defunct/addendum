@@ -26,6 +26,12 @@ extends RuntimeException
     /** The dialog does not support a specific SQL type. */
     public final static int DIALECT_DOES_NOT_SUPPORT_TYPE = 102;
     
+    /**
+     * A specific dialect instance was used, but that dialect does not support
+     * the database at the other end of the JDBC connection.
+     */
+    public final static int DIALECT_DOES_NOT_SUPPORT_CONNECTION = 103;
+    
     /** Unable to open an SQL connection due to a JNI naming error. */
     public final static int NAMING_EXCEPTION = 201;
     

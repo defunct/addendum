@@ -11,7 +11,7 @@ import com.goodworkalan.furnish.Furnish;
  * 
  * @author Alan Gutierrez
  */
-class DialectLibrary  
+class DialectLibrary implements DialectProvider  
 {
     /** The singleton instance of the library. */
     private final static DialectLibrary INSTNACE = new DialectLibrary(); 

@@ -8,6 +8,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -162,7 +163,7 @@ public abstract class AbstractDialect implements Dialect
         {
             info.message("Creating table %s.", tableName);
             
-            info.object("columns", columns);
+            info.object("columns", new ArrayList<Column>(columns));
             
             StringBuilder sql = new StringBuilder();
             
@@ -195,7 +196,7 @@ public abstract class AbstractDialect implements Dialect
                 
                 sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
                 
-                if (column.isNotNull())
+                if (column.getNotNull())
                 {
                     sql.append(" NOT NULL");
                 }
@@ -285,7 +286,7 @@ public abstract class AbstractDialect implements Dialect
         
         sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
         
-        if (canNull && column.isNotNull())
+        if (canNull && column.getNotNull())
         {
             sql.append(" NOT NULL");
         }
@@ -305,8 +306,19 @@ public abstract class AbstractDialect implements Dialect
         
         if (column.getDefaultValue() != null)
         {
-            // FIXME Escape string values.
-            sql.append(" DEFAULT ").append("'" + column.getDefaultValue().toString().replace("'", "''") + "'");
+            switch (column.getColumnType())
+            {
+            case Types.CHAR:
+            case Types.VARCHAR:
+            case Types.DATE:
+            case Types.TIME:
+            case Types.TIMESTAMP:
+                sql.append(" DEFAULT ").append("'" + column.getDefaultValue().toString().replace("'", "''") + "'");
+                break;
+            default:
+                sql.append(" DEFAULT ").append(column.getDefaultValue().toString());
+                break;
+            }
         }
     }
 
@@ -368,7 +380,8 @@ public abstract class AbstractDialect implements Dialect
             throw new RuntimeException("Table: " + tableName + ", column: " + columnName);
         }
         column.setNotNull(rs.getInt("NULLABLE") == DatabaseMetaData.columnNoNulls);
-        column.setDefaultValue(rs.getString("COLUMN_DEF"));
+//        column.setHasDefaultValue(rs.getObject("COLUMN_DEF") != null);
+//        column.setDefaultValue(rs.getObject("COLUMN_DEF"));
         switch (column.getColumnType())
         {
         case Types.CHAR:
@@ -407,7 +420,7 @@ public abstract class AbstractDialect implements Dialect
         Statement statement = connection.createStatement();
         statement.execute(addSql.toString());
         
-        if (column.isNotNull())
+        if (column.getNotNull())
         {
             StringBuilder updateSql = new StringBuilder();
             updateSql.append("UPDATE ").append(tableName)
@@ -469,9 +482,9 @@ public abstract class AbstractDialect implements Dialect
         {
             partial.setDefaultValue(full.getDefaultValue());
         }
-        if (partial.isNotNull() == null)
+        if (partial.getNotNull() == null)
         {
-            partial.setNotNull(full.isNotNull());
+            partial.setNotNull(full.getNotNull());
         }
         if (partial.getGeneratorType() == null)
         {

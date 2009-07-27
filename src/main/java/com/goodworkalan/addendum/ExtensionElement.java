@@ -37,7 +37,7 @@ public class ExtensionElement<Parent>
      */
     void setAddendum(Parent parent)
     {
-        if (parent != null)
+        if (this.parent != null)
         {
             throw new IllegalStateException();
         }

@@ -20,7 +20,7 @@ public class Column
     private Integer columnType;
     
     /** True if there is a default value. */
-    private Boolean hasDefaultValue;
+    private boolean hasDefaultValue;
 
     /** The default value. */
     private Object defaultValue;
@@ -234,7 +234,7 @@ public class Column
      * 
      * @return The not null flag.
      */
-    public Boolean isNotNull()
+    public Boolean getNotNull()
     {
         return notNull;
     }

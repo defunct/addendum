@@ -1,68 +1,16 @@
 package com.goodworkalan.addendum.api;
 
-import java.io.File;
+import static org.testng.Assert.assertEquals;
+
 import java.sql.SQLException;
 
-import org.h2.tools.Server;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.Addenda;
-import com.goodworkalan.addendum.Connector;
-import com.goodworkalan.addendum.DriverManagerConnector;
 
 
 public class AddendaTest
 {
-    private Server server;
-    
-    private File database;
-    
-    private String getDatabasePath()
-    {
-        String property = System.getProperty("java.io.tmpdir");
-        do
-        {
-            database = new File(property, "database_" + (int) (Math.random() * 10000));
-        }
-        while (!database.mkdirs());
-        return new File(database, "temp").toString();
-    }
-    
-    @BeforeTest
-    public void start() throws SQLException
-    {
-        server = Server.createTcpServer(new String[] { "-trace" }).start();
-    }
-    
-    @AfterTest
-    public void stop()
-    {
-        server.stop();
-    }
-    
-    @AfterMethod
-    public void deleteDatabase()
-    {
-        if (database != null)
-        {
-            for (File file : database.listFiles())
-            {
-                if (!file.delete())
-                {
-                    throw new RuntimeException();
-                }
-            }
-            if (!database.delete())
-            {
-                throw new RuntimeException();
-            }
-        }
-        database = null;
-    }
-    
     private void createPersonAndAddress(Addenda addenda)
     {
         addenda
@@ -82,21 +30,11 @@ public class AddendaTest
                    .end();
     }
 
-    private Connector newConnector(String database)
-    {
-        return new DriverManagerConnector("jdbc:h2:" + database, "test", "");
-    }
-
-    private Addenda newAddenda() throws ClassNotFoundException
-    {
-        Class.forName("org.h2.Driver");
-        return new Addenda(newConnector(getDatabasePath()));
-    }
-
     @Test
     public void addendum() throws ClassNotFoundException, SQLException
     {
-        Addenda addenda = newAddenda();
+        MockDialect dialect = new MockDialect();
+        Addenda addenda = new Addenda(new MockConnector(), dialect);
         createPersonAndAddress(addenda);
         addenda.amend();
     }
@@ -104,7 +42,8 @@ public class AddendaTest
     @Test
     public void addendaTableExists() throws ClassNotFoundException, SQLException
     {
-        Addenda addenda = newAddenda();
+        MockDialect dialect = new MockDialect();
+        Addenda addenda = new Addenda(new MockConnector(), dialect);
         createPersonAndAddress(addenda);
         addenda.amend();
         addenda.amend();
@@ -113,9 +52,8 @@ public class AddendaTest
     @Test
     public void alterPerson()  throws ClassNotFoundException, SQLException
     {
-        Addenda addenda = newAddenda();
-        createPersonAndAddress(addenda);
-        addenda.amend();
+        MockDialect dialect = new MockDialect();
+        Addenda addenda = new Addenda(new MockConnector(), dialect);
         addenda
             .addendum()
                 .alterTable("Person")
@@ -124,6 +62,29 @@ public class AddendaTest
                     .end()
                 .commit();
         addenda.amend();
+        assertEquals(dialect.getAlterColumns().size(), 2);
+        AlterColumn alterColumn = dialect.getAlterColumns().get(0);
+        assertEquals(alterColumn.getTableName(), "Person");
+        assertEquals(alterColumn.getOldName(), "firstName");
+        assertEquals(alterColumn.getColumn().getName(), "first_name");
+    }
+    
+    @Test
+    public void addColumn() throws ClassNotFoundException, SQLException
+    {
+        MockDialect dialect = new MockDialect();
+        Addenda addenda = new Addenda(new MockConnector(), dialect);
+        addenda
+            .addendum()
+                .alterTable("Person")
+                    .addColumn("firstName", String.class).length(64).end()
+                    .end()
+                .commit();
+        addenda.amend();
+        assertEquals(dialect.getAddColumns().size(), 1);
+        AddColumn addColumn = dialect.getAddColumns().get(0);
+        assertEquals(addColumn.getTableName(), "Person");
+        assertEquals(addColumn.getColumn().getName(), "firstName");
     }
 }
 
