@@ -129,7 +129,7 @@ public class H2Dialect extends AbstractDialect
                            || column.getLength() != null
                            || column.getPrecision() != null
                            || column.getScale() != null
-                           || column.isNotNull() != null
+                           || column.getNotNull() != null
                            || column.getGeneratorType() != null
                            || column.getHasDefaultValue();
     
