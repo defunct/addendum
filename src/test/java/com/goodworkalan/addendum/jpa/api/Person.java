@@ -1,19 +1,45 @@
 package com.goodworkalan.addendum.jpa.api;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Person
 {
-    private int hatSize;
+    private int id;
     
-    public int getHatSize()
+    private String firstName;
+    
+    private String lastName;
+    
+    @Id
+    public int getId()
     {
-        return hatSize;
+        return id;
     }
     
-    public void setHatSize(int hatSize)
+    public void setId(int hatSize)
     {
-        this.hatSize = hatSize;
+        this.id = hatSize;
+    }
+    
+    public String getFirstName()
+    {
+        return firstName;
+    }
+    
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+    
+    public String getLastName()
+    {
+        return lastName;
+    }
+    
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
     }
 }

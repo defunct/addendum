@@ -61,7 +61,7 @@
         </dependency>
         <dependency>
             <groupId>com.goodworkalan</groupId>
-            <artifactId>addendum</artifactId>
+            <artifactId>addendum-h2</artifactId>
             <version>0.1${version.suffix}</version>
             <scope>test</scope>
         </dependency>
@@ -77,6 +77,11 @@
             <version>5.8</version>
             <classifier>jdk15</classifier>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.goodworkalan</groupId>
+            <artifactId>addendum-h2</artifactId>
+            <version>0.1${version.suffix}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

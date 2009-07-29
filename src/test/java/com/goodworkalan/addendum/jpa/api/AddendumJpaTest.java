@@ -1,18 +1,23 @@
 package com.goodworkalan.addendum.jpa.api;
 
+import static org.testng.Assert.assertTrue;
+
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.h2.tools.Server;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.Addenda;
 import com.goodworkalan.addendum.Connector;
 import com.goodworkalan.addendum.DriverManagerConnector;
-import com.goodworkalan.addendum.api.MockConnector;
-import com.goodworkalan.addendum.api.MockDialect;
+import com.goodworkalan.addendum.jpa.CreateEntity;
 
 public class AddendumJpaTest
 {
@@ -63,32 +68,31 @@ public class AddendumJpaTest
         database = null;
     }
     
-    private void createPersonAndAddress(Addenda addenda)
-    {
-        addenda
-            .addendum()
-                .createTable("Person")
-                    .column("firstName", String.class).length(64).end()
-                    .column("lastName", String.class).length(64).end()
-                    .end()
-                .createTable("Address")
-                    .column("address", String.class).length(64).end()
-                    .column("city", String.class).length(64).end()
-                    .column("state", String.class).length(64).end()
-                    .column("zip", String.class).length(64).end()
-                    .end()
-               .insert("Person")
-                   .columns("firstName", "lastName").values("Alan", "Gutierrez")
-                   .end();
-    }
-
     private Connector newConnector(String database)
     {
         return new DriverManagerConnector("jdbc:h2:" + database, "test", "");
     }
-
-    private Addenda newAddenda() throws ClassNotFoundException
+    
+    private void assertTable(Connector connector, String name) throws SQLException
     {
-        return new Addenda(new MockConnector(), new MockDialect());
+        Connection connection = connector.open();
+        DatabaseMetaData meta = connection.getMetaData();
+        ResultSet rs = meta.getTables(null, null, name, null);
+        assertTrue(rs.next());
+        rs.close();
+        connector.close(connection);
+    }
+
+    @Test
+    public void testCreateEntity() throws SQLException
+    {
+        Connector connector = newConnector(getDatabasePath());
+        Addenda addenda = new Addenda(connector);
+        addenda
+            .addendum()
+                .create(new CreateEntity(Person.class)).end()
+            .commit();
+        addenda.amend();
+        assertTable(connector, "PERSON");
     }
 }
