@@ -117,7 +117,7 @@ public class MySQLDialect extends AbstractDialect
         
         info.message("Altering column %s in table %s.", column.getName(), tableName);
         
-        info.string("tableName", tableName).string("oldName", oldName).object("column", column);
+        info.string("tableName", tableName).string("oldName", oldName).freeze("column", column, Column.class);
         
         Column meta = getMetaColumn(connection, tableName, oldName);
         
