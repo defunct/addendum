@@ -1,6 +1,7 @@
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Allows users to specify application specific SQL updates against
@@ -18,5 +19,5 @@ public interface Executable
      * @param dialect
      *            The SQL dialect.
      */
-    public void execute(Connection connection, Dialect dialect);
+    public void execute(Connection connection, Dialect dialect) throws SQLException;
 }
