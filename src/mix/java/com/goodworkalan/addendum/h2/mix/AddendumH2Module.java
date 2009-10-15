@@ -1,4 +1,4 @@
-package com.goodworkalan.go.go.mix;
+package com.goodworkalan.addendum.h2.mix;
 
 import com.goodworkalan.go.go.Artifact;
 import com.goodworkalan.mix.BasicJavaModule;
