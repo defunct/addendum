@@ -11,6 +11,7 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
+// FIXME Drop column.
 public class AlterTable
 {
     /**
