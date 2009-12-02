@@ -1,4 +1,4 @@
-package com.goodworkalan.go.go.mix;
+package com.goodworkalan.addendum.jpa.mix;
 
 import com.goodworkalan.go.go.Artifact;
 import com.goodworkalan.mix.ProjectModule;
@@ -24,7 +24,7 @@ public class AddendumJpaProject extends ProjectModule {
                     .depends()
                         .artifact(new Artifact("org.slf4j/slf4j-log4j12/1.4.2"))
                         .artifact(new Artifact("log4j/log4j/1.2.14"))
-                        .artifact(new Artifact("org.testng/testng/5.10"))
+                        .artifact(new Artifact("org.testng/testng/5.10/jdk15"))
                         .artifact(new Artifact("org.mockito/mockito-core/1.6"))
                         .artifact(new Artifact("com.h2database/h2/1.1.115"))
                         .artifact(new Artifact("com.goodworkalan/addendum-h2/0.1"))
