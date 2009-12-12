@@ -3,8 +3,13 @@ ADDENDUM
 A strategy for managing database schema changes, ordered updates to an
 application database schema.
 
-    Issues and Tasks: http://blogometer.com/trac/incubator
+    Home: http://bigeasy.github.com/addendum
+
     Source: http://github.com/bigeasy/addendum/tree/master
+    Documentation: http://wiki.github.com/bigeasy/addendum
+
+    Issues and Tasks: http://github.com/bigeasy/addendum/issues
+
     Contact: alan@blogometer.com
 
 MOTIVATION
