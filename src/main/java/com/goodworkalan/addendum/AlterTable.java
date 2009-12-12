@@ -232,6 +232,13 @@ public class AlterTable
         updates.add(new ColumnAlteration(tableName, name, column));
         return new AlterColumn(this, column);
     }
+    
+    
+    public AlterTable dropColumn(String name) {
+        updates.add(new ColumnDrop(tableName, name));
+        return this;
+    }
+
 
     /**
      * Test to see if the given column is not null and that the column name

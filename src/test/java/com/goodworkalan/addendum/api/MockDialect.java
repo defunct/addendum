@@ -67,6 +67,9 @@ public class MockDialect implements Dialect
     {
         alterColumns.add(new AlterColumn(tableName, oldName, column));
     }
+    
+    public void dropColumn(Connection connection, String tableName, String columnName) throws SQLException {
+    }
 
     public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException
     {

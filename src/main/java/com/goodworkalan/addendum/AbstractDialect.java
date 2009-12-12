@@ -452,6 +452,23 @@ public abstract class AbstractDialect implements Dialect
     }
 
     /**
+     * Drop the column with the given column name from the table with the given
+     * table name using the given connection.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param tableName
+     *            The table name.
+     * @param columnName
+     *            The column name.
+     */
+    public void dropColumn(Connection connection, String tableName, String columnName) throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.execute(String.format("ALTER TABLE %s DROP COLUMN %s", tableName, columnName));
+        statement.close();
+    }
+
+    /**
      * Inhert the properties of the given full column by assigning them to
      * unspecified values in the partial column.
      * 

@@ -103,6 +103,8 @@ public interface Dialect
      */
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException;
 
+    public void dropColumn(Connection connection, String tableName, String columnName) throws SQLException;
+
     /**
      * Verify that a table with the given table name exists in the database.
      * 
