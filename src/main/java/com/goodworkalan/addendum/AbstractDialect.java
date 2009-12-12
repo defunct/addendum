@@ -438,7 +438,7 @@ public abstract class AbstractDialect implements Dialect
             
             StringBuilder alterSql = new StringBuilder();
             alterSql.append("ALTER TABLE ").append(tableName)
-                    .append(" CHANGE ").append(column.getName()).append(" ").append(column.getName()).append(" ");
+                    .append(" CHANGE ").append(column.getName()).append(" ");
             columnDefinition(alterSql, column, true);
             
             info.string("alter", alterSql);
