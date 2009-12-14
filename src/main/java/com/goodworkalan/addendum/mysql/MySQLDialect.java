@@ -9,7 +9,7 @@ import java.sql.Types;
 
 import com.goodworkalan.addendum.AbstractDialect;
 import com.goodworkalan.addendum.Column;
-import com.goodworkalan.prattle.Log;
+import com.goodworkalan.prattle.Entry;
 import com.goodworkalan.prattle.Logger;
 import com.goodworkalan.prattle.LoggerFactory;
 
@@ -113,15 +113,13 @@ public class MySQLDialect extends AbstractDialect
     
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
     {
-        Log info = logger.info();
+        Entry info = logger.info("alter.column");
         
-        info.message("Altering column %s in table %s.", column.getName(), tableName);
-        
-        info.string("tableName", tableName).string("oldName", oldName).freeze("column", column, Column.class);
+        info.put("tableName", tableName).put("oldName", oldName).put("column", column);
         
         Column meta = getMetaColumn(connection, tableName, oldName);
         
-        info.object("meta", meta);
+        info.put("meta", meta);
         
         inherit(column, meta);
 
@@ -132,7 +130,7 @@ public class MySQLDialect extends AbstractDialect
         
         columnDefinition(sql, column, true);
         
-        info.string("alter", sql);
+        info.put("alter", sql);
 
         info.send();
         
