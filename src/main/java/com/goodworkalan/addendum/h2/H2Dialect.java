@@ -9,7 +9,7 @@ import java.sql.Types;
 
 import com.goodworkalan.addendum.AbstractDialect;
 import com.goodworkalan.addendum.Column;
-import com.goodworkalan.prattle.Log;
+import com.goodworkalan.prattle.Entry;
 import com.goodworkalan.prattle.Logger;
 import com.goodworkalan.prattle.LoggerFactory;
 
@@ -107,18 +107,16 @@ public class H2Dialect extends AbstractDialect
 
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
     {
-        Log debug = logger.debug();
+        Entry debug = logger.debug("alter.column");
         try
         {
-            debug.message("Altering column %s in table %s.", column.getName(), tableName);
-            
-            debug.string("tableName", tableName).string("oldName", oldName).freeze("column", column);
+            debug.put("tableName", tableName).put("oldName", oldName).put("column", column);
             
             if (!oldName.equals(column.getName()))
             {
                 String sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + oldName + " RENAME TO " + column.getName();
                 
-                debug.object("rename", sql);
+                debug.put("rename", sql);
                 
                 Statement statement = connection.createStatement();
                 statement.execute(sql);
@@ -137,7 +135,7 @@ public class H2Dialect extends AbstractDialect
             {
                 Column meta = getMetaColumn(connection, tableName, column.getName());
                 
-                debug.object("meta", meta);
+                debug.put("meta", meta);
                 
                 inherit(column, meta);
     
@@ -145,7 +143,7 @@ public class H2Dialect extends AbstractDialect
                 sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldName).append(" ");
                 columnDefinition(sql, column, true);
                 
-                debug.string("alter", sql);
+                debug.put("alter", sql);
                 
                 Statement statement = connection.createStatement();
                 statement.execute(sql.toString());
