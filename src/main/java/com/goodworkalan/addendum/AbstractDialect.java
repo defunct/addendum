@@ -8,7 +8,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.goodworkalan.prattle.Log;
+import com.goodworkalan.prattle.Entry;
 import com.goodworkalan.prattle.Logger;
 
 /**
@@ -158,12 +157,10 @@ public abstract class AbstractDialect implements Dialect
      */
     public void createTable(Connection connection, String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException
     {
-        Log info = getLogger().info();
+        Entry info = getLogger().info("create");
         try
         {
-            info.message("Creating table %s.", tableName);
-            
-            info.object("columns", new ArrayList<Column>(columns));
+            info.put("columns", columns);
             
             StringBuilder sql = new StringBuilder();
             
@@ -232,7 +229,7 @@ public abstract class AbstractDialect implements Dialect
     
             sql.append("\n)");
             
-            info.string("sql", sql);
+            info.put("sql", sql);
             
             Statement statement = connection.createStatement();
             statement.execute(sql.toString());
@@ -405,17 +402,15 @@ public abstract class AbstractDialect implements Dialect
      */
     public void addColumn(Connection connection, String tableName, Column column) throws SQLException
     {
-        Log info = getLogger().info();
+        Entry info = getLogger().info("add.column");
         
-        info.message("Adding column %s to table %s.", column.getName(), tableName);
-        
-        info.string("tableName", tableName).object("column", column);
+        info.put("tableName", tableName).put("column", column);
         
         StringBuilder addSql = new StringBuilder();
         addSql.append("ALTER TABLE ").append(tableName).append(" ADD ");
         columnDefinition(addSql, column, false);
         
-        info.string("add", addSql);
+        info.put("add", addSql);
         
         Statement statement = connection.createStatement();
         statement.execute(addSql.toString());
@@ -428,8 +423,8 @@ public abstract class AbstractDialect implements Dialect
             
             info
                 .map("update")
-                    .string("sql", updateSql)
-                    .string("defaultValue", column.getDefaultValue())
+                    .put("sql", updateSql)
+                    .put("defaultValue", column.getDefaultValue())
                     .end();
             
             PreparedStatement prepared = connection.prepareStatement(updateSql.toString());
@@ -441,7 +436,7 @@ public abstract class AbstractDialect implements Dialect
                     .append(" CHANGE ").append(column.getName()).append(" ");
             columnDefinition(alterSql, column, true);
             
-            info.string("alter", alterSql);
+            info.put("alter", alterSql);
             
             statement.execute(alterSql.toString());
         }
@@ -537,15 +532,14 @@ public abstract class AbstractDialect implements Dialect
      */
     public void renameTable(Connection connection, String oldName, String newName) throws SQLException
     {
-        Log info = getLogger().info();
+        Entry info = getLogger().info("rename");
         
-        info.message("Renaming table %s to %s.", oldName, newName);
-        info.string("oldName", oldName).string("newName", newName);
+        info.put("oldName", oldName).put("newName", newName);
 
         StringBuilder sql = new StringBuilder();
         sql.append("RENAME TABLE ").append(oldName).append(" TO ").append(newName);
         
-        info.string("sql", sql);
+        info.put("sql", sql);
         
         info.send();
 
@@ -572,12 +566,10 @@ public abstract class AbstractDialect implements Dialect
      */
     public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException
     {
-        Log info = getLogger().info();
+        Entry info = getLogger().info("insert");
         try
         {
-            info.message("Inserting record into %s.", table);
-            
-            info.string("table", table).object("columns", columns).object("values", values);
+            info.put("table", table).put("columns", columns).put("values", values);
             
             StringBuilder sql = new StringBuilder();
             
@@ -604,7 +596,7 @@ public abstract class AbstractDialect implements Dialect
             
             sql.append(")\n");
             
-            info.string("sql", sql);
+            info.put("sql", sql);
             
             PreparedStatement statement = connection.prepareStatement(sql.toString());
             
