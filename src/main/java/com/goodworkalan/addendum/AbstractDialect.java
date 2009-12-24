@@ -25,19 +25,17 @@ import com.goodworkalan.prattle.Logger;
  * 
  * @author Alan Gutierrez
  */
-public abstract class AbstractDialect implements Dialect
-{
+public abstract class AbstractDialect implements Dialect {
     /** A map of SQL type flags to their SQL type names for the dialect. */
     private final Map<Integer, SortedMap<Integer, String>> typeNames;
     
     /** A map of SQL type flags to their SQL type names for the dialect. */
     private final Map<Integer, int[]> defaultPrecisionScale;
-    
+
     /**
      * Create a base dialect.
      */
-    protected AbstractDialect()
-    {
+    protected AbstractDialect() {
         this.typeNames = new HashMap<Integer, SortedMap<Integer, String>>();
         this.defaultPrecisionScale = new HashMap<Integer, int[]>();
     }
@@ -57,8 +55,7 @@ public abstract class AbstractDialect implements Dialect
      * @param name
      *            The SQL type name.
      */
-    protected void setType(int type, String name)
-    {
+    protected void setType(int type, String name) {
         setType(type, name, Integer.MAX_VALUE);
     }
 
@@ -73,10 +70,8 @@ public abstract class AbstractDialect implements Dialect
      * @param maxLength
      *            The max length for which the name applies.
      */
-    protected void setType(int type, String name, int maxLength)
-    {
-        if (!typeNames.containsKey(type))
-        {
+    protected void setType(int type, String name, int maxLength) {
+        if (!typeNames.containsKey(type)) {
             typeNames.put(type, new TreeMap<Integer, String>());
             setType(type, name, maxLength);
         }
@@ -94,8 +89,7 @@ public abstract class AbstractDialect implements Dialect
      * @param scale
      *            The default scale.
      */
-    protected void setDefaultPrecisionScale(int type, int precision, int scale)
-    {
+    protected void setDefaultPrecisionScale(int type, int precision, int scale) {
         defaultPrecisionScale.put(type, new int[] { precision, scale });
     }
     
@@ -155,37 +149,29 @@ public abstract class AbstractDialect implements Dialect
      * @param primaryKey
      *            The list of primary key fields.
      */
-    public void createTable(Connection connection, String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException
-    {
+    public void createTable(Connection connection, String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException {
         Entry info = getLogger().info("create");
-        try
-        {
+        try {
             info.put("columns", columns);
-            
+       
             StringBuilder sql = new StringBuilder();
             
             sql.append("CREATE TABLE ").append(tableName).append(" (\n");
-            
+
             String separator = "";
-            for (Column column : columns)
-            {
+            for (Column column : columns) {
                 sql.append(separator).append(column.getName()).append(" ");
-            
+
                 int length = column.getLength();
-                if (!typeNames.containsKey(column.getColumnType()))
-                {
+                if (!typeNames.containsKey(column.getColumnType())) {
                     throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
                 }
     
                 String pattern = null;
-                for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet())
-                {
-                    if (length > name.getKey())
-                    {
+                for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet()) {
+                    if (length > name.getKey()) {
                         continue;
-                    }
-                    else if (pattern != null)
-                    {
+                    } else if (pattern != null) {
                         break;
                     }
                     pattern = name.getValue();
@@ -193,15 +179,12 @@ public abstract class AbstractDialect implements Dialect
                 
                 sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
                 
-                if (column.getNotNull())
-                {
+                if (column.getNotNull()) {
                     sql.append(" NOT NULL");
                 }
-                
-                if (column.getGeneratorType() != null)
-                {
-                    switch (column.getGeneratorType())
-                    {
+
+                if (column.getGeneratorType() != null) {
+                    switch (column.getGeneratorType()) {
                     case IDENTITY:
                     case AUTO:
                         sql.append(" AUTO_INCREMENT");
@@ -214,13 +197,11 @@ public abstract class AbstractDialect implements Dialect
                 separator = ",\n";
             }
             
-            if (!primaryKey.isEmpty())
-            {
+            if (!primaryKey.isEmpty()) {
                 sql.append(separator);
                 sql.append("PRIMARY KEY (");
                 String keySeparator = "";
-                for (String key : primaryKey)
-                {
+                for (String key : primaryKey) {
                     sql.append(keySeparator).append(key);
                     keySeparator = ", ";
                 }
@@ -234,9 +215,7 @@ public abstract class AbstractDialect implements Dialect
             Statement statement = connection.createStatement();
             statement.execute(sql.toString());
             statement.close();
-        }
-        finally
-        {
+        } finally {
             info.send();
         }
     }
@@ -256,26 +235,20 @@ public abstract class AbstractDialect implements Dialect
      *            will not be added to the column definition SQL even if the
      *            column not null property is true.
      */
-    protected void columnDefinition(StringBuilder sql, Column column, boolean canNull)
-    {
+    protected void columnDefinition(StringBuilder sql, Column column, boolean canNull) {
         sql.append(column.getName()).append(" ");
         String pattern = null;
         
         int length = column.getLength();
         
-        if (!typeNames.containsKey(column.getColumnType()))
-        {
+        if (!typeNames.containsKey(column.getColumnType())) {
             throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
         }
 
-        for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet())
-        {
-            if (length > name.getKey())
-            {
+        for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet()) {
+            if (length > name.getKey()) {
                 continue;
-            }
-            else if (pattern != null)
-            {
+            } else if (pattern != null) {
                 break;
             }
             pattern = name.getValue();
@@ -283,15 +256,12 @@ public abstract class AbstractDialect implements Dialect
         
         sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
         
-        if (canNull && column.getNotNull())
-        {
+        if (canNull && column.getNotNull()) {
             sql.append(" NOT NULL");
         }
-        
-        if (column.getGeneratorType() != null)
-        {
-            switch (column.getGeneratorType())
-            {
+
+        if (column.getGeneratorType() != null) {
+            switch (column.getGeneratorType()) {
             case IDENTITY:
             case AUTO:
                 sql.append(" AUTO_INCREMENT");
@@ -301,10 +271,8 @@ public abstract class AbstractDialect implements Dialect
             }
         }
         
-        if (column.getDefaultValue() != null)
-        {
-            switch (column.getColumnType())
-            {
+        if (column.getDefaultValue() != null) {
+            switch (column.getColumnType()) {
             case Types.CHAR:
             case Types.VARCHAR:
             case Types.DATE:
@@ -355,14 +323,12 @@ public abstract class AbstractDialect implements Dialect
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    protected Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException
-    {
+    protected Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException {
         Column column = new Column(columnName);
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery("SELECT " + columnCase(column.getName()) + " FROM " + tableCase(tableName));
         ResultSetMetaData meta = rs.getMetaData();
-        if (meta.isAutoIncrement(1))
-        {
+        if (meta.isAutoIncrement(1)) {
             column.setGeneratorType(GeneratorType.IDENTITY);
         }
         column.setColumnType(meta.getColumnType(1));
@@ -372,15 +338,13 @@ public abstract class AbstractDialect implements Dialect
         statement.close();
         
         rs = connection.getMetaData().getColumns(null, null, tableCase(tableName), columnCase(columnName));
-        if (!rs.next())
-        {
+        if (!rs.next()) {
             throw new RuntimeException("Table: " + tableName + ", column: " + columnName);
         }
         column.setNotNull(rs.getInt("NULLABLE") == DatabaseMetaData.columnNoNulls);
 //        column.setHasDefaultValue(rs.getObject("COLUMN_DEF") != null);
 //        column.setDefaultValue(rs.getObject("COLUMN_DEF"));
-        switch (column.getColumnType())
-        {
+        switch (column.getColumnType()) {
         case Types.CHAR:
         case Types.VARCHAR:
             column.setLength(rs.getInt("COLUMN_SIZE"));
@@ -400,8 +364,7 @@ public abstract class AbstractDialect implements Dialect
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    public void addColumn(Connection connection, String tableName, Column column) throws SQLException
-    {
+    public void addColumn(Connection connection, String tableName, Column column) throws SQLException {
         Entry info = getLogger().info("add.column");
         
         info.put("tableName", tableName).put("column", column);
@@ -415,8 +378,7 @@ public abstract class AbstractDialect implements Dialect
         Statement statement = connection.createStatement();
         statement.execute(addSql.toString());
         
-        if (column.getNotNull())
-        {
+        if (column.getNotNull()) {
             StringBuilder updateSql = new StringBuilder();
             updateSql.append("UPDATE ").append(tableName)
                      .append(" SET ").append(column.getName()).append(" = ?");
@@ -472,34 +434,26 @@ public abstract class AbstractDialect implements Dialect
      * @param full
      *            The full column to inherit from.
      */
-    protected void inherit(Column partial, Column full)
-    {
-        if (partial.getColumnType() == null)
-        {
+    protected void inherit(Column partial, Column full) {
+        if (partial.getColumnType() == null) {
             partial.setColumnType(full.getColumnType());
         }
-        if (partial.getLength() == null)
-        {
+        if (partial.getLength() == null) {
             partial.setLength(full.getLength());
         }
-        if (partial.getPrecision() == null)
-        {
+        if (partial.getPrecision() == null) {
             partial.setPrecision(full.getPrecision());
         }
-        if (partial.getScale() == null)
-        {
+        if (partial.getScale() == null) {
             partial.setScale(full.getScale());
         }
-        if (partial.getDefaultValue() == null)
-        {
+        if (partial.getDefaultValue() == null) {
             partial.setDefaultValue(full.getDefaultValue());
         }
-        if (partial.getNotNull() == null)
-        {
+        if (partial.getNotNull() == null) {
             partial.setNotNull(full.getNotNull());
         }
-        if (partial.getGeneratorType() == null)
-        {
+        if (partial.getGeneratorType() == null) {
             partial.setGeneratorType(full.getGeneratorType());
         }
     }
@@ -514,8 +468,7 @@ public abstract class AbstractDialect implements Dialect
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    public void verifyTable(Connection connection, Table table)
-    {
+    public void verifyTable(Connection connection, Table table) {
     }
 
     /**
@@ -530,10 +483,9 @@ public abstract class AbstractDialect implements Dialect
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    public void renameTable(Connection connection, String oldName, String newName) throws SQLException
-    {
+    public void renameTable(Connection connection, String oldName, String newName) throws SQLException {
         Entry info = getLogger().info("rename");
-        
+
         info.put("oldName", oldName).put("newName", newName);
 
         StringBuilder sql = new StringBuilder();
@@ -564,11 +516,9 @@ public abstract class AbstractDialect implements Dialect
      * @throws SQLException
      *             For any SQL error.
      */
-    public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException
-    {
+    public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException {
         Entry info = getLogger().info("insert");
-        try
-        {
+        try {
             info.put("table", table).put("columns", columns).put("values", values);
             
             StringBuilder sql = new StringBuilder();
@@ -577,8 +527,7 @@ public abstract class AbstractDialect implements Dialect
             
             String separator = "";
             
-            for (String column : columns)
-            {
+            for (String column : columns) {
                 sql.append(separator).append(column);
                 separator = ", ";
             }
@@ -588,8 +537,7 @@ public abstract class AbstractDialect implements Dialect
             sql.append("VALUES(");
             
             separator = "";
-            for (int i = 0; i < values.size(); i++)
-            {
+            for (int i = 0; i < values.size(); i++) {
                 sql.append(separator).append("?");
                 separator = ", ";
             }
@@ -600,24 +548,18 @@ public abstract class AbstractDialect implements Dialect
             
             PreparedStatement statement = connection.prepareStatement(sql.toString());
             
-            for (int i = 0; i < values.size(); i++)
-            {
+            for (int i = 0; i < values.size(); i++) {
                 String value = values.get(i);
-                if (value == null)
-                {
+                if (value == null) {
                     statement.setNull(i + 1, Types.VARCHAR);
-                }
-                else
-                {
+                } else {
                     statement.setString(i + 1, value);
                 }
             }
             
             statement.execute();
             statement.close();
-        }
-        finally
-        {
+        } finally {
             info.send();
         }
     }
