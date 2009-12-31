@@ -64,7 +64,7 @@ public class CreateEntity extends ExtensionElement<Create>
     protected void ending(Create create)
     {
         List<String> pk = new ArrayList<String>();
-        CreateTable newTable = create.createTable(entityInfo.getName());
+        CreateTable newTable = create.createTable(entityInfo.getTableName());
         for (Map.Entry<String, PropertyInfo> entry : entityInfo.getProperties().entrySet())
         {
             PropertyInfo prop = entry.getValue();
