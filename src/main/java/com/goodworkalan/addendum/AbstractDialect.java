@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.goodworkalan.prattle.Entry;
-import com.goodworkalan.prattle.Logger;
+import com.goodworkalan.notice.event.Entry;
+import com.goodworkalan.notice.event.Logger;
 
 /**
  * An abstract dialect with default implementations of create table and insert
