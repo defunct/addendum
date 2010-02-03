@@ -9,9 +9,9 @@ import java.sql.Types;
 
 import com.goodworkalan.addendum.AbstractDialect;
 import com.goodworkalan.addendum.Column;
-import com.goodworkalan.prattle.Entry;
-import com.goodworkalan.prattle.Logger;
-import com.goodworkalan.prattle.LoggerFactory;
+import com.goodworkalan.notice.event.Entry;
+import com.goodworkalan.notice.event.Logger;
+import com.goodworkalan.notice.event.LoggerFactory;
 
 public class H2Dialect extends AbstractDialect
 {

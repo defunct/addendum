@@ -12,7 +12,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/addendum"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/furnish"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/prattle"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/notice"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/notice-event"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
