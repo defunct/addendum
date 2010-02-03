@@ -32,8 +32,7 @@
 			<attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/goodworkalan/madlib/0.1/madlib-0.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/cassandra"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/notice"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/prattle"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/notice-event"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
