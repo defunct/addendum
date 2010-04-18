@@ -1,8 +1,13 @@
 package com.goodworkalan.addendum;
 
 /**
- * Specifies the property values to verify against an existing column
- * in a table in a table assertion. 
+ * Specifies the property values to verify against an existing column in a table
+ * in a table assertion.
+ * <p>
+ * FIXME Who cares? If you fall apart during a migration, you're cause is lost.
+ * Make sure the output is correct before running it in production. There are
+ * many ways to do this. I'm not sure that this migration library is the right
+ * way. It makes the library so much more complex.
  * 
  * @author Alan Gutierrez
  */

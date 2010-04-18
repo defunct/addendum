@@ -1,0 +1,23 @@
+    addendum()
+        .entity("Person")
+            .column("firstName", String.class).length(64).add()
+            .column("lastName", String.class).length(64).end()
+            .get("lastName").add()
+            .column("age", int.class).add()
+            .end()
+        .get("Person").create()
+        .index("PersonLastName", get("Person")) // get operates on current addendum!
+        .end():
+    addendum()
+        .entity("Customer").renameFrom(previous().get("Person"))
+        .end();
+    addendum(AddMiddleInitialToCustomer.class)
+        .getCustomer() 
+            .getMiddleInitial().add()
+            .alter()
+        .end();
+    addendum(RenameMiddleInitialToMiddleName.class)
+        .getCustomer()
+            .getMiddleName().renameFrom(get(AddMiddleInitialToCustomer.class).getMiddleInitial())
+            .alter()
+        .end();
