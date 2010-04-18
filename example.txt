@@ -18,6 +18,43 @@
         .end();
     addendum(RenameMiddleInitialToMiddleName.class)
         .getCustomer()
-            .getMiddleName().renameFrom(get(AddMiddleInitialToCustomer.class).getMiddleInitial())
+            .getMiddleName().renameFrom(get(AddMiddleInitialToCustomer.class).getCustomer().getMiddleInitial())
             .alter()
         .end();
+
+public class AddMiddleInitialToCustomer {
+    public AddMiddleInitialToCustomer() {
+        entity("Customer")
+            .column("firstName", String.class).length(64).end()
+            .column("lastName", String.class).length(64).end()
+            .column("middleInitial", String.class).length(1).end()
+            .column("age", int.class).end()
+            .end();
+    }
+
+    public CustomerDefinition getCustomer() {
+        return new CustomerDefinition(this, get("Customer"));
+    }
+
+    public final static class CustomerDefinition extends TableDefinition<AddMiddleInitialToCustomer> { 
+        public CustomerDefinition(AddMiddleInitialToCustomer parent, TableDefinition<?> definition) {
+            super(parent, definition);
+        }
+
+        public ColumnDefinition<CustomerDefinition> getFirstName() {
+            new ColumnDefinition<CustomerDefinition>(this, get("firstName"));
+        }
+
+        public ColumnDefinition<CustomerDefinition> getLastName() {
+            new ColumnDefinition<CustomerDefinition>(this, get("lastName"));
+        }
+
+        public ColumnDefinition<CustomerDefinition> getMiddleName() {
+            new ColumnDefinition<CustomerDefinition>(this, get("middleInitial"));
+        }
+
+        public ColumnDefinition<CustomerDefinition> getAge() {
+            new ColumnDefinition<CustomerDefinition>(this, get("age"));
+        }
+    }
+}
