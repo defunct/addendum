@@ -1,9 +1,13 @@
 package com.goodworkalan.addendum;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Script {
-    private final Database database;
+class Script {
+    public final Database database;
+    
+    public final Map<String, Table> tables = new HashMap<String, Table>();
     
     private final List<Update> updates;
     

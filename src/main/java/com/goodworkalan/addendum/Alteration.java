@@ -14,6 +14,14 @@ public class Alteration {
         return new RenameTable(this, script, from);
     }
     
+    public AlterTable table(String name) {
+        Table table = script.database.tables.get(name);
+        if (table == null) {
+            throw new AddendumException(0, name);
+        }
+        return new AlterTable(this, table, script);
+    }
+    
     public Addendum end() {
         return addendum;
     }

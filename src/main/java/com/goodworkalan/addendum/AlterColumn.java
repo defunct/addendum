@@ -8,6 +8,10 @@ package com.goodworkalan.addendum;
  */
 public class AlterColumn extends ExistingColumn<AlterTable, AlterColumn>
 {
+    private final Script script;
+    
+    private final String tableName;
+
     /**
      * Create an alter column element that alters the given column in the given
      * table.
@@ -17,9 +21,10 @@ public class AlterColumn extends ExistingColumn<AlterTable, AlterColumn>
      * @param column
      *            The column name.
      */
-    public AlterColumn(AlterTable table, Column column)
-    {
-        super(table, column);
+    public AlterColumn(AlterTable alterTable, Script script, String tableName, Column column) {
+        super(alterTable, column);
+        this.tableName = tableName;
+        this.script = script;
     }
 
     /**
@@ -46,5 +51,10 @@ public class AlterColumn extends ExistingColumn<AlterTable, AlterColumn>
     protected AlterColumn getElement()
     {
         return this;
+    }
+    
+    @Override
+    protected void ending() {
+        script.add(new ColumnAlteration(tableName, column.getName(), column));
     }
 }

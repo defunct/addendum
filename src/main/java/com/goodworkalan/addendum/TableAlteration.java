@@ -2,7 +2,6 @@ package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Perform a table alteration update against the database.
@@ -14,8 +13,8 @@ class TableAlteration implements Update
     /** The table name. */
     private final String tableName;
 
-    /** List of columns to create. */
-    private final List<Column> addColumns;
+    /** The column to create. */
+    private final Column column;
 
     /**
      * Create a table alteration that adds the given columns the given table.
@@ -25,10 +24,10 @@ class TableAlteration implements Update
      * @param addColumns
      *            The columns to add.
      */
-    public TableAlteration(String tableName, List<Column> addColumns)
+    public TableAlteration(String tableName, Column column)
     {   
         this.tableName = tableName;
-        this.addColumns = addColumns;
+        this.column = column;
     }
     
     public void execute(Database database) {
@@ -36,10 +35,8 @@ class TableAlteration implements Update
         if (table == null) {
             throw new AddendumException(0, tableName);
         }
-        for (Column column : addColumns) {
-            if (table.getColumns().put(column.getName(), column) != null) {
-                throw new AddendumException(0, tableName, column.getName());
-            }
+        if (table.getColumns().put(column.getName(), column) != null) {
+            throw new AddendumException(0, tableName, column.getName());
         }
     }
 
@@ -55,11 +52,8 @@ class TableAlteration implements Update
      * @throws AddendumException
      *             For any error occurring during the update.
      */
-    public void execute(Connection connection, Dialect dialect) throws SQLException
-    {
-        for (Column column : addColumns)
-        {
+    public void execute(Connection connection, Dialect dialect)
+    throws SQLException {
             dialect.addColumn(connection, tableName, column);
-        }
     }
 }

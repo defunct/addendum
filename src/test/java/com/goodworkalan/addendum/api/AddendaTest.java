@@ -107,6 +107,14 @@ public class AddendaTest
                         .rename("Employee").to("Person")
                         .end()
                     .commit();
+                addendum()
+                    .alter()
+                        .table("Person")
+                            .alter("firstName").length(64).end()
+                            .add("age", int.class).defaultValue(0).end()
+                            .end()
+                        .end()
+                    .commit();
             }
         };
         addenda.create();

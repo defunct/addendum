@@ -1,0 +1,22 @@
+package com.goodworkalan.addendum;
+
+public class AddColumn extends FreshColumn<AlterTable, AddColumn> {
+    private final Script script;
+    private final String tableName;
+
+    public AddColumn(AlterTable container, Script script, String tableName, Column column) {
+        super(container, column);
+        this.script = script;
+        this.tableName = tableName;
+    }
+    
+    @Override
+    protected AddColumn getElement() {
+        return this;
+    }
+    
+    @Override
+    protected void ending() {
+        script.add(new TableAlteration(tableName, column));
+    }
+}

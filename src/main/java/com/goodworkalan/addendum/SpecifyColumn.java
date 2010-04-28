@@ -91,14 +91,17 @@ public abstract class SpecifyColumn<Container, Element>
         return getElement();
     }
 
+    protected void ending() {
+    }
+    
     /**
      * Terminate the column definition and return the containing domain-specific
      * language element.
      * 
      * @return The table builder.
      */
-    public Container end()
-    {
+    public Container end() {
+        ending();
         return container;
     }
 }

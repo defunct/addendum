@@ -40,6 +40,18 @@ public class Column
     /** The unique id generator type. */
     private GeneratorType generatorType;
 
+    public Column(Column column) {
+        this.name = column.name;
+        this.columnType = column.columnType;
+        this.hasDefaultValue = column.hasDefaultValue;
+        this.defaultValue = column.defaultValue;
+        this.notNull = column.notNull;
+        this.length = column.length;
+        this.precision = column.precision;
+        this.scale = column.scale;
+        this.generatorType = column.generatorType;
+    }
+
     /**
      * Create a column with the given name and the given
      * <code>java.sql.Types</code> type with the column properties set to their default
