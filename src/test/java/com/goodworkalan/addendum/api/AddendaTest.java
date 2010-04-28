@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.Addenda;
+import com.goodworkalan.addendum.Definition;
 
 
 public class AddendaTest
@@ -96,6 +97,10 @@ public class AddendaTest
                         .column("lastName", String.class).end()
                         .end()
                     .table("Person").create()
+                    .commit();
+                addendum(BlogDefinition.class)
+                    .table("Post").create()
+                    .table("Comment").create()
                     .commit();
             }
         };

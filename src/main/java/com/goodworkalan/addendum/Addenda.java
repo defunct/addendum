@@ -11,14 +11,18 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.goodworkalan.reflective.ReflectiveException;
+import com.goodworkalan.reflective.ReflectiveFactory;
+
 /**
  * A collection of {@link Addendum} instances with changes to apply to an
  * application's data structures.
  * 
  * @author Alan Gutierrez
  */
-public class Addenda
-{
+public class Addenda {
+    private final ReflectiveFactory reflective;
+
     /** This logger is not currently in use. */
     static final Logger log = LoggerFactory.getLogger(Addenda.class);
     
@@ -45,15 +49,28 @@ public class Addenda
 
     /**
      * Create a collection of changes that tracks version updates in the data
+     * source returned by the given connection server using the given dialect.
+     * 
+     * @param connector
+     *            The database connection server.
+     * @param dialectProvider
+     *            The dialect provider.
+     */
+    Addenda(ReflectiveFactory reflective, Connector connector, DialectProvider dialectProvider) {
+        this.reflective = reflective;
+        this.connector = connector;
+        this.dialectProvider = dialectProvider;
+    }
+
+    /**
+     * Create a collection of changes that tracks version updates in the data
      * source returned by the given connection server.
      * 
      * @param connector
      *            The database connection server.
      */
-    public Addenda(Connector connector)
-    {
-        this.connector = connector;
-        this.dialectProvider = DialectLibrary.getInstance();
+    public Addenda(Connector connector) {
+        this(new ReflectiveFactory(), connector ,DialectLibrary.getInstance());
     }
 
     /**
@@ -65,10 +82,8 @@ public class Addenda
      * @param dialect
      *            The dialect.
      */
-    public Addenda(Connector connector, Dialect dialect)
-    {
-        this.connector = connector;
-        this.dialectProvider = new DialectInstance(dialect);
+    public Addenda(Connector connector, Dialect dialect) {
+        this(new ReflectiveFactory(), connector, new DialectInstance(dialect));
     }
 
     /**
@@ -144,6 +159,16 @@ public class Addenda
     public Addendum addendum(Connector connector)
     {
         return addendum(connector, dialectProvider);
+    }
+    
+    public Addendum addendum(Class<? extends Definition> definition) {
+        Addendum addendum = addendum();
+        try {
+            reflective.newInstance(definition).define(addendum);
+        } catch (ReflectiveException e) {
+            throw new AddendumException(0, e);
+        }
+        return addendum;
     }
 
     /**

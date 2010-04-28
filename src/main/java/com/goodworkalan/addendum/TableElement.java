@@ -115,6 +115,9 @@ public class TableElement
      *         migration.
      */
     public Create create() {
+        if (table.getColumns().isEmpty()) {
+            throw new AddendumException(0, table.getName());
+        }
         updates.add(new TableCreate(table));
         return addendum;
     }
