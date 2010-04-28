@@ -1,5 +1,5 @@
     addendum()
-        .entity("Person")
+        .table("Person")
             .column("firstName", String.class).length(64).add()
             .column("lastName", String.class).length(64).end()
             .get("lastName").add()

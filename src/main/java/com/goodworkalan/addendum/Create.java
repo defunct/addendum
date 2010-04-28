@@ -28,5 +28,5 @@ public interface Create extends Alter
      *            The table name.
      * @return A create table element to define the new table.
      */
-    public CreateTable createTable(String name);
+    public CreateTable table(String name);
 }

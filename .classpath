@@ -34,5 +34,6 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/notice"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/notice-event"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/class-boxer"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

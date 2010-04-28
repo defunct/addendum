@@ -1,5 +1,5 @@
 <projectDescription>
-  <name>addendum</name>
+  <name>addendum-migrations</name>
   <comment>A strategy for managing database schema changes,
     ordered updates to an application database schema.</comment>
   <projects/>

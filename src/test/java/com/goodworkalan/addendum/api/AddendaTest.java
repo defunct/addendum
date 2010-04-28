@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.Addenda;
+import com.goodworkalan.addendum.NamingConnector;
 
 
 public class AddendaTest
@@ -15,11 +16,11 @@ public class AddendaTest
     {
         addenda
             .addendum()
-                .createTable("Person")
+                .table("Person")
                     .column("firstName", String.class).length(64).end()
                     .column("lastName", String.class).length(64).end()
                     .end()
-                .createTable("Address")
+                .table("Address")
                     .column("address", String.class).length(64).end()
                     .column("city", String.class).length(64).end()
                     .column("state", String.class).length(64).end()
@@ -85,6 +86,22 @@ public class AddendaTest
         AddColumn addColumn = dialect.getAddColumns().get(0);
         assertEquals(addColumn.getTableName(), "Person");
         assertEquals(addColumn.getColumn().getName(), "firstName");
+    }
+    
+    @Test
+    public void basic() {
+        Addenda addenda = new Addenda(new NamingConnector("")) {
+            @Override
+            public void create() {
+                addendum()
+                    .table("Person")
+                        .column("firstName", String.class).end()
+                        .column("lastName", String.class).end()
+                        .end()
+                    .commit();
+            }
+        };
+        addenda.create();
     }
 }
 

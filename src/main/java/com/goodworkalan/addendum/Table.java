@@ -15,6 +15,9 @@ public class Table
     /** The table name. */
     private String name;
     
+    /** The primary key. */
+    private List<String> primaryKey;
+    
     /** The map of columns by column name. */
     private Map<String, Column> columns = new LinkedHashMap<String, Column>();
     
@@ -27,9 +30,19 @@ public class Table
      * @param name
      *            The table name.
      */
-    public Table(String name)
-    {
+    public Table(String name) {
+        this.primaryKey = new ArrayList<String>();
         this.name = name;
+    }
+
+    /**
+     * Return the primary key of the table as a list of primary key column
+     * names.
+     * 
+     * @return The primary key.
+     */
+    public List<String> getPrimaryKey() {
+        return primaryKey;
     }
 
     /**

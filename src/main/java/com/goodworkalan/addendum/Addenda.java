@@ -195,6 +195,11 @@ public class Addenda
     {
         return new Schema(verifications);
     }
+    
+    
+    public void create() {
+    }
+
 }
 
 /* vim: set et sw=4 ts=4 ai tw=78 nowrap: */

@@ -67,7 +67,7 @@ public class Addendum implements Execute
         updates.add(execution);
         return this;
     }
-
+    
     /**
      * Begin a creation extension element.
      * 
@@ -90,7 +90,7 @@ public class Addendum implements Execute
      *            The table name.
      * @return A create table element to define the new table.
      */
-    public CreateTable createTable(String name)
+    public CreateTable table(String name)
     {
         if (state.ordinal() > AddendumState.CREATING.ordinal())
         {
