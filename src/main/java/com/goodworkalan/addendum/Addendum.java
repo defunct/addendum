@@ -108,33 +108,6 @@ public class Addendum implements Execute {
 //        // FIXME Do not allow rename during first addendum.
 //        return new AlterTable(this, name, updates, tables);
 //    }
-
-    /**
-     * Begin an assert extension element.
-     * 
-     * @param <T>
-     *            The extension element type.
-     * @param extension
-     *            An instance of the extension element.
-     * @return The extension element.
-     */
-    public <T extends ExtensionElement<Verify>> T verify(T extension)
-    {
-        extension.setAddendum(this);
-        return extension;
-    }
-
-    /**
-     * Assert that an existing table matches a specified table definition.
-     * 
-     * @param name
-     *            The table name.
-     * @return An assert table element to specify the table definition.
-     */
-    public VerifyTable verifyTable(String name)
-    {
-        return null;// new VerifyTable(this, updates, tables.getFirst(), name);
-    } 
     
     /**
      * Begin an insert extension element.
