@@ -193,12 +193,12 @@ public class AlterTable
      *            The <code>java.sql.Type</code> column type.
      * @return An add column language element to define the column.
      */
-    public AddColumn addColumn(String name, int columnType)
+    public ColumnElement addColumn(String name, int columnType)
     {
         Column column = newColumn(name, 0);
         column.setDefaults(columnType);
         addColumns.add(column);
-        return new AddColumn(this, column);
+        return new ColumnElement(this, column);
     }
     
     /**
@@ -211,12 +211,12 @@ public class AlterTable
      *            The native column type.
      * @return An add column language element to define the column.
      */
-    public AddColumn addColumn(String name, Class<?> nativeType)
+    public ColumnElement addColumn(String name, Class<?> nativeType)
     {
         Column column = newColumn(name, 0);
         column.setDefaults(nativeType);
         addColumns.add(column);
-        return new AddColumn(this, column);
+        return new ColumnElement(this, column);
     }
 
     /**

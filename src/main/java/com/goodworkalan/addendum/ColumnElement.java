@@ -6,7 +6,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AddColumn extends DefineColumn<AlterTable, AddColumn>
+public class ColumnElement extends DefineColumn<AlterTable, ColumnElement>
 {
     /**
      * Add a new column to the table named by the given table name with the
@@ -17,7 +17,7 @@ public class AddColumn extends DefineColumn<AlterTable, AddColumn>
      * @param column
      *            The column object.
      */
-    AddColumn(AlterTable table, Column column)
+    ColumnElement(AlterTable table, Column column)
     {
         super(table, column);
     }
@@ -28,7 +28,7 @@ public class AddColumn extends DefineColumn<AlterTable, AddColumn>
      * @return The builder.
      */
     @Override
-    protected AddColumn getElement()
+    protected ColumnElement getElement()
     {
         return this;
     }
@@ -41,7 +41,7 @@ public class AddColumn extends DefineColumn<AlterTable, AddColumn>
      *            The default not null value.
      * @return This column builder to continue construction.
      */
-    public AddColumn notNull(Object defaultValue)
+    public ColumnElement notNull(Object defaultValue)
     {
         column.setNotNull(true);
         column.setDefaultValue(defaultValue);
