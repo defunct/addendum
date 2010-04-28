@@ -14,7 +14,7 @@ public class AlterTable {
      * The domain-specific language element that defines a single database
      * migration.
      */
-    private final Alteration alteration;
+    private final Addendum addendum;
 
     private final Script script;
     
@@ -39,8 +39,8 @@ public class AlterTable {
      *            each addendum, used to amend table and column names for the
      *            rename form methods.
      */
-    AlterTable(Alteration alteration, Table table, Script script) {
-        this.alteration = alteration;
+    AlterTable(Addendum addendum, Table table, Script script) {
+        this.addendum = addendum;
         this.table = table;
         this.script = script;
         this.addColumns = new ArrayList<Column>();
@@ -106,7 +106,7 @@ public class AlterTable {
         return this;
     }
 
-    public Alteration end () {
-        return alteration;
+    public Addendum end () {
+        return addendum;
     }
 }

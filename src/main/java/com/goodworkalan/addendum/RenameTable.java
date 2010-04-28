@@ -2,20 +2,20 @@ package com.goodworkalan.addendum;
 
 
 public class RenameTable {
-    private final Alteration alteration;
+    private final Addendum addendum;
 
     private final String from;
-    
+
     private final Script script;
-    
-    public RenameTable(Alteration alteration, Script script, String from) {
-        this.alteration = alteration;
+
+    public RenameTable(Addendum addendum, Script script, String from) {
+        this.addendum = addendum;
         this.from = from;
         this.script = script;
     }
 
-    public Alteration to(String to) {
+    public Addendum to(String to) {
         script.add(new TableRename(from, to));
-        return alteration;
+        return addendum;
     }
 }

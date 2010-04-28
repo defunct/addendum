@@ -3,10 +3,7 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +26,6 @@ public class Addenda {
     
     /** A list of changes to apply to the database. */
     private final List<ApplyAddendum> addenda = new ArrayList<ApplyAddendum>();
-    
-    /**
-     * A list of maps of table definitions by table name, one map for each
-     * addendum.
-     */
-    private final LinkedList<Map<String, Table>> tables = new LinkedList<Map<String, Table>>();
     
     /**
      * Update versions are stored in the data sources return by this connection
@@ -197,12 +188,10 @@ public class Addenda {
      * @return A domain-specific language element used to specify updates to the
      *         database.
      */
-    private Addendum addendum(Connector connector, DialectProvider dialectProvider)
-    {
+    private Addendum addendum(Connector connector, DialectProvider dialectProvider) {
         List<Update> updates = new ArrayList<Update>();
-        tables.addFirst(new HashMap<String, Table>());
         ApplyAddendum addendum = new ApplyAddendum(connector, dialectProvider, updates);
-        Addendum schema = new Addendum(new Script(database, updates), tables);
+        Addendum schema = new Addendum(new Script(database, updates));
         addenda.add(addendum);
         return schema;
     }

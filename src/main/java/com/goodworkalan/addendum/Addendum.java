@@ -1,7 +1,7 @@
 package com.goodworkalan.addendum;
 
-import java.util.LinkedList;
 import java.util.Map;
+
 
 /**
  * The root object of the domain-specific language used to define a database
@@ -14,20 +14,13 @@ public class Addendum {
     private final Script script;
     
     /**
-     * A list of maps of table definitions by table name, one map for each
-     * addendum.
-     */
-    private final LinkedList<Map<String, Table>> tables;
-    
-    /**
      * Create a new schema.
      * 
      * @param updates
      *            A list to record the updates to perform.
      */
-    Addendum(Script script, LinkedList<Map<String, Table>> tables) {
+    Addendum(Script script) {
         this.script = script;
-        this.tables = tables;
     }
 
     /**
@@ -44,6 +37,38 @@ public class Addendum {
         script.add(execution);
         return this;
     }
+    
+    public Addendum createIfAbsent() {
+        for (Map.Entry<String, Table> entry : script.tables.entrySet()) {
+            if (!script.database.tables.containsKey(entry.getKey())) {
+                script.add(new TableCreate(entry.getValue()));
+            }
+        }
+        return this;
+    }
+    
+    public Addendum create(String...names) {
+        for (String name : names) {
+            Table table = script.database.tables.get(name);
+            if (table == null) {
+                throw new AddendumException(0, name);
+            }
+            script.add(new TableCreate(table));
+        }
+        return this;
+    }
+    
+    public TableElement create(String name) {
+        if (script.database.tables.containsKey(name)) {
+            throw new AddendumException(0, name);
+        }
+        final Table table = new Table(name);
+        return new TableElement(this, script, table, new Runnable() {
+            public void run() {
+                script.add(new TableCreate(table));
+            }
+        });
+    }
 
     /**
      * Create a new table with the given name.
@@ -53,14 +78,30 @@ public class Addendum {
      * @return A create table element to define the new table.
      */
     public TableElement table(String name) {
-        Table table = tables.getFirst().get(name);
+        Table table = script.tables.get(name);
         if (table == null) {
             table = new Table(name);
-            tables.getFirst().put(name, table);
+            script.tables.put(name, table);
         }
-        tables.getFirst().put(name, table);
-        return new TableElement(this, script, table);
+        return new TableElement(this, script, table, new Runnable() {
+            public void run() {
+            }
+        });
     }
+    
+    
+    public RenameTable rename(String from) {
+        return new RenameTable(this, script, from);
+    }
+    
+    public AlterTable alter(String name) {
+        Table table = script.database.tables.get(name);
+        if (table == null) {
+            throw new AddendumException(0, name);
+        }
+        return new AlterTable(this, table, script);
+    }
+    
 
     /**
      * Alter an existing table with the given name.
@@ -91,10 +132,6 @@ public class Addendum {
         Insertion insertion = new Insertion(table);
         script.add(insertion);
         return new Insert(this, insertion);
-    }
-    
-    public Alteration alter() {
-        return new Alteration(this, script);
     }
     
     /**

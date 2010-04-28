@@ -91,28 +91,22 @@ public class AddendaTest
             @Override
             public void create() {
                 addendum()
-                    .table("Employee")
+                    .create("Employee")
                         .column("firstName", String.class).end()
                         .column("lastName", String.class).end()
                         .column("city", String.class).end()
                         .end()
-                    .table("Employee").create()
                     .commit();
                 addendum(BlogDefinition.class)
-                    .table("Post").create()
-                    .table("Comment").create()
+                    .createIfAbsent()
                     .commit();
                 addendum()
-                    .alter()
-                        .rename("Employee").to("Person")
-                        .end()
+                    .rename("Employee").to("Person")
                     .commit();
                 addendum()
-                    .alter()
-                        .table("Person")
-                            .alter("firstName").length(64).end()
-                            .add("age", int.class).defaultValue(0).end()
-                            .end()
+                    .alter("Person")
+                        .alter("firstName").length(64).end()
+                        .add("age", int.class).defaultValue(0).end()
                         .end()
                     .commit();
             }

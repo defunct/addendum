@@ -10,6 +10,8 @@ import java.util.Arrays;
  */
 public class TableElement
 {
+    private final Runnable ending;
+
     /** The root language element. */
     private final Addendum addendum;
     
@@ -27,10 +29,11 @@ public class TableElement
      * @param columns
      *            The list of column definitions.
      */
-    TableElement(Addendum schema, Script script, Table table) {
+    TableElement(Addendum schema, Script script, Table table, Runnable ending) {
         this.addendum = schema;
         this.script = script;
         this.table = table;
+        this.ending = ending;
     }
 
     /**
@@ -102,8 +105,8 @@ public class TableElement
      * 
      * @return The schema.
      */
-    public Addendum end()
-    {
+    public Addendum end() {
+        ending.run();
         return addendum;
     }
 
