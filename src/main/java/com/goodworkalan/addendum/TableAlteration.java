@@ -30,6 +30,18 @@ class TableAlteration implements Update
         this.tableName = tableName;
         this.addColumns = addColumns;
     }
+    
+    public void execute(Database database) {
+        Table table = database.tables.get(tableName);
+        if (table == null) {
+            throw new AddendumException(0, tableName);
+        }
+        for (Column column : addColumns) {
+            if (table.getColumns().put(column.getName(), column) != null) {
+                throw new AddendumException(0, tableName, column.getName());
+            }
+        }
+    }
 
     /**
      * Perform a table alteration that adds columns to a table in the database.

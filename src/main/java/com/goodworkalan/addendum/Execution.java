@@ -23,7 +23,17 @@ class Execution implements Update
     {
         this.executable = executable;
     }
-    
+
+    /**
+     * No good way to test an execution since we don't really know what it is
+     * going to do.
+     * 
+     * @param database
+     *            The pseudo-database.
+     */
+    public void execute(Database database) {
+    }
+
     /**
      * Perform a database update on the given JDBC connection using the given
      * SQL dialect.

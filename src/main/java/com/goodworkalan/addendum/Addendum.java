@@ -1,8 +1,6 @@
 package com.goodworkalan.addendum;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,10 +9,9 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
-public class Addendum implements Execute
-{
+public class Addendum implements Execute {
     /** A list of updates to perform. */
-    private final List<Update> updates;
+    private final Script script;
     
     /**
      * A list of maps of table definitions by table name, one map for each
@@ -28,9 +25,8 @@ public class Addendum implements Execute
      * @param updates
      *            A list to record the updates to perform.
      */
-    Addendum(List<Update> updates, LinkedList<Map<String, Table>> tables)
-    {
-        this.updates = updates;
+    Addendum(Script script, LinkedList<Map<String, Table>> tables) {
+        this.script = script;
         this.tables = tables;
     }
 
@@ -60,7 +56,7 @@ public class Addendum implements Execute
     public Execute execute(Executable executable)
     {
         Execution execution = new Execution(executable);
-        updates.add(execution);
+        script.add(execution);
         return this;
     }
     
@@ -93,7 +89,7 @@ public class Addendum implements Execute
             tables.getFirst().put(name, table);
         }
         tables.getFirst().put(name, table);
-        return new TableElement(this, updates, table);
+        return new TableElement(this, script, table);
     }
 
     /**
@@ -103,15 +99,15 @@ public class Addendum implements Execute
      *            The table name.
      * @return An alter table element to specify changes to the table.
      */
-    public AlterTable alterTable(String name)
-    {
-        if (!tables.getFirst().containsKey(name))
-        {
-            tables.getFirst().put(name, new Table(name));
-        }
-        // FIXME Do not allow rename during first addendum.
-        return new AlterTable(this, name, updates, tables);
-    }
+//    public AlterTable alterTable(String name)
+//    {
+//        if (!tables.getFirst().containsKey(name))
+//        {
+//            tables.getFirst().put(name, new Table(name));
+//        }
+//        // FIXME Do not allow rename during first addendum.
+//        return new AlterTable(this, name, updates, tables);
+//    }
 
     /**
      * Begin an assert extension element.
@@ -137,7 +133,7 @@ public class Addendum implements Execute
      */
     public VerifyTable verifyTable(String name)
     {
-        return new VerifyTable(this, updates, tables.getFirst(), name);
+        return null;// new VerifyTable(this, updates, tables.getFirst(), name);
     } 
     
     /**
@@ -165,10 +161,14 @@ public class Addendum implements Execute
     public Insert insert(String table)
     {
         Insertion insertion = new Insertion(table);
-        updates.add(insertion);
+        script.add(insertion);
         return new Insert(this, insertion);
     }
-
+    
+    public Alteration alter() {
+        return new Alteration(this, script);
+    }
+    
     /**
      * Terminates the addendum specification statement in the domain specific
      * language.

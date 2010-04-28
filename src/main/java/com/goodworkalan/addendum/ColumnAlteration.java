@@ -36,6 +36,17 @@ class ColumnAlteration implements Update
         this.columnName = oldName;
         this.column = column;
     }
+    
+    public void execute(Database database) {
+        Table table = database.tables.get(tableName);
+        if (table == null) {
+            throw new AddendumException(0, tableName, columnName);
+        }
+        if (table.getColumns().remove(columnName) == null) {
+            throw new AddendumException(0, tableName, columnName);
+        }
+        table.getColumns().put(column.getName(), column);
+    }
 
     /**
      * Performs a single alter column update against the database.

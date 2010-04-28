@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.Addenda;
-import com.goodworkalan.addendum.Definition;
 
 
 public class AddendaTest
@@ -92,15 +91,21 @@ public class AddendaTest
             @Override
             public void create() {
                 addendum()
-                    .table("Person")
+                    .table("Employee")
                         .column("firstName", String.class).end()
                         .column("lastName", String.class).end()
+                        .column("city", String.class).end()
                         .end()
-                    .table("Person").create()
+                    .table("Employee").create()
                     .commit();
                 addendum(BlogDefinition.class)
                     .table("Post").create()
                     .table("Comment").create()
+                    .commit();
+                addendum()
+                    .alter()
+                        .rename("Employee").to("Person")
+                        .end()
                     .commit();
             }
         };

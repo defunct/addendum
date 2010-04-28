@@ -22,6 +22,7 @@ import com.goodworkalan.reflective.ReflectiveFactory;
  */
 public class Addenda {
     private final ReflectiveFactory reflective;
+    private final Database database = new Database();
 
     /** This logger is not currently in use. */
     static final Logger log = LoggerFactory.getLogger(Addenda.class);
@@ -204,7 +205,7 @@ public class Addenda {
         List<Update> updates = new ArrayList<Update>();
         tables.addFirst(new HashMap<String, Table>());
         ApplyAddendum addendum = new ApplyAddendum(connector, dialectProvider, updates);
-        Addendum schema = new Addendum(updates, tables);
+        Addendum schema = new Addendum(new Script(database, updates), tables);
         addenda.add(addendum);
         return schema;
     }
@@ -220,7 +221,6 @@ public class Addenda {
     {
         return new Schema(verifications);
     }
-    
     
     public void create() {
     }

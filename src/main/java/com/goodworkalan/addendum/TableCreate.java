@@ -2,8 +2,6 @@ package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An update action that creates a table in a database.
@@ -22,6 +20,13 @@ class TableCreate implements Update {
      */
     public TableCreate(Table table) {
         this.table = table;
+    }
+    
+    public void execute(Database database) {
+        if (database.tables.containsKey(table.getName())) {
+            throw new AddendumException(0, table.getName());
+        }
+        database.tables.put(table.getName(), table);
     }
 
     /**

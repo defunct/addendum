@@ -24,6 +24,9 @@ public class TableVerification implements Update
         this.table = table;
     }
 
+    public void execute(Database database) {
+    }
+
     /**
      * Perform a verification of the existence of a table definition in the
      * database.

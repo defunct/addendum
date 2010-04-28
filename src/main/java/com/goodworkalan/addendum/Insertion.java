@@ -70,6 +70,16 @@ class Insertion implements Update
     }
 
     /**
+     * Nothing really takes place since the psuedo-database only tracks database
+     * structure.
+     * 
+     * @param database
+     *            The psuedo-database.
+     */
+    public void execute(Database database) {
+    }
+
+    /**
      * Insert the record described by this insertion statement into the database
      * at the given connection with the given database dialect.
      * 

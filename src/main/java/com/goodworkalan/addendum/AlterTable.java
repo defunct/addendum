@@ -74,7 +74,7 @@ public class AlterTable
      */
     AlterTable rename(String newName)
     {
-        updates.add(new RenameTable(tableName, newName));
+        updates.add(new TableRename(tableName, newName));
         tableName = newName;
         return this;
     }
@@ -157,7 +157,7 @@ public class AlterTable
                 }
             }
         }
-        updates.add(new RenameTable(oldName, tableName));
+        updates.add(new TableRename(oldName, tableName));
         return this;
     }
 

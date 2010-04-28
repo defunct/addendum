@@ -54,7 +54,7 @@ public class Table
     {
         return columns;
     }
-
+    
     /**
      * Get the map of verifications to perform on the table.
      * 

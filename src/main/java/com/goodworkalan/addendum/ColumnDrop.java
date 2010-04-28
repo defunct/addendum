@@ -27,6 +27,16 @@ public class ColumnDrop implements Update {
         this.tableName = tableName;
         this.columnName = columnName;
     }
+    
+    public void execute(Database database) {
+        Table table = database.tables.get(tableName);
+        if (table == null) {
+            throw new AddendumException(0, tableName, columnName);
+        }
+        if (table.getColumns().remove(columnName) == null) {
+            throw new AddendumException(0, tableName, columnName);
+        }
+    }
 
     /**
      * Performs a single alter column update against the database.

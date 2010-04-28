@@ -1,7 +1,6 @@
 package com.goodworkalan.addendum;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Begins a create table statement in the domain-specific language used to
@@ -18,7 +17,7 @@ public class TableElement
     private final Table table;
     
     /** The list of updates to perform against the database. */
-    private final List<Update> updates;
+    private final Script script;
 
     /**
      * Create a table builder with the given root language element.
@@ -28,9 +27,9 @@ public class TableElement
      * @param columns
      *            The list of column definitions.
      */
-    TableElement(Addendum schema, List<Update> updates, Table table) {
+    TableElement(Addendum schema, Script script, Table table) {
         this.addendum = schema;
-        this.updates = updates;
+        this.script = script;
         this.table = table;
     }
 
@@ -118,7 +117,7 @@ public class TableElement
         if (table.getColumns().isEmpty()) {
             throw new AddendumException(0, table.getName());
         }
-        updates.add(new TableCreate(table));
+        script.add(new TableCreate(table));
         return addendum;
     }
 }

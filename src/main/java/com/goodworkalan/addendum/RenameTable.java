@@ -1,49 +1,21 @@
 package com.goodworkalan.addendum;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 
-/**
- * Performs a single table rename update against the database.
- *
- * @author Alan Gutierrez
- */
-class RenameTable implements Update
-{
-    /** The existing table name. */
-    private final String name;
+public class RenameTable {
+    private final Alteration alteration;
+
+    private final String from;
     
-    /** The new table name. */
-    private final String newName;
-
-    /**
-     * The existing table name.
-     * 
-     * @param name
-     *            The existing table name.
-     * @param newName
-     *            The old table name.
-     */
-    public RenameTable(String name, String newName)
-    {
-        this.name = name;
-        this.newName = newName;
+    private final Script script;
+    
+    public RenameTable(Alteration alteration, Script script, String from) {
+        this.alteration = alteration;
+        this.from = from;
+        this.script = script;
     }
 
-    /**
-     * Perform a single table rename update against the database.
-     * 
-     * @param connection
-     *            The JDBC connection.
-     * @param dialect
-     *            The SQL dialect.
-     * @throws SQLException
-     *             For any SQL error.
-     * @throws AddendumException
-     *             For any error occurring during the update.
-     */
-    public void execute(Connection connection, Dialect dialect) throws SQLException
-    {
-        dialect.renameTable(connection, name, newName);
+    public Alteration to(String to) {
+        script.add(new TableRename(from, to));
+        return alteration;
     }
 }
