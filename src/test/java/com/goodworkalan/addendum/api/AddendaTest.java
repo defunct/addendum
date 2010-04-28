@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.Addenda;
-import com.goodworkalan.addendum.NamingConnector;
 
 
 public class AddendaTest
@@ -88,7 +87,7 @@ public class AddendaTest
     
     @Test
     public void basic() {
-        Addenda addenda = new Addenda(new NamingConnector("")) {
+        Addenda addenda = new Addenda(new MockConnector()) {
             @Override
             public void create() {
                 addendum()
@@ -96,6 +95,7 @@ public class AddendaTest
                         .column("firstName", String.class).end()
                         .column("lastName", String.class).end()
                         .end()
+                    .table("Person").create()
                     .commit();
             }
         };
