@@ -9,7 +9,7 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
-public class Addendum implements Execute {
+public class Addendum {
     /** A list of updates to perform. */
     private final Script script;
     
@@ -31,21 +31,6 @@ public class Addendum implements Execute {
     }
 
     /**
-     * Begin an execute extension element.
-     * 
-     * @param <T>
-     *            The extension element type.
-     * @param extension
-     *            An instance of the extension element.
-     * @return The extension element.
-     */
-    public <T extends ExtensionElement<Execute>> T execute(T extension)
-    {
-        extension.setAddendum(this);
-        return extension;
-    }
-
-    /**
      * Performs updates using application specific SQL statements.
      * 
      * @param executable
@@ -53,26 +38,11 @@ public class Addendum implements Execute {
      * @return This schema element to continue the domain-specific language
      *         statement.
      */
-    public Execute execute(Executable executable)
+    public Addendum execute(Executable executable)
     {
         Execution execution = new Execution(executable);
         script.add(execution);
         return this;
-    }
-    
-    /**
-     * Begin a creation extension element.
-     * 
-     * @param <T>
-     *            The extension element type.
-     * @param extension
-     *            An instance of the extension element.
-     * @return The extension element.
-     */
-    public <T extends ExtensionElement<Create>> T create(T extension)
-    {
-        extension.setAddendum(this);
-        return extension;
     }
 
     /**
@@ -108,21 +78,6 @@ public class Addendum implements Execute {
 //        // FIXME Do not allow rename during first addendum.
 //        return new AlterTable(this, name, updates, tables);
 //    }
-    
-    /**
-     * Begin an insert extension element.
-     * 
-     * @param <T>
-     *            The extension element type.
-     * @param extension
-     *            An instance of the extension element.
-     * @return The extension element.
-     */
-    public <T extends ExtensionElement<Populate>> T insert(T extension)
-    {
-        extension.setAddendum(this);
-        return extension;
-    }
 
     /**
      * Create an insert statement that will insert values into the database.

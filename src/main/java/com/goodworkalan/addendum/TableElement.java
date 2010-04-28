@@ -102,7 +102,7 @@ public class TableElement
      * 
      * @return The schema.
      */
-    public Create end()
+    public Addendum end()
     {
         return addendum;
     }
@@ -113,7 +113,7 @@ public class TableElement
      * @return The parent addendum element to continue specifying the database
      *         migration.
      */
-    public Create create() {
+    public Addendum create() {
         if (table.getColumns().isEmpty()) {
             throw new AddendumException(0, table.getName());
         }

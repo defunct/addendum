@@ -1,9 +1,7 @@
 package com.goodworkalan.addendum;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Begins an alter table statement in the domain-specific language for defining
@@ -11,9 +9,7 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
-// FIXME Drop column.
-public class AlterTable
-{
+public class AlterTable {
     /**
      * The domain-specific language element that defines a single database
      * migration.
@@ -110,7 +106,6 @@ public class AlterTable
         return this;
     }
 
-    
     public Alteration end () {
         return alteration;
     }

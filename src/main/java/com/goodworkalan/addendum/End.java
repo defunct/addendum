@@ -29,7 +29,7 @@ public class End
      * 
      * @return The schema.
      */
-    public Populate end()
+    public Addendum end()
     {
         return addendum;
     }
