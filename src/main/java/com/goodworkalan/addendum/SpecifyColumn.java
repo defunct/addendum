@@ -13,7 +13,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public abstract class DefineColumn<Container, Element>
+public abstract class SpecifyColumn<Container, Element>
 {
     /** The containing domain-specific language element. */
     private Container container;
@@ -29,7 +29,7 @@ public abstract class DefineColumn<Container, Element>
      * @param column
      *            The column definition bean.
      */
-    DefineColumn(Container container, Column column)
+    SpecifyColumn(Container container, Column column)
     {
         this.container = container;
         this.column = column;

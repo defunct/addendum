@@ -11,7 +11,7 @@ package com.goodworkalan.addendum;
  * @param <Element>
  *            The type of the sub-classed column element.
  */
-public abstract class ExistingColumn<Container, Element> extends DefineColumn<Container, Element>
+public abstract class ExistingColumn<Container, Element> extends SpecifyColumn<Container, Element>
 {
     /**
      * Create an alter column element that defines the given column and returns

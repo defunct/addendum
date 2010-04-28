@@ -11,7 +11,7 @@ package com.goodworkalan.addendum;
  * @param <Element>
  *            The type of the sub-classed column element.
  */
-public abstract class FreshColumn<Container, Element> extends DefineColumn<Container, Element>
+public abstract class FreshColumn<Container, Element> extends SpecifyColumn<Container, Element>
 {
     /**
      * Create a column specifier with the given name and given column type.

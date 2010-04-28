@@ -6,7 +6,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class ColumnElement extends DefineColumn<AlterTable, ColumnElement>
+public class ColumnElement extends SpecifyColumn<AlterTable, ColumnElement>
 {
     /**
      * Add a new column to the table named by the given table name with the
