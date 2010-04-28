@@ -190,7 +190,7 @@ public abstract class AbstractDialect implements Dialect {
                         sql.append(" AUTO_INCREMENT");
                         break;
                     case SEQUENCE:
-                        throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+                        throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR, "SEQUENCE");
                     }
                 }
                 
@@ -267,7 +267,7 @@ public abstract class AbstractDialect implements Dialect {
                 sql.append(" AUTO_INCREMENT");
                 break;
             case SEQUENCE:
-                throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR).add("SEQUENCE");
+                throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR, "SEQUENCE");
             }
         }
         

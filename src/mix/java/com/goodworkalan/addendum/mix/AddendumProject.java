@@ -13,6 +13,7 @@ public class AddendumProject extends ProjectModule {
                 .produces(new Artifact("com.goodworkalan/addendum/0.7"))
                 .main()
                     .depends()
+                        .artifact(new Artifact("com.github.bigeasy.danger/danger/0.1"))
                         .artifact(new Artifact("com.goodworkalan/furnish/0.1"))
                         .artifact(new Artifact("com.goodworkalan/notice-event/0.1.2"))
                         .artifact(new Artifact("org.slf4j/slf4j-api/1.4.2"))
