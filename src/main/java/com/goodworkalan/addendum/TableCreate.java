@@ -2,32 +2,26 @@ package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * An update action that creates a table in a database.
- *  
+ * 
  * @author Alan Gutierrez
  */
-class TableCreate implements Update
-{
+class TableCreate implements Update {
+    /** The table definition. */
     private final Table table;
     
-    /** The list of primary key fields. */
-    private final List<String> primaryKey;
-
     /**
      * Create a new create table update action.
      * 
      * @param table
      *            The table definition.
-     * @param primaryKey
-     *            The list of primary key fields.
      */
-    public TableCreate(Table table, List<String> primaryKey)
-    {
+    public TableCreate(Table table) {
         this.table = table;
-        this.primaryKey = primaryKey;
     }
 
     /**
@@ -45,6 +39,6 @@ class TableCreate implements Update
      */
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        dialect.createTable(connection, table.getName(), table.getColumns().values(), primaryKey);
+        dialect.createTable(connection, table.getName(), table.getColumns().values(), table.getPrimaryKey());
     }
 }

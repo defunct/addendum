@@ -86,17 +86,14 @@ public class Addendum implements Execute
      *            The table name.
      * @return A create table element to define the new table.
      */
-    public TableElement table(String name)
-    {
-        if (tables.getFirst().containsKey(name))
-        {
-            throw new IllegalStateException();
+    public TableElement table(String name) {
+        Table table = tables.getFirst().get(name);
+        if (table == null) {
+            table = new Table(name);
+            tables.getFirst().put(name, table);
         }
-        Table table = new Table(name);
         tables.getFirst().put(name, table);
-        List<String> primaryKey = new ArrayList<String>();
-        updates.add(new TableCreate(table, primaryKey));
-        return new TableElement(this, table, primaryKey);
+        return new TableElement(this, updates, table);
     }
 
     /**

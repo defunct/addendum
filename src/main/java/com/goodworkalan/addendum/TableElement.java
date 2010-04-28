@@ -17,8 +17,8 @@ public class TableElement
     /** The table definition bean. */
     private final Table table;
     
-    /** The primary key columns of the table. */
-    private final List<String> primaryKey;
+    /** The list of updates to perform against the database. */
+    private final List<Update> updates;
 
     /**
      * Create a table builder with the given root language element.
@@ -27,14 +27,11 @@ public class TableElement
      *            The root language element.
      * @param columns
      *            The list of column definitions.
-     * @param primaryKey
-     *            The primary key columns.
      */
-    TableElement(Addendum schema, Table table, List<String> primaryKey)
-    {
+    TableElement(Addendum schema, List<Update> updates, Table table) {
         this.addendum = schema;
+        this.updates = updates;
         this.table = table;
-        this.primaryKey = primaryKey;
     }
 
     /**
@@ -95,9 +92,8 @@ public class TableElement
      *            The primary key column names.
      * @return This builder to continue building.
      */
-    public TableElement primaryKey(String... columns)
-    {
-        primaryKey.addAll(Arrays.asList(columns));
+    public TableElement primaryKey(String... columns) {
+        table.getPrimaryKey().addAll(Arrays.asList(columns));
         return this;
     }
 
@@ -111,9 +107,15 @@ public class TableElement
     {
         return addendum;
     }
-    
-    
+
+    /**
+     * Create the table defined by this table language element.
+     * 
+     * @return The parent addendum element to continue specifying the database
+     *         migration.
+     */
     public Create create() {
+        updates.add(new TableCreate(table));
         return addendum;
     }
 }
