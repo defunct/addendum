@@ -36,11 +36,17 @@ public class TableElement
         this.table = table;
         this.primaryKey = primaryKey;
     }
-    
-    private Column newColumn(String name)
-    {
-        if (table.getColumns().containsKey(name))
-        {
+
+    /**
+     * Get the column definition for the given name or create one if the column
+     * definition does not exist.
+     * 
+     * @param name
+     *            The column name.
+     * @return The column definition.
+     */
+    private Column newColumn(String name) {
+        if (table.getColumns().containsKey(name)) {
             throw new AddendumException(0);
         }
         Column column = new Column(name);
@@ -58,8 +64,7 @@ public class TableElement
      *            The SQL column type.
      * @return A column builder.
      */
-    public CreateColumn column(String name, int columnType)
-    {
+    public CreateColumn column(String name, int columnType) {
         Column column = newColumn(name);
         column.setDefaults(columnType);
         return new CreateColumn(this, column);
@@ -104,6 +109,11 @@ public class TableElement
      */
     public Create end()
     {
+        return addendum;
+    }
+    
+    
+    public Create create() {
         return addendum;
     }
 }
