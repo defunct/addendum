@@ -36,9 +36,6 @@ public class Addenda {
      */
     private final LinkedList<Map<String, Table>> tables = new LinkedList<Map<String, Table>>();
     
-    /** A list of verifications to perform after all addenda are complete. */
-    private final List<Update> verifications = new ArrayList<Update>();
-    
     /**
      * Update versions are stored in the data sources return by this connection
      * server.
@@ -208,18 +205,6 @@ public class Addenda {
         Addendum schema = new Addendum(new Script(database, updates), tables);
         addenda.add(addendum);
         return schema;
-    }
-
-    /**
-     * After all addenda are applied, verify that the schema matches schema
-     * definition specified by a domain-specific language.
-     * 
-     * @return The root element of a domain-specific language use to specify a
-     *         schema verification.
-     */
-    public Schema verifySchema()
-    {
-        return new Schema(verifications);
     }
     
     public void create() {
