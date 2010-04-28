@@ -107,21 +107,6 @@ public class Addendum implements Execute
         updates.add(new TableCreate(table, primaryKey));
         return new CreateTable(this, table, primaryKey);
     }
-    
-    /**
-     * Begin an alter extension element.
-     * 
-     * @param <T>
-     *            The extension element type.
-     * @param extension
-     *            An instance of the extension element.
-     * @return The extension element.
-     */
-    public <T extends ExtensionElement<Alter>> T alter(T extension)
-    {
-        extension.setAddendum(this);
-        return extension;
-    }
 
     /**
      * Alter an existing table with the given name.

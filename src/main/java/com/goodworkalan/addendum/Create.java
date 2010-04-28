@@ -8,7 +8,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public interface Create extends Alter
+public interface Create extends Verify
 {
     /**
      * Begin a creation extension element.

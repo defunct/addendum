@@ -317,16 +317,4 @@ public class AlterTable
         updates.add(new ColumnAlteration(tableName, oldName, alter));
         return new AlterColumn(this, alter);
     }
-
-    /**
-     * Terminate the alter column statement and return the addendum parent
-     * language element to continue the definition of the addendum.
-     * 
-     * @return The addendum parent language element.
-     */
-    public Alter end()
-    {
-        updates.add(new TableAlteration(tableName, addColumns));
-        return addendum;
-    }
 }
