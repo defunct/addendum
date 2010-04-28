@@ -9,7 +9,7 @@ import java.util.List;
  * 
  * @author Alan Gutierrez
  */
-public class CreateTable
+public class TableElement
 {
     /** The root language element. */
     private final Addendum addendum;
@@ -30,7 +30,7 @@ public class CreateTable
      * @param primaryKey
      *            The primary key columns.
      */
-    CreateTable(Addendum schema, Table table, List<String> primaryKey)
+    TableElement(Addendum schema, Table table, List<String> primaryKey)
     {
         this.addendum = schema;
         this.table = table;
@@ -90,7 +90,7 @@ public class CreateTable
      *            The primary key column names.
      * @return This builder to continue building.
      */
-    public CreateTable primaryKey(String... columns)
+    public TableElement primaryKey(String... columns)
     {
         primaryKey.addAll(Arrays.asList(columns));
         return this;

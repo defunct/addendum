@@ -28,5 +28,5 @@ public interface Create extends Verify
      *            The table name.
      * @return A create table element to define the new table.
      */
-    public CreateTable table(String name);
+    public TableElement table(String name);
 }

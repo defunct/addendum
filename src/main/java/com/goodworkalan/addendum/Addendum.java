@@ -90,7 +90,7 @@ public class Addendum implements Execute
      *            The table name.
      * @return A create table element to define the new table.
      */
-    public CreateTable table(String name)
+    public TableElement table(String name)
     {
         if (state.ordinal() > AddendumState.CREATING.ordinal())
         {
@@ -105,7 +105,7 @@ public class Addendum implements Execute
         tables.getFirst().put(name, table);
         List<String> primaryKey = new ArrayList<String>();
         updates.add(new TableCreate(table, primaryKey));
-        return new CreateTable(this, table, primaryKey);
+        return new TableElement(this, table, primaryKey);
     }
 
     /**
