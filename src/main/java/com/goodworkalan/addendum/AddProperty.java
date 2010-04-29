@@ -10,7 +10,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class CreateColumn extends FreshColumn<DefineEntity, CreateColumn> {
+public class AddProperty extends FreshColumn<DefineEntity, AddProperty> {
     /**
      * Build the given column for new property in the given entity builder.
      * 
@@ -19,7 +19,7 @@ public class CreateColumn extends FreshColumn<DefineEntity, CreateColumn> {
      * @param column
      *            The column definition.
      */
-    public CreateColumn(DefineEntity table, Column column) {
+    public AddProperty(DefineEntity table, Column column) {
         super(table, column);
     }
 
@@ -29,7 +29,7 @@ public class CreateColumn extends FreshColumn<DefineEntity, CreateColumn> {
      * @return This builder.
      */
     @Override
-    protected CreateColumn getElement() {
+    protected AddProperty getElement() {
         return this;
     }
 }
