@@ -468,7 +468,7 @@ public abstract class AbstractDialect implements Dialect {
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    public void verifyTable(Connection connection, Table table) {
+    public void verifyTable(Connection connection, Entity table) {
     }
 
     /**

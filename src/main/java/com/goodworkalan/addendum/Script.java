@@ -7,7 +7,7 @@ import java.util.Map;
 class Script {
     public final Schema database;
     
-    public final Map<String, Table> tables = new HashMap<String, Table>();
+    public final Map<String, Entity> tables = new HashMap<String, Entity>();
     
     private final List<Update> updates;
     

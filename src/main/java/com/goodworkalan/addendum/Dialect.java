@@ -115,7 +115,7 @@ public interface Dialect
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    public void verifyTable(Connection connection, Table table) throws SQLException;
+    public void verifyTable(Connection connection, Entity table) throws SQLException;
 
     
     /**

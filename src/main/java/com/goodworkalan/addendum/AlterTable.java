@@ -18,7 +18,7 @@ public class AlterTable {
 
     private final Script script;
     
-    private final Table table;
+    private final Entity table;
     
     /** The list of column definitions of columns to add to the table. */
     private final List<Column> addColumns;
@@ -39,7 +39,7 @@ public class AlterTable {
      *            each addendum, used to amend table and column names for the
      *            rename form methods.
      */
-    AlterTable(Addendum addendum, Table table, Script script) {
+    AlterTable(Addendum addendum, Entity table, Script script) {
         this.addendum = addendum;
         this.table = table;
         this.script = script;

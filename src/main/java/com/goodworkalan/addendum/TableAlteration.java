@@ -31,7 +31,7 @@ class TableAlteration implements Update
     }
     
     public void execute(Schema database) {
-        Table table = database.tables.get(tableName);
+        Entity table = database.tables.get(tableName);
         if (table == null) {
             throw new AddendumException(0, tableName);
         }

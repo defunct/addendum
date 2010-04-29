@@ -16,7 +16,7 @@ public class TableElement
     private final Addendum addendum;
     
     /** The table definition bean. */
-    private final Table table;
+    private final Entity table;
     
     /**
      * Create a table builder with the given root language element.
@@ -26,7 +26,7 @@ public class TableElement
      * @param columns
      *            The list of column definitions.
      */
-    TableElement(Addendum schema, Table table, Runnable ending) {
+    TableElement(Addendum schema, Entity table, Runnable ending) {
         this.addendum = schema;
         this.table = table;
         this.ending = ending;

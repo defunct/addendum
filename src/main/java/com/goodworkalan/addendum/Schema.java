@@ -9,6 +9,6 @@ import java.util.Map;
  * @author Alan Gutierrez
  */
 class Schema {
-    public final Map<String, Table> tables = new HashMap<String, Table>();
+    public final Map<String, Entity> tables = new HashMap<String, Entity>();
     public final Map<String, String> aliases = new HashMap<String, String>();
 }

@@ -10,7 +10,7 @@ import java.util.Map;
  * 
  * @author Alan Gutierrez
  */
-public class Table
+public class Entity
 {
     /** The table name. */
     private String name;
@@ -30,7 +30,7 @@ public class Table
      * @param name
      *            The table name.
      */
-    public Table(String name) {
+    public Entity(String name) {
         this.primaryKey = new ArrayList<String>();
         this.name = name;
     }

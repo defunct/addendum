@@ -31,7 +31,7 @@ class TableRename implements Update {
     }
     
     public void execute(Schema schema) {
-        Table table = schema.tables.remove(from);
+        Entity table = schema.tables.remove(from);
         table.setName(to);
         schema.tables.put(to, table);
         schema.aliases.put(alias, to);

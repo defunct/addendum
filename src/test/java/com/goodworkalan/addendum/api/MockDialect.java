@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.goodworkalan.addendum.Column;
 import com.goodworkalan.addendum.Dialect;
-import com.goodworkalan.addendum.Table;
+import com.goodworkalan.addendum.Entity;
 
 public class MockDialect implements Dialect
 {
@@ -79,7 +79,7 @@ public class MockDialect implements Dialect
     {
     }
     
-    public void verifyTable(Connection connection, Table table)
+    public void verifyTable(Connection connection, Entity table)
     {
     }
 }

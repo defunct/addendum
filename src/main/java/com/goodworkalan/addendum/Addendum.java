@@ -39,7 +39,7 @@ public class Addendum {
     }
     
     public Addendum createIfAbsent() {
-        for (Map.Entry<String, Table> entry : script.tables.entrySet()) {
+        for (Map.Entry<String, Entity> entry : script.tables.entrySet()) {
             if (!script.database.aliases.containsKey(entry.getKey())) {
                 script.add(new TableCreate(entry.getKey(), entry.getValue()));
             }
@@ -53,7 +53,7 @@ public class Addendum {
             if (alias == null) {
                 throw new AddendumException(0, name);
             }
-            Table table = script.database.tables.get(alias);
+            Entity table = script.database.tables.get(alias);
             if (table == null) {
                 throw new AddendumException(0, name, alias);
             }
@@ -66,7 +66,7 @@ public class Addendum {
         if (script.database.tables.containsKey(name)) {
             throw new AddendumException(0, name);
         }
-        final Table table = new Table(name);
+        final Entity table = new Entity(name);
         return new TableElement(this, table, new Runnable() {
             public void run() {
                 script.add(new TableCreate(name, table));
@@ -82,9 +82,9 @@ public class Addendum {
      * @return A create table element to define the new table.
      */
     public TableElement define(String name) {
-        Table table = script.tables.get(name);
+        Entity table = script.tables.get(name);
         if (table == null) {
-            table = new Table(name);
+            table = new Entity(name);
             script.tables.put(name, table);
         }
         return new TableElement(this, table, new Runnable() {
@@ -106,7 +106,7 @@ public class Addendum {
         if (alias == null) {
             throw new AddendumException(0, name);
         }
-        Table table = script.database.tables.get(alias);
+        Entity table = script.database.tables.get(alias);
         if (table == null) {
             throw new AddendumException(0, name, alias);
         }

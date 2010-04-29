@@ -12,7 +12,7 @@ class TableCreate implements Update {
     private final String alias;
 
     /** The table definition. */
-    private final Table table;
+    private final Entity table;
     
     /**
      * Create a new create table update action.
@@ -20,7 +20,7 @@ class TableCreate implements Update {
      * @param table
      *            The table definition.
      */
-    public TableCreate(String alias, Table table) {
+    public TableCreate(String alias, Entity table) {
         this.alias = alias;
         this.table = table;
     }
