@@ -56,6 +56,9 @@ extends CodedDanger {
     /** Insert statement DSL values count does not match column count. */
     public final static int INSERT_VALUES = 401;
     
+    /** Unable to create an instance of a {@link Definition}. */
+    public final static int CREATE_DEFINITION = 402;
+    
     /**
      * Create a Sheaf exception with the given error code.
      * 

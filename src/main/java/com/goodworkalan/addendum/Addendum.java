@@ -1,10 +1,11 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
+
 import java.util.Map;
 
 import com.goodworkalan.reflective.ReflectiveException;
 import com.goodworkalan.reflective.ReflectiveFactory;
-
 
 /**
  * The root builder for an individual migration definition.
@@ -30,7 +31,7 @@ public class Addendum {
         try {
             return reflective.newInstance(definition);
         } catch (ReflectiveException e) {
-            throw new AddendumException(0, e);
+            throw new AddendumException(CREATE_DEFINITION, e, definition.getCanonicalName());
         }
     }
 
