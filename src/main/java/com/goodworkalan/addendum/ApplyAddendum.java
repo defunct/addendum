@@ -1,5 +1,6 @@
 package com.goodworkalan.addendum;
 import static com.goodworkalan.addendum.AddendumException.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;

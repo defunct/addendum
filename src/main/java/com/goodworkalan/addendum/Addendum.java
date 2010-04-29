@@ -1,6 +1,10 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
+import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
 
 import java.util.Map;
 
@@ -26,7 +30,20 @@ public class Addendum {
     Addendum(Script script) {
         this.script = script;
     }
-    
+
+    /**
+     * Create a new instance of a definition of the given type using the given
+     * reflective factory.
+     * <p>
+     * This method wraps a reflective exception in an addendum exception and is
+     * package visible for testing.
+     * 
+     * @param reflective
+     *            The reflective factory.
+     * @param definition
+     *            The definition type.
+     * @return A new instance of the definition type.
+     */
     static Definition newInstance(ReflectiveFactory reflective, Class<? extends Definition> definition) {
         try {
             return reflective.newInstance(definition);
@@ -52,7 +69,8 @@ public class Addendum {
     /**
      * Define an entity with the given entity <code>name</code> and the given
      * <code>tableName</code> in the database.
-     * 
+     * <p>
+     * FIXME Next, 100% coverage of DefineEntity.
      * @param name
      *            The entity name.
      * @param tableName
@@ -61,11 +79,11 @@ public class Addendum {
      */
     public DefineEntity define(String name, String tableName) {
         if (script.aliases.put(name, tableName) != null) {
-            throw new AddendumException(0, name, tableName);
+            throw new AddendumException(ADDENDUM_ENTITY_EXISTS, name);
         }
         Entity entity = new Entity(name);
         if (script.entities.put(tableName, entity) != null) {
-            throw new AddendumException(0, name, tableName);
+            throw new AddendumException(ADDENDUM_TABLE_EXISTS, tableName);
         }
         return new DefineEntity(this, entity);
     }
@@ -120,10 +138,10 @@ public class Addendum {
      */
     public CreateEntity create(String name, String tableName) {
         if (script.schema.aliases.containsKey(name)) {
-            throw new AddendumException(0, name, tableName);
+            throw new AddendumException(ENTITY_EXISTS, name);
         }
         if (script.schema.tables.containsKey(tableName)) {
-            throw new AddendumException(0, name, tableName);
+            throw new AddendumException(TABLE_EXISTS, tableName);
         }
         return new CreateEntity(this, new Entity(tableName), name, script);
     }

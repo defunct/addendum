@@ -62,6 +62,18 @@ extends CodedDanger {
     /** Unable to create an instance of a {@link Definition}. */
     public final static int CREATE_DEFINITION = 402;
     
+    /** An entity name already exists in the addendum. */
+    public final static int ADDENDUM_ENTITY_EXISTS = 403;
+    
+    /** A table name already exists in the addendum. */
+    public final static int ADDENDUM_TABLE_EXISTS = 404;
+    
+    /** An entity name already exists in the schema. */
+    public final static int ENTITY_EXISTS = 405;
+    
+    /** A table name already exists in the schema. */
+    public final static int TABLE_EXISTS = 406;
+    
     /**
      * Create a Sheaf exception with the given error code.
      * 

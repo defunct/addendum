@@ -1,11 +1,12 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
+import static com.goodworkalan.addendum.AddendumException.*;
 import static com.goodworkalan.reflective.ReflectiveException.ILLEGAL_ACCESS;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.api.MockConnector;
 import com.goodworkalan.reflective.ReflectiveException;
 import com.goodworkalan.reflective.ReflectiveFactory;
 
@@ -32,6 +33,78 @@ public class AddendumTest {
             Addendum.newInstance(reflective, BlogDefinition.class);
         } catch (AddendumException e) {
             assertEquals(e.getCode(), CREATE_DEFINITION);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    /** Test duplicate definition of an entity name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void addendumEntityExists() {
+        Addenda addenda = new Addenda(new MockConnector());
+        try {
+            addenda
+                .addendum()
+                    .define("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .define("a");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), ADDENDUM_ENTITY_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
+    /** Test duplicate definition of an entity name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void addendumTableExists() {
+        Addenda addenda = new Addenda(new MockConnector());
+        try {
+            addenda
+                .addendum()
+                    .define("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .define("b", "a");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), ADDENDUM_TABLE_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
+    /** Test duplicate definition of an entity name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void entityExists() {
+        Addenda addenda = new Addenda(new MockConnector());
+        try {
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .create("a");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), ENTITY_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
+    /** Test duplicate definition of an entity name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void tableExists() {
+        Addenda addenda = new Addenda(new MockConnector());
+        try {
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .create("b", "a");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), TABLE_EXISTS);
             System.out.println(e.getMessage());
             throw e;
         }
