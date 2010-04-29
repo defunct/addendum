@@ -81,7 +81,7 @@ public class Addendum {
      *            The table name.
      * @return A create table element to define the new table.
      */
-    public TableElement table(String name) {
+    public TableElement define(String name) {
         Table table = script.tables.get(name);
         if (table == null) {
             table = new Table(name);

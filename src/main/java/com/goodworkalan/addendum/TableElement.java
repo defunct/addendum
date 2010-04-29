@@ -49,7 +49,7 @@ public class TableElement
         return column;
     }
     
-    public TableElement name(String name) {
+    public TableElement table(String name) {
         table.setName(name);
         return this;
     }

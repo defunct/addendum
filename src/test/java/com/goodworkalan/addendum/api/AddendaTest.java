@@ -13,11 +13,11 @@ public class AddendaTest
     {
         addenda
             .addendum()
-                .table("Person")
+                .define("Person")
                     .add("firstName", String.class).length(64).end()
                     .add("lastName", String.class).length(64).end()
                     .end()
-                .table("Address")
+                .define("Address")
                     .add("address", String.class).length(64).end()
                     .add("city", String.class).length(64).end()
                     .add("state", String.class).length(64).end()
@@ -97,7 +97,7 @@ public class AddendaTest
                         .add("city", String.class).end()
                         .end()
                     .create("TaxRate")
-                        .name("tax_rate")
+                        .table("tax_rate")
                         .add("description", String.class).end()
                         .add("rate", float.class).end()
                         .end()
