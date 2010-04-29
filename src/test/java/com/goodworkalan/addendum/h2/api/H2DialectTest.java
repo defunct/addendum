@@ -72,11 +72,11 @@ public class H2DialectTest
     {
         addenda
             .addendum()
-                .createTable("Person")
+                .create("Person")
                     .column("firstName", String.class).length(64).end()
                     .column("lastName", String.class).length(64).end()
                     .end()
-                .createTable("Address")
+                .create("Address")
                     .column("address", String.class).length(64).end()
                     .column("city", String.class).length(64).end()
                     .column("state", String.class).length(64).end()
@@ -121,9 +121,9 @@ public class H2DialectTest
         addenda.amend();
         addenda
             .addendum()
-                .alterTable("Person")
-                    .alterColumn("firstName").rename("first_name").end()
-                    .alterColumn("lastName").rename("last_name").end()
+                .alter("Person")
+                    .alter("firstName").rename("first_name").end()
+                    .alter("lastName").rename("last_name").end()
                     .end()
                 .commit();
         addenda.amend();
