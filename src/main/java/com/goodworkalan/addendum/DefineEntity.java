@@ -3,13 +3,16 @@ package com.goodworkalan.addendum;
 import java.util.Arrays;
 
 /**
- * Begins a create table statement in the domain-specific language used to
- * define database update actions.
+ * Builds a new entity specifying the entity primary key and entity properties.
+ * <p>
+ * This class is used in the context of a domain-specific language that is
+ * implemented as chained Java method calls. Refer to the package documentation
+ * for documentation of the language and examples of use.
  * 
  * @author Alan Gutierrez
  */
 public class DefineEntity {
-    /** The root language element. */
+    /** The root individual migration builder. */
     private final Addendum addendum;
     
     /** The entity definition. */
@@ -18,25 +21,29 @@ public class DefineEntity {
     /**
      * Create a table builder with the given root language element.
      * 
-     * @param schema
-     *            The root language element.
-     * @param columns
-     *            The list of column definitions.
+     * @param addendum
+     *            The root individual migration builder.
+     * @param entity
+     *            The entity definition.
      */
-    DefineEntity(Addendum schema, Entity entity) {
-        this.addendum = schema;
+    DefineEntity(Addendum addendum, Entity entity) {
+        this.addendum = addendum;
         this.entity = entity;
     }
 
     /**
-     * Get the column definition for the given name or create one if the column
-     * definition does not exist.
+     * Define a new column in the table with the given name and given column
+     * type stored in the given column name in the database.
      * 
      * @param name
      *            The column name.
-     * @return The column definition.
+     * @param columnName
+     *            The name of the column in the database.
+     * @param columnType
+     *            The SQL column type.
+     * @return A new property builder.
      */
-    private Column newColumn(String name, String columnName) {
+    public CreateColumn add(String name, String columnName, int columnType) {
         if (entity.properties.containsKey(name)) {
             throw new AddendumException(0);
         }
@@ -46,7 +53,8 @@ public class DefineEntity {
         entity.properties.put(name, columnName);
         Column column = new Column(columnName);
         entity.columns.put(columnName, column);
-        return column;
+        column.setDefaults(columnType);
+        return new CreateColumn(this, column);
     }
 
     /**
@@ -54,32 +62,45 @@ public class DefineEntity {
      * type.
      * 
      * @param name
-     *            The column name.
+     *            The property name.
      * @param columnType
      *            The SQL column type.
-     * @return A column builder.
+     * @return A new property builder.
      */
     public CreateColumn add(String name, int columnType) {
-        Column column = newColumn(name, name);
-        column.setDefaults(columnType);
-        return new CreateColumn(this, column);
+        return add(name, name, columnType);
     }
 
     /**
-     * Define a new column in the table with the given name and a
-     * <code>java.sql.Types</code> column type appropriate for the given native
-     * Java type.
+     * Define a new property in the entity with the given name and a
+     * <code>java.sql.Types</code> column type appropriate for the given Java
+     * native type stored in the given column name in the database.
      * 
      * @param name
-     *            The column name.
+     *            The property name.
+     * @param columnName
+     *            The name of the column in the database.
+     * @param nativeType
+     *            The native column type.
+     * @return A column builder.
+     */
+    public CreateColumn add(String name, String columnName, Class<?> nativeType) {
+        return add(name, columnName, Column.getColumnType(nativeType));
+    }
+
+    /**
+     * Define a new property in the entity with the given name and a
+     * <code>java.sql.Types</code> column type appropriate for the given Java
+     * native type.
+     * 
+     * @param name
+     *            The property name.
      * @param nativeType
      *            The native column type.
      * @return A column builder.
      */
     public CreateColumn add(String name, Class<?> nativeType) {
-        Column column = newColumn(name, name);
-        column.setDefaults(nativeType);
-        return new CreateColumn(this, column);
+        return add(name, name, nativeType);
     }
 
     /**
@@ -90,6 +111,9 @@ public class DefineEntity {
      * @return This builder to continue building.
      */
     public DefineEntity primaryKey(String... columns) {
+        if (!entity.primaryKey.isEmpty()) {
+            throw new AddendumException(0);
+        }
         entity.primaryKey.addAll(Arrays.asList(columns));
         return this;
     }
@@ -102,9 +126,9 @@ public class DefineEntity {
     }
 
     /**
-     * Terminate the table definition and return the schema.
+     * Terminate the entity definition and the parent addendum builder.
      * 
-     * @return The schema.
+     * @return The addendum builder.
      */
     public Addendum end() {
         ending();

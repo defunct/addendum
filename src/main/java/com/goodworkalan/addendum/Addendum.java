@@ -54,21 +54,6 @@ public class Addendum {
         return define(name, name);
     }
 
-    /**
-     * Performs updates using application specific SQL statements.
-     * 
-     * @param executable
-     *            An {@link Executable} to execute.
-     * @return This schema element to continue the domain-specific language
-     *         statement.
-     */
-    public Addendum execute(Executable executable)
-    {
-        Execution execution = new Execution(executable);
-        script.add(execution);
-        return this;
-    }
-    
     // FIXME Take a set of names to create, or empty means all.
     public Addendum createIfAbsent() {
         // FIXME Broken, need to use aliases.
@@ -128,6 +113,21 @@ public class Addendum {
         return new AlterTable(this, table, script);
     }
     
+    /**
+     * Performs updates using application specific SQL statements.
+     * 
+     * @param executable
+     *            An {@link Executable} to execute.
+     * @return This schema element to continue the domain-specific language
+     *         statement.
+     */
+    public Addendum execute(Executable executable)
+    {
+        Execution execution = new Execution(executable);
+        script.add(execution);
+        return this;
+    }
+
     /**
      * Create an insert statement that will insert values into the database.
      * 
