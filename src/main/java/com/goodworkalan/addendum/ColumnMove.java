@@ -3,7 +3,7 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class ColumnMove implements Update {
+public class ColumnMove implements UpdateSchema {
     private final String entityName;
 
     private final String from;

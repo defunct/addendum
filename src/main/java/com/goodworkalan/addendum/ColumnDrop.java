@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Alan Gutierrez
  */
-public class ColumnDrop implements Update {
+public class ColumnDrop implements UpdateSchema {
     /** The table name. */
     private final String tableName;
 

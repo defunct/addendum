@@ -7,6 +7,6 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-interface Update {
+interface UpdateSchema {
     public UpdateDatabase execute(Schema schema);
 }

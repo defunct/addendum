@@ -3,7 +3,7 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class AliasRename implements Update {
+public class AliasRename implements UpdateSchema {
     /** The existing alias name. */
     private final String from;
     

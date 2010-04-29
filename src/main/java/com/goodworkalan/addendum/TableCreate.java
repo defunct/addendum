@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * 
  * @author Alan Gutierrez
  */
-class TableCreate implements Update {
+class TableCreate implements UpdateSchema {
     private final String alias;
 
     /** The table definition. */

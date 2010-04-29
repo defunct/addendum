@@ -16,7 +16,7 @@ class Script {
         this.updates = updates;
     }
     
-    public void add(Update update) {
+    public void add(UpdateSchema update) {
         updates.add(update.execute(database));
     }
 }

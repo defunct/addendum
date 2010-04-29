@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * 
  * @author Alan Gutierrez
  */
-class TableAlteration implements Update
+class TableAlteration implements UpdateSchema
 {
     /** The table name. */
     private final String tableName;

@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Alan Gutierrez
  */
-class ColumnAlteration implements Update
+class ColumnAlteration implements UpdateSchema
 {
     /** The entity name. */
     private final String entityName;
