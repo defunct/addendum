@@ -51,21 +51,4 @@ class TableAlteration implements UpdateSchema
             }
         };
     }
-
-    /**
-     * Perform a table alteration that adds columns to a table in the database.
-     * 
-     * @param connection
-     *            The JDBC connection.
-     * @param dialect
-     *            The SQL dialect.
-     * @throws SQLException
-     *             For any SQL error.
-     * @throws AddendumException
-     *             For any error occurring during the update.
-     */
-    public void execute(Connection connection, Dialect dialect)
-    throws SQLException {
-            dialect.addColumn(connection, tableName, column);
-    }
 }
