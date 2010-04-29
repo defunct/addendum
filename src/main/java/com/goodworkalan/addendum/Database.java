@@ -10,4 +10,5 @@ import java.util.Map;
  */
 class Database {
     public final Map<String, Table> tables = new HashMap<String, Table>();
+    public final Map<String, String> aliases = new HashMap<String, String>();
 }

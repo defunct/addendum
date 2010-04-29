@@ -40,8 +40,8 @@ public class Addendum {
     
     public Addendum createIfAbsent() {
         for (Map.Entry<String, Table> entry : script.tables.entrySet()) {
-            if (!script.database.tables.containsKey(entry.getKey())) {
-                script.add(new TableCreate(entry.getValue()));
+            if (!script.database.aliases.containsKey(entry.getKey())) {
+                script.add(new TableCreate(entry.getKey(), entry.getValue()));
             }
         }
         return this;
@@ -49,23 +49,27 @@ public class Addendum {
     
     public Addendum create(String...names) {
         for (String name : names) {
-            Table table = script.database.tables.get(name);
-            if (table == null) {
+            String alias = script.database.aliases.get(name);
+            if (alias == null) {
                 throw new AddendumException(0, name);
             }
-            script.add(new TableCreate(table));
+            Table table = script.database.tables.get(alias);
+            if (table == null) {
+                throw new AddendumException(0, name, alias);
+            }
+            script.add(new TableCreate(alias, table));
         }
         return this;
     }
     
-    public TableElement create(String name) {
+    public TableElement create(final String name) {
         if (script.database.tables.containsKey(name)) {
             throw new AddendumException(0, name);
         }
         final Table table = new Table(name);
-        return new TableElement(this, script, table, new Runnable() {
+        return new TableElement(this, table, new Runnable() {
             public void run() {
-                script.add(new TableCreate(table));
+                script.add(new TableCreate(name, table));
             }
         });
     }
@@ -83,7 +87,7 @@ public class Addendum {
             table = new Table(name);
             script.tables.put(name, table);
         }
-        return new TableElement(this, script, table, new Runnable() {
+        return new TableElement(this, table, new Runnable() {
             public void run() {
             }
         });
@@ -91,13 +95,20 @@ public class Addendum {
     
     
     public RenameTable rename(String from) {
+        if (!script.database.aliases.containsKey(from)) {
+            throw new AddendumException(0, from);
+        }
         return new RenameTable(this, script, from);
     }
     
     public AlterTable alter(String name) {
-        Table table = script.database.tables.get(name);
-        if (table == null) {
+        String alias = script.database.aliases.get(name);
+        if (alias == null) {
             throw new AddendumException(0, name);
+        }
+        Table table = script.database.tables.get(alias);
+        if (table == null) {
+            throw new AddendumException(0, name, alias);
         }
         return new AlterTable(this, table, script);
     }

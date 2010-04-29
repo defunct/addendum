@@ -9,6 +9,8 @@ import java.sql.SQLException;
  * @author Alan Gutierrez
  */
 class TableCreate implements Update {
+    private final String alias;
+
     /** The table definition. */
     private final Table table;
     
@@ -18,15 +20,20 @@ class TableCreate implements Update {
      * @param table
      *            The table definition.
      */
-    public TableCreate(Table table) {
+    public TableCreate(String alias, Table table) {
+        this.alias = alias;
         this.table = table;
     }
     
-    public void execute(Database database) {
-        if (database.tables.containsKey(table.getName())) {
-            throw new AddendumException(0, table.getName());
+    public void execute(Database schema) {
+        if (schema.aliases.containsKey(alias)) {
+            throw new AddendumException(0, alias, table.getName());
         }
-        database.tables.put(table.getName(), table);
+        schema.aliases.put(alias, table.getName());
+        if (schema.tables.containsKey(table.getName())) {
+            throw new AddendumException(0, alias, table.getName());
+        }
+        schema.tables.put(table.getName(), table);
     }
 
     /**

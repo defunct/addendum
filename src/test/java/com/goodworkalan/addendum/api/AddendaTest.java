@@ -96,6 +96,11 @@ public class AddendaTest
                         .column("lastName", String.class).end()
                         .column("city", String.class).end()
                         .end()
+                    .create("TaxRate")
+                        .name("tax_rate")
+                        .column("description", String.class).end()
+                        .column("rate", float.class).end()
+                        .end()
                     .commit();
                 addendum(BlogDefinition.class)
                     .createIfAbsent()

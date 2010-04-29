@@ -8,38 +8,33 @@ import java.sql.SQLException;
  *
  * @author Alan Gutierrez
  */
-class TableRename implements Update
-{
+class TableRename implements Update {
+    private final String alias;
     /** The existing table name. */
-    private final String name;
+    private final String from;
     
     /** The new table name. */
-    private final String newName;
-
+    private final String to;
+    
     /**
      * The existing table name.
      * 
-     * @param name
+     * @param from
      *            The existing table name.
-     * @param newName
-     *            The old table name.
+     * @param to
+     *            The new table name.
      */
-    public TableRename(String name, String newName)
-    {
-        this.name = name;
-        this.newName = newName;
+    public TableRename(String alias, String from, String to) {
+        this.alias = alias;
+        this.from = from;
+        this.to = to;
     }
     
-    public void execute(Database database) {
-        Table table = database.tables.remove(name);
-        if (table == null) {
-            throw new AddendumException(0, name, newName);
-        }
-        if (database.tables.containsKey(newName)) {
-            throw new AddendumException(0, name, newName);
-        }
-        table.setName(newName);
-        database.tables.put(table.getName(), table);
+    public void execute(Database schema) {
+        Table table = schema.tables.remove(from);
+        table.setName(to);
+        schema.tables.put(to, table);
+        schema.aliases.put(alias, to);
     }
 
     /**
@@ -56,6 +51,6 @@ class TableRename implements Update
      */
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        dialect.renameTable(connection, name, newName);
+        dialect.renameTable(connection, from, to);
     }
 }

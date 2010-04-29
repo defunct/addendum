@@ -56,4 +56,18 @@ public abstract class ExistingColumn<Container, Element> extends SpecifyColumn<C
         column.setColumnType(nativeType);
         return getElement();
     }
+
+    /**
+     * Set the column not null and initialize all existing values with the given
+     * default value.
+     * 
+     * @param defaultValue
+     *            The default not null value.
+     * @return This column builder to continue construction.
+     */
+    public Element notNull(Object defaultValue) {
+        column.setNotNull(true);
+        column.setDefaultValue(defaultValue);
+        return getElement();
+    }
 }

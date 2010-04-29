@@ -18,9 +18,6 @@ public class TableElement
     /** The table definition bean. */
     private final Table table;
     
-    /** The list of updates to perform against the database. */
-    private final Script script;
-
     /**
      * Create a table builder with the given root language element.
      * 
@@ -29,9 +26,8 @@ public class TableElement
      * @param columns
      *            The list of column definitions.
      */
-    TableElement(Addendum schema, Script script, Table table, Runnable ending) {
+    TableElement(Addendum schema, Table table, Runnable ending) {
         this.addendum = schema;
-        this.script = script;
         this.table = table;
         this.ending = ending;
     }
@@ -51,6 +47,11 @@ public class TableElement
         Column column = new Column(name);
         table.getColumns().put(name, column);
         return column;
+    }
+    
+    public TableElement name(String name) {
+        table.setName(name);
+        return this;
     }
 
     /**
@@ -107,20 +108,6 @@ public class TableElement
      */
     public Addendum end() {
         ending.run();
-        return addendum;
-    }
-
-    /**
-     * Create the table defined by this table language element.
-     * 
-     * @return The parent addendum element to continue specifying the database
-     *         migration.
-     */
-    public Addendum create() {
-        if (table.getColumns().isEmpty()) {
-            throw new AddendumException(0, table.getName());
-        }
-        script.add(new TableCreate(table));
         return addendum;
     }
 }

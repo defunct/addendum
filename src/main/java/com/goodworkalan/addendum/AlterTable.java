@@ -46,6 +46,14 @@ public class AlterTable {
         this.addColumns = new ArrayList<Column>();
     }
 
+    public RenameColumn rename(String from) {
+        Column column = table.getColumns().get(from);
+        if (column == null) {
+            throw new AddendumException(0, from);
+        }
+        return new RenameColumn(this, script, table.getName(), new Column(column), from);
+    }
+
     /**
      * Add a new column to the table with the given name and given column type.
      * 
@@ -76,7 +84,7 @@ public class AlterTable {
      * @return An add column language element to define the column.
      */
     public AddColumn add(String name, Class<?> nativeType) {
-        if (table.getColumns().containsKey("name")) {
+        if (table.getColumns().containsKey(name)) {
             throw new AddendumException(0, name);
         }
         Column column = new Column(name, nativeType);
