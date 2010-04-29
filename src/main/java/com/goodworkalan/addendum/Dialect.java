@@ -11,8 +11,7 @@ import java.util.List;
  * 
  * @author Alan Gutierrez
  */
-public interface Dialect
-{
+public interface Dialect {
     /**
      * Create the table used to store the applied addenda.
      * 
@@ -103,6 +102,19 @@ public interface Dialect
      */
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException;
 
+    /**
+     * Drop the column with the given column name in the table with the given
+     * table name using the given connection.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param tableName
+     *            The table name.
+     * @param columnName
+     *            The name of the column to drop.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
     public void dropColumn(Connection connection, String tableName, String columnName) throws SQLException;
 
     /**

@@ -289,32 +289,32 @@ public abstract class AbstractDialect implements Dialect {
 
     /**
      * Perform a case transform on the given table name for use as a metadata
-     * selection critieria.
+     * selection criteria.
      * 
      * @param tableName
      *            The table name.
      * @return The table name with the correct case for use as a metadata
-     *         selection critieria.
+     *         selection criteria.
      */
     protected abstract String tableCase(String tableName);
 
     /**
      * Perform a case transform on the given column name for use as a metadata
-     * selection critieria.
+     * selection criteria.
      * 
      * @param columnName
      *            The table name.
      * @return The column name with the correct case for use as a metadata
-     *         selection critieria.
+     *         selection criteria.
      */
     protected abstract String columnCase(String columnName);
 
     /**
-     * Create a column contianing the column metadata for the given column in
+     * Create a column containing the column metadata for the given column in
      * the given table.
      * 
      * @param connection
-     *            The JDBC conneciton.
+     *            The JDBC connection.
      * @param tableName
      *            The table name.
      * @param columnName
@@ -356,7 +356,7 @@ public abstract class AbstractDialect implements Dialect {
      * Add a the given column definition to the the given table.
      * 
      * @param connection
-     *            The JDBC conneciton.
+     *            The JDBC connection.
      * @param tableName
      *            The table name.
      * @param column
@@ -418,15 +418,18 @@ public abstract class AbstractDialect implements Dialect {
      *            The table name.
      * @param columnName
      *            The column name.
+     * @throws SQLException
+     *             For any reason, any reason at all.
      */
-    public void dropColumn(Connection connection, String tableName, String columnName) throws SQLException {
+    public void dropColumn(Connection connection, String tableName, String columnName)
+    throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute(String.format("ALTER TABLE %s DROP COLUMN %s", tableName, columnName));
         statement.close();
     }
 
     /**
-     * Inhert the properties of the given full column by assigning them to
+     * Inherit the properties of the given full column by assigning them to
      * unspecified values in the partial column.
      * 
      * @param partial
@@ -475,7 +478,7 @@ public abstract class AbstractDialect implements Dialect {
      * Rename a table form the given old name to the given new name.
      * 
      * @param connection
-     *            The JDBC conneciton.
+     *            The JDBC connection.
      * @param oldName
      *            The old table name.
      * @param newName
