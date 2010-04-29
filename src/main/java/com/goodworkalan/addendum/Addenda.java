@@ -198,7 +198,6 @@ public class Addenda {
     
     public void create() {
     }
-
 }
 
 /* vim: set et sw=4 ts=4 ai tw=78 nowrap: */

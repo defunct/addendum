@@ -34,6 +34,8 @@ public class DefineEntity {
     /**
      * Define a new column in the table with the given name and given column
      * type stored in the given column name in the database.
+     * <p>
+     * FIXME Rename CreateProperty and document.
      * 
      * @param name
      *            The column name.
