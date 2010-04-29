@@ -101,7 +101,8 @@ public class AddendaTest
                         .add("rate", float.class).end()
                         .end()
                     .commit();
-                addendum(BlogDefinition.class)
+                addendum()
+                    .apply(BlogDefinition.class)
                     .createIfAbsent()
                     .commit();
                 addendum()

@@ -2,6 +2,9 @@ package com.goodworkalan.addendum;
 
 import java.util.Map;
 
+import com.goodworkalan.reflective.ReflectiveException;
+import com.goodworkalan.reflective.ReflectiveFactory;
+
 
 /**
  * The root builder for an individual migration definition.
@@ -21,6 +24,28 @@ public class Addendum {
      */
     Addendum(Script script) {
         this.script = script;
+    }
+    
+    static Definition newInstance(ReflectiveFactory reflective, Class<? extends Definition> definition) {
+        try {
+            return reflective.newInstance(definition);
+        } catch (ReflectiveException e) {
+            throw new AddendumException(0, e);
+        }
+    }
+
+    /**
+     * Apply the an instance of the given definition class against this
+     * addendum. Definition classes are used to capture entity definitions
+     * generated from reflecting on an object-relational mapping.
+     * 
+     * @param definition
+     *            A definition class.
+     * @return This addendum builder to continue construction.
+     */
+    public Addendum apply(Class<? extends Definition> definition) {
+        newInstance(new ReflectiveFactory(), definition).define(this);
+        return this;
     }
 
     /**

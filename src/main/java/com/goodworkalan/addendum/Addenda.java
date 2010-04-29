@@ -8,9 +8,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.goodworkalan.reflective.ReflectiveException;
-import com.goodworkalan.reflective.ReflectiveFactory;
-
 /**
  * A collection of {@link Addendum} instances with changes to apply to an
  * application's data structures.
@@ -18,7 +15,7 @@ import com.goodworkalan.reflective.ReflectiveFactory;
  * @author Alan Gutierrez
  */
 public class Addenda {
-    private final ReflectiveFactory reflective;
+    // FIXME Rename.
     private final Schema database = new Schema();
 
     /** This logger is not currently in use. */
@@ -45,8 +42,7 @@ public class Addenda {
      * @param dialectProvider
      *            The dialect provider.
      */
-    Addenda(ReflectiveFactory reflective, Connector connector, DialectProvider dialectProvider) {
-        this.reflective = reflective;
+    Addenda(Connector connector, DialectProvider dialectProvider) {
         this.connector = connector;
         this.dialectProvider = dialectProvider;
     }
@@ -59,7 +55,7 @@ public class Addenda {
      *            The database connection server.
      */
     public Addenda(Connector connector) {
-        this(new ReflectiveFactory(), connector ,DialectLibrary.getInstance());
+        this(connector, DialectLibrary.getInstance());
     }
 
     /**
@@ -72,7 +68,7 @@ public class Addenda {
      *            The dialect.
      */
     public Addenda(Connector connector, Dialect dialect) {
-        this(new ReflectiveFactory(), connector, new DialectInstance(dialect));
+        this(connector, new DialectInstance(dialect));
     }
 
     /**
@@ -148,17 +144,6 @@ public class Addenda {
     public Addendum addendum(Connector connector)
     {
         return addendum(connector, dialectProvider);
-    }
-    
-    // FIXME Move this into addendum. (Whew! Saves a lot of refactoring.)
-    public Addendum addendum(Class<? extends Definition> definition) {
-        Addendum addendum = addendum();
-        try {
-            reflective.newInstance(definition).define(addendum);
-        } catch (ReflectiveException e) {
-            throw new AddendumException(0, e);
-        }
-        return addendum;
     }
 
     /**
