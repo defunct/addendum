@@ -8,15 +8,12 @@ import java.util.Arrays;
  * 
  * @author Alan Gutierrez
  */
-public class TableElement
-{
-    private final Runnable ending;
-
+public class DefineEntity {
     /** The root language element. */
     private final Addendum addendum;
     
     /** The entity definition. */
-    private final Entity entity;
+    protected final Entity entity;
     
     /**
      * Create a table builder with the given root language element.
@@ -26,10 +23,9 @@ public class TableElement
      * @param columns
      *            The list of column definitions.
      */
-    TableElement(Addendum schema, Entity entity, Runnable ending) {
+    DefineEntity(Addendum schema, Entity entity) {
         this.addendum = schema;
         this.entity = entity;
-        this.ending = ending;
     }
 
     /**
@@ -51,11 +47,6 @@ public class TableElement
         Column column = new Column(columnName);
         entity.columns.put(columnName, column);
         return column;
-    }
-    
-    public TableElement table(String name) {
-        entity.tableName = name;
-        return this;
     }
 
     /**
@@ -98,11 +89,17 @@ public class TableElement
      *            The primary key column names.
      * @return This builder to continue building.
      */
-    public TableElement primaryKey(String... columns) {
+    public DefineEntity primaryKey(String... columns) {
         entity.primaryKey.addAll(Arrays.asList(columns));
         return this;
     }
 
+    /**
+     * Called when the {@link #end() end} method is called to perform any 
+     * actions based on this entity definition.
+     */
+    protected void ending() {
+    }
 
     /**
      * Terminate the table definition and return the schema.
@@ -110,7 +107,7 @@ public class TableElement
      * @return The schema.
      */
     public Addendum end() {
-        ending.run();
+        ending();
         return addendum;
     }
 }

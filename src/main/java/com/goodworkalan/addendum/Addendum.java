@@ -4,23 +4,54 @@ import java.util.Map;
 
 
 /**
- * The root object of the domain-specific language used to define a database
- * migration.
+ * The root language element of an individual migration definition.
  * 
  * @author Alan Gutierrez
  */
 public class Addendum {
     /** A list of updates to perform. */
     private final Script script;
-    
+
     /**
-     * Create a new schema.
+     * Create a new addendum using the given <code>script</code> to record the
+     * addendum properties.
      * 
-     * @param updates
-     *            A list to record the updates to perform.
+     * @param script
+     *            The database migration script.
      */
     Addendum(Script script) {
         this.script = script;
+    }
+
+    /**
+     * Define an entity with the given entity <code>name</code> and the given
+     * <code>tableName</code> in the database.
+     * 
+     * @param name
+     *            The entity name.
+     * @return A create entity element to define the new table.
+     */
+    public DefineEntity define(String name, String tableName) {
+        if (script.aliases.put(name, tableName) != null) {
+            throw new AddendumException(0, name, tableName);
+        }
+        Entity entity = new Entity(name);
+        if (script.entities.put(tableName, entity) != null) {
+            throw new AddendumException(0, name, tableName);
+        }
+        return new DefineEntity(this, entity);
+    }
+
+    /**
+     * Define an entity with the given entity <code>name</code> which will also
+     * be used as the table name in the database.
+     * 
+     * @param name
+     *            The entity name.
+     * @return An entity definition langauge element.
+     */
+    public DefineEntity define(String name) {
+        return define(name, name);
     }
 
     /**
@@ -38,7 +69,9 @@ public class Addendum {
         return this;
     }
     
+    // FIXME Take a set of names to create, or empty means all.
     public Addendum createIfAbsent() {
+        // FIXME Broken, need to use aliases.
         for (Map.Entry<String, Entity> entry : script.entities.entrySet()) {
             if (!script.schema.aliases.containsKey(entry.getKey())) {
                 script.add(new TableCreate(entry.getKey(), entry.getValue()));
@@ -47,7 +80,7 @@ public class Addendum {
         return this;
     }
     
-    public Addendum create(String...names) {
+    public Addendum createDefinitions(String...names) {
         for (String name : names) {
             String alias = script.schema.aliases.get(name);
             if (alias == null) {
@@ -62,46 +95,20 @@ public class Addendum {
         return this;
     }
     
-    public TableElement create(final String name) {
-        if (script.schema.tables.containsKey(name)) {
-            throw new AddendumException(0, name);
+    public CreateEntity create(String name, String tableName) {
+        if (script.schema.aliases.containsKey(name)) {
+            throw new AddendumException(0, name, tableName);
         }
-        final Entity table = new Entity(name);
-        return new TableElement(this, table, new Runnable() {
-            public void run() {
-                script.add(new TableCreate(name, table));
-            }
-        });
+        if (script.schema.tables.containsKey(tableName)) {
+            throw new AddendumException(0, name, tableName);
+        }
+        return new CreateEntity(this, new Entity(tableName), name, script);
     }
 
-    /**
-     * Define an entity of the given name for use in this addendum.
-     * <p>
-     * FIXME Rename TableElement to DefineEntity.
-     * 
-     * @param name
-     *            The entity name.
-     * @return A create entity element to define the new table.
-     */
-    public TableElement define(String name, String tableName) {
-        if (script.aliases.put(name, tableName) != null) {
-            throw new AddendumException(0, name, tableName);
-        }
-        Entity entity = new Entity(name);
-        if (script.entities.put(tableName, entity) != null) {
-            throw new AddendumException(0, name, tableName);
-        }
-        return new TableElement(this, entity, new Runnable() {
-            public void run() {
-            }
-        });
+    public CreateEntity create(String name) {
+        return create(name, name);
     }
-    
-    public TableElement define(String name) {
-        return define(name, name);
-    }
-    
-    
+
     public RenameTable rename(String from) {
         if (!script.schema.aliases.containsKey(from)) {
             throw new AddendumException(0, from);
@@ -121,24 +128,6 @@ public class Addendum {
         return new AlterTable(this, table, script);
     }
     
-
-    /**
-     * Alter an existing table with the given name.
-     * 
-     * @param name
-     *            The table name.
-     * @return An alter table element to specify changes to the table.
-     */
-//    public AlterTable alterTable(String name)
-//    {
-//        if (!tables.getFirst().containsKey(name))
-//        {
-//            tables.getFirst().put(name, new Table(name));
-//        }
-//        // FIXME Do not allow rename during first addendum.
-//        return new AlterTable(this, name, updates, tables);
-//    }
-
     /**
      * Create an insert statement that will insert values into the database.
      * 

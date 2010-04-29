@@ -7,7 +7,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class CreateColumn extends FreshColumn<TableElement, CreateColumn>
+public class CreateColumn extends FreshColumn<DefineEntity, CreateColumn>
 {
     /**
      * Create a new column in the given table builder with the given name and
@@ -18,7 +18,7 @@ public class CreateColumn extends FreshColumn<TableElement, CreateColumn>
      * @param column
      *            The column.
      */
-    public CreateColumn(TableElement table, Column column)
+    public CreateColumn(DefineEntity table, Column column)
     {
         super(table, column);
     }
