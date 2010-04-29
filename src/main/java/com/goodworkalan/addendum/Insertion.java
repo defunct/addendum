@@ -76,7 +76,7 @@ class Insertion implements Update
      * @param database
      *            The psuedo-database.
      */
-    public void execute(Database database) {
+    public void execute(Schema database) {
     }
 
     /**

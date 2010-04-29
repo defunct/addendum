@@ -19,7 +19,7 @@ import com.goodworkalan.reflective.ReflectiveFactory;
  */
 public class Addenda {
     private final ReflectiveFactory reflective;
-    private final Database database = new Database();
+    private final Schema database = new Schema();
 
     /** This logger is not currently in use. */
     static final Logger log = LoggerFactory.getLogger(Addenda.class);

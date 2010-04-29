@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author Alan Gutierrez
  */
-class Database {
+class Schema {
     public final Map<String, Table> tables = new HashMap<String, Table>();
     public final Map<String, String> aliases = new HashMap<String, String>();
 }

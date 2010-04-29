@@ -15,7 +15,7 @@ public class AliasRename implements Update {
         this.to = to;
     }
 
-    public void execute(Database schema) {
+    public void execute(Schema schema) {
         if (schema.aliases.containsKey(to)) {
             throw new AddendumException(0, to);
         }

@@ -30,7 +30,7 @@ class TableRename implements Update {
         this.to = to;
     }
     
-    public void execute(Database schema) {
+    public void execute(Schema schema) {
         Table table = schema.tables.remove(from);
         table.setName(to);
         schema.tables.put(to, table);

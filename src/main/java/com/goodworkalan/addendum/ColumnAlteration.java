@@ -37,7 +37,7 @@ class ColumnAlteration implements Update
         this.column = column;
     }
     
-    public void execute(Database database) {
+    public void execute(Schema database) {
         Table table = database.tables.get(tableName);
         if (table == null) {
             throw new AddendumException(0, tableName, columnName);

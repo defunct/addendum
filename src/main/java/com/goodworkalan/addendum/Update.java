@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * @author Alan Gutierrez
  */
 interface Update {
-    public void execute(Database database);
+    public void execute(Schema database);
     /**
      * Perform a database update on the given JDBC connection using the given
      * SQL dialect.

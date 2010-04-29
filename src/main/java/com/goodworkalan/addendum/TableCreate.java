@@ -25,7 +25,7 @@ class TableCreate implements Update {
         this.table = table;
     }
     
-    public void execute(Database schema) {
+    public void execute(Schema schema) {
         if (schema.aliases.containsKey(alias)) {
             throw new AddendumException(0, alias, table.getName());
         }

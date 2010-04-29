@@ -31,7 +31,7 @@ class Execution implements Update
      * @param database
      *            The pseudo-database.
      */
-    public void execute(Database database) {
+    public void execute(Schema database) {
     }
 
     /**

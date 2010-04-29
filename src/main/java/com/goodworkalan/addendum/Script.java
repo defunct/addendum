@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 class Script {
-    public final Database database;
+    public final Schema database;
     
     public final Map<String, Table> tables = new HashMap<String, Table>();
     
     private final List<Update> updates;
     
-    public Script(Database database, List<Update> updates) {
+    public Script(Schema database, List<Update> updates) {
         this.database = database;
         this.updates = updates;
     }
