@@ -1,9 +1,7 @@
 package com.goodworkalan.addendum;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 
-public class AliasRename implements UpdateSchema {
+class AliasRename implements UpdateSchema {
     /** The existing alias name. */
     private final String from;
     
@@ -20,10 +18,6 @@ public class AliasRename implements UpdateSchema {
             throw new AddendumException(0, to);
         }
         schema.aliases.put(to, schema.aliases.remove(from));
-        return new UpdateDatabase() {
-            public void execute(Connection connection, Dialect dialect)
-            throws SQLException {
-            }
-        };
+        return new NullUpdateDatabase();
     }
 }
