@@ -18,7 +18,7 @@ public class RenameTable {
         script.add(new AliasRename(from, to));
         Schema schema = script.database;
         Entity table = schema.tables.get(schema.aliases.get(to));
-        if (table.getName().equals(from)) {
+        if (table.tableName.equals(from)) {
             script.add(new TableRename(to, from, to));
         }
         return addendum;

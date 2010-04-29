@@ -13,7 +13,7 @@ import java.util.Map;
 public class Entity
 {
     /** The table name. */
-    private String name;
+    public String tableName;
     
     /** The primary key. */
     private List<String> primaryKey;
@@ -32,7 +32,7 @@ public class Entity
      */
     public Entity(String name) {
         this.primaryKey = new ArrayList<String>();
-        this.name = name;
+        this.tableName = name;
     }
 
     /**
@@ -63,26 +63,5 @@ public class Entity
     public List<Map<String, Column>> getVerifications()
     {
         return verifications;
-    }
-
-    /**
-     * Get the table name.
-     * 
-     * @return The table name.
-     */
-    public String getName()
-    {
-        return name;
-    }
-
-    /**
-     * Set the table name.
-     * 
-     * @param name
-     *            The table name.
-     */
-    public void setName(String name)
-    {
-        this.name = name;
     }
 }

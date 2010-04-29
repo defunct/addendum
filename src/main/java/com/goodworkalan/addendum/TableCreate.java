@@ -12,28 +12,28 @@ class TableCreate implements Update {
     private final String alias;
 
     /** The table definition. */
-    private final Entity table;
+    private final Entity entity;
     
     /**
      * Create a new create table update action.
      * 
-     * @param table
+     * @param entity
      *            The table definition.
      */
-    public TableCreate(String alias, Entity table) {
+    public TableCreate(String alias, Entity entity) {
         this.alias = alias;
-        this.table = table;
+        this.entity = entity;
     }
     
     public void execute(Schema schema) {
         if (schema.aliases.containsKey(alias)) {
-            throw new AddendumException(0, alias, table.getName());
+            throw new AddendumException(0, alias, entity.tableName);
         }
-        schema.aliases.put(alias, table.getName());
-        if (schema.tables.containsKey(table.getName())) {
-            throw new AddendumException(0, alias, table.getName());
+        schema.aliases.put(alias, entity.tableName);
+        if (schema.tables.containsKey(entity.tableName)) {
+            throw new AddendumException(0, alias, entity.tableName);
         }
-        schema.tables.put(table.getName(), table);
+        schema.tables.put(entity.tableName, entity);
     }
 
     /**
@@ -51,6 +51,6 @@ class TableCreate implements Update {
      */
     public void execute(Connection connection, Dialect dialect) throws SQLException
     {
-        dialect.createTable(connection, table.getName(), table.getColumns().values(), table.getPrimaryKey());
+        dialect.createTable(connection, entity.tableName, entity.getColumns().values(), entity.getPrimaryKey());
     }
 }

@@ -15,8 +15,8 @@ public class TableElement
     /** The root language element. */
     private final Addendum addendum;
     
-    /** The table definition bean. */
-    private final Entity table;
+    /** The entity definition. */
+    private final Entity entity;
     
     /**
      * Create a table builder with the given root language element.
@@ -26,9 +26,9 @@ public class TableElement
      * @param columns
      *            The list of column definitions.
      */
-    TableElement(Addendum schema, Entity table, Runnable ending) {
+    TableElement(Addendum schema, Entity entity, Runnable ending) {
         this.addendum = schema;
-        this.table = table;
+        this.entity = entity;
         this.ending = ending;
     }
 
@@ -41,16 +41,16 @@ public class TableElement
      * @return The column definition.
      */
     private Column newColumn(String name) {
-        if (table.getColumns().containsKey(name)) {
+        if (entity.getColumns().containsKey(name)) {
             throw new AddendumException(0);
         }
         Column column = new Column(name);
-        table.getColumns().put(name, column);
+        entity.getColumns().put(name, column);
         return column;
     }
     
     public TableElement table(String name) {
-        table.setName(name);
+        entity.tableName = name;
         return this;
     }
 
@@ -95,7 +95,7 @@ public class TableElement
      * @return This builder to continue building.
      */
     public TableElement primaryKey(String... columns) {
-        table.getPrimaryKey().addAll(Arrays.asList(columns));
+        entity.getPrimaryKey().addAll(Arrays.asList(columns));
         return this;
     }
 
