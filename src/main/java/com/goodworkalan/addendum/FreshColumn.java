@@ -1,51 +1,50 @@
 package com.goodworkalan.addendum;
 
 /**
- * Base element for column definition elements for columns that do not yet
- * exist.
+ * Base builder for property definition builders for properties added to
+ * entities.
  * 
- * @author Alan Guteierrez
+ * @author Alan Gutierrez
  * 
  * @param <Container>
- *            The parent element in the domain-specific language.
+ *            The parent builder in the domain-specific language.
  * @param <Element>
- *            The type of the sub-classed column element.
+ *            The type of the sub-classed property builder.
  */
-public abstract class FreshColumn<Container, Element> extends SpecifyColumn<Container, Element>
-{
+public abstract class FreshColumn<Container, Element>
+extends SpecifyColumn<Container, Element> {
     /**
-     * Create a column specifier with the given name and given column type.
+     * Create a property builder with the given container builder that builds
+     * the given column definition.
+     * 
      * 
      * @param container
-     *            The containing language element.
+     *            The containing builder.
      * @param column
-     *            The column definition bean.
+     *            The column definition.
      */
-    public FreshColumn(Container container, Column column)
-    {
+    public FreshColumn(Container container, Column column) {
         super(container, column);
     }
 
     /**
-     * Set the unique id generator type;
+     * Set the unique id generator type of the database column.
      * 
      * @param generatorType
      *            The unique id generator type.
-     * @return This column builder to continue construction.
+     * @return This property builder to continue construction.
      */
-    public Element generator(GeneratorType generatorType)
-    {
+    public Element generator(GeneratorType generatorType) {
         column.setGeneratorType(generatorType);
         return getElement();
     }
     
     /**
-     * Set the column to not null.
+     * Set the database column to not null.
      * 
-     * @return This column builder to continue construction.
+     * @return This property builder to continue construction.
      */
-    public Element notNull()
-    {
+    public Element notNull() {
         column.setNotNull(true);
         return getElement();
     }
