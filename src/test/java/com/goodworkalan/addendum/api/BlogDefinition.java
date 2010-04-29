@@ -10,15 +10,15 @@ public class BlogDefinition implements Definition {
     public void define(Addendum addendum) {
         addendum
             .table("Post")
-                .column("id", Long.class).generator(GeneratorType.AUTO).end()
-                .column("created_at", Date.class).notNull().end()
-                .column("body", String.class).end()
+                .add("id", Long.class).generator(GeneratorType.AUTO).end()
+                .add("created_at", Date.class).notNull().end()
+                .add("body", String.class).end()
                 .end()
             .table("Comment")
-                .column("id", Long.class).generator(GeneratorType.AUTO).end()
-                .column("post_id", Long.class).notNull().end()
-                .column("created_at", Date.class).notNull().end()
-                .column("body", String.class).end()
+                .add("id", Long.class).generator(GeneratorType.AUTO).end()
+                .add("post_id", Long.class).notNull().end()
+                .add("created_at", Date.class).notNull().end()
+                .add("body", String.class).end()
                 .end();
     }
 }

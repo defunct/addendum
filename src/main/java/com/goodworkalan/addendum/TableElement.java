@@ -64,7 +64,7 @@ public class TableElement
      *            The SQL column type.
      * @return A column builder.
      */
-    public CreateColumn column(String name, int columnType) {
+    public CreateColumn add(String name, int columnType) {
         Column column = newColumn(name);
         column.setDefaults(columnType);
         return new CreateColumn(this, column);
@@ -81,8 +81,7 @@ public class TableElement
      *            The native column type.
      * @return A column builder.
      */
-    public CreateColumn column(String name, Class<?> nativeType)
-    {
+    public CreateColumn add(String name, Class<?> nativeType) {
         Column column = newColumn(name);
         column.setDefaults(nativeType);
         return new CreateColumn(this, column);
