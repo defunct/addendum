@@ -5,18 +5,20 @@ import java.util.List;
 import java.util.Map;
 
 class Script {
-    public final Schema database;
+    public final Schema schema;
     
-    public final Map<String, Entity> tables = new HashMap<String, Entity>();
+    public final Map<String, String> aliases = new HashMap<String, String>();
+
+    public final Map<String, Entity> entities = new HashMap<String, Entity>();
     
-    private final List<UpdateDatabase> updates;
+    private final List<UpdateDatabase> databaseUpdates;
     
-    public Script(Schema database, List<UpdateDatabase> updates) {
-        this.database = database;
-        this.updates = updates;
+    public Script(Schema database, List<UpdateDatabase> databaseUpdates) {
+        this.schema = database;
+        this.databaseUpdates = databaseUpdates;
     }
     
     public void add(UpdateSchema update) {
-        updates.add(update.execute(database));
+        databaseUpdates.add(update.execute(schema));
     }
 }

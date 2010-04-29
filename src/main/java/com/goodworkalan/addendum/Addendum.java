@@ -39,8 +39,8 @@ public class Addendum {
     }
     
     public Addendum createIfAbsent() {
-        for (Map.Entry<String, Entity> entry : script.tables.entrySet()) {
-            if (!script.database.aliases.containsKey(entry.getKey())) {
+        for (Map.Entry<String, Entity> entry : script.entities.entrySet()) {
+            if (!script.schema.aliases.containsKey(entry.getKey())) {
                 script.add(new TableCreate(entry.getKey(), entry.getValue()));
             }
         }
@@ -49,11 +49,11 @@ public class Addendum {
     
     public Addendum create(String...names) {
         for (String name : names) {
-            String alias = script.database.aliases.get(name);
+            String alias = script.schema.aliases.get(name);
             if (alias == null) {
                 throw new AddendumException(0, name);
             }
-            Entity table = script.database.tables.get(alias);
+            Entity table = script.schema.tables.get(alias);
             if (table == null) {
                 throw new AddendumException(0, name, alias);
             }
@@ -63,7 +63,7 @@ public class Addendum {
     }
     
     public TableElement create(final String name) {
-        if (script.database.tables.containsKey(name)) {
+        if (script.schema.tables.containsKey(name)) {
             throw new AddendumException(0, name);
         }
         final Entity table = new Entity(name);
@@ -75,38 +75,46 @@ public class Addendum {
     }
 
     /**
-     * Create a new table with the given name.
+     * Define an entity of the given name for use in this addendum.
+     * <p>
+     * FIXME Rename TableElement to DefineEntity.
      * 
      * @param name
-     *            The table name.
-     * @return A create table element to define the new table.
+     *            The entity name.
+     * @return A create entity element to define the new table.
      */
-    public TableElement define(String name) {
-        Entity table = script.tables.get(name);
-        if (table == null) {
-            table = new Entity(name);
-            script.tables.put(name, table);
+    public TableElement define(String name, String tableName) {
+        if (script.aliases.put(name, tableName) != null) {
+            throw new AddendumException(0, name, tableName);
         }
-        return new TableElement(this, table, new Runnable() {
+        Entity entity = new Entity(name);
+        if (script.entities.put(tableName, entity) != null) {
+            throw new AddendumException(0, name, tableName);
+        }
+        return new TableElement(this, entity, new Runnable() {
             public void run() {
             }
         });
     }
     
+    public TableElement define(String name) {
+        return define(name, name);
+    }
+    
     
     public RenameTable rename(String from) {
-        if (!script.database.aliases.containsKey(from)) {
+        if (!script.schema.aliases.containsKey(from)) {
             throw new AddendumException(0, from);
         }
         return new RenameTable(this, script, from);
     }
     
     public AlterTable alter(String name) {
-        String alias = script.database.aliases.get(name);
+        String alias = script.schema.aliases.get(name);
         if (alias == null) {
             throw new AddendumException(0, name);
         }
-        Entity table = script.database.tables.get(alias);
+        Entity table = script.schema.tables.get(alias);
         if (table == null) {
             throw new AddendumException(0, name, alias);
         }
