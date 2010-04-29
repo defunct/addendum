@@ -11,7 +11,7 @@ package com.goodworkalan.addendum;
  * @param <Element>
  *            The type of the sub-classed property builder.
  */
-public abstract class FreshColumn<Container, Element>
+public abstract class FreshProperty<Container, Element>
 extends SpecifyColumn<Container, Element> {
     /**
      * Create a property builder with the given container builder that builds
@@ -23,7 +23,7 @@ extends SpecifyColumn<Container, Element> {
      * @param column
      *            The column definition.
      */
-    public FreshColumn(Container container, Column column) {
+    public FreshProperty(Container container, Column column) {
         super(container, column);
     }
 

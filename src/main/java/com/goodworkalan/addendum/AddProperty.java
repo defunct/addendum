@@ -10,7 +10,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AddProperty extends FreshColumn<DefineEntity, AddProperty> {
+public class AddProperty extends FreshProperty<DefineEntity, AddProperty> {
     /**
      * Build the given column for new property in the given entity builder.
      * 

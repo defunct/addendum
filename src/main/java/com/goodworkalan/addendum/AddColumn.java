@@ -1,6 +1,6 @@
 package com.goodworkalan.addendum;
 
-public class AddColumn extends FreshColumn<AlterTable, AddColumn> {
+public class AddColumn extends FreshProperty<AlterTable, AddColumn> {
     private final Script script;
     private final String tableName;
     private final String property;
