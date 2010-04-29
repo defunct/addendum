@@ -150,6 +150,7 @@ public class Addenda {
         return addendum(connector, dialectProvider);
     }
     
+    // FIXME Move this into addendum. (Whew! Saves a lot of refactoring.)
     public Addendum addendum(Class<? extends Definition> definition) {
         Addendum addendum = addendum();
         try {

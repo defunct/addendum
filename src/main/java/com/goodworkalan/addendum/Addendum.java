@@ -4,7 +4,7 @@ import java.util.Map;
 
 
 /**
- * The root language element of an individual migration definition.
+ * The root builder for an individual migration definition.
  * 
  * @author Alan Gutierrez
  */
@@ -29,7 +29,9 @@ public class Addendum {
      * 
      * @param name
      *            The entity name.
-     * @return A create entity element to define the new table.
+     * @param tableName
+     *            The name of the table in the database.
+     * @return An entity definition builder.
      */
     public DefineEntity define(String name, String tableName) {
         if (script.aliases.put(name, tableName) != null) {
@@ -48,7 +50,7 @@ public class Addendum {
      * 
      * @param name
      *            The entity name.
-     * @return An entity definition langauge element.
+     * @return An entity definition builder.
      */
     public DefineEntity define(String name) {
         return define(name, name);
@@ -79,7 +81,17 @@ public class Addendum {
         }
         return this;
     }
-    
+
+    /**
+     * Create an entity with the given entity name and the given table name in
+     * the database.
+     * 
+     * @param name
+     *            The entity name.
+     * @param tableName
+     *            The name of the table in the database.
+     * @return A create entity builder.
+     */
     public CreateEntity create(String name, String tableName) {
         if (script.schema.aliases.containsKey(name)) {
             throw new AddendumException(0, name, tableName);
@@ -90,6 +102,14 @@ public class Addendum {
         return new CreateEntity(this, new Entity(tableName), name, script);
     }
 
+    /**
+     * Create an entity with the given entity name which will also be used as
+     * the table name in the database.
+     * 
+     * @param name
+     *            The entity name.
+     * @return A create entity builder.
+     */
     public CreateEntity create(String name) {
         return create(name, name);
     }

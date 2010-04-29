@@ -3,7 +3,8 @@ package com.goodworkalan.addendum;
 import java.util.Arrays;
 
 /**
- * Builds a new entity specifying the entity primary key and entity properties.
+ * Builds an entity definition specifying the entity primary key and entity
+ * properties.
  * <p>
  * This class is used in the context of a domain-specific language that is
  * implemented as chained Java method calls. Refer to the package documentation
@@ -34,8 +35,6 @@ public class DefineEntity {
     /**
      * Define a new column in the table with the given name and given column
      * type stored in the given column name in the database.
-     * <p>
-     * FIXME Rename CreateProperty and document.
      * 
      * @param name
      *            The column name.
