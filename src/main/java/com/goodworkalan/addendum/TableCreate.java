@@ -39,7 +39,7 @@ class TableCreate implements UpdateSchema {
             throw new AddendumException(0, alias, entity.tableName);
         }
         schema.tables.put(entity.tableName, entity);
-        return new UpdateDatabase() {
+        return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.createTable(connection, entity.tableName, entity.columns.values(), entity.primaryKey);

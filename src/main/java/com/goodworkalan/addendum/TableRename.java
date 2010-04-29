@@ -38,7 +38,7 @@ class TableRename implements UpdateSchema {
         entity.tableName = to;
         schema.tables.put(to, entity);
         schema.aliases.put(alias, to);
-        return new UpdateDatabase() {
+        return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.renameTable(connection, from, to);

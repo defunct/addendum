@@ -8,8 +8,7 @@ import java.sql.SQLException;
  * 
  * @author Alan Gutierrez
  */
-interface DialectProvider
-{
+interface DialectProvider {
     /**
      * Get a dialect for the given connection.
      * 

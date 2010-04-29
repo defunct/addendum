@@ -1,6 +1,7 @@
 package com.goodworkalan.addendum.api;
 
 import com.goodworkalan.addendum.Addenda;
+import com.goodworkalan.addendum.BlogDefinition;
 import com.goodworkalan.addendum.Migration;
 
 public class ExampleMigration extends Migration {
@@ -10,7 +11,7 @@ public class ExampleMigration extends Migration {
 
     @Override
     public void create() {
-        addendum()
+        addendum(new MockConnector())
             .create("Employee")
                 .add("firstName", String.class).end()
                 .add("lastName", String.class).end()
@@ -21,7 +22,7 @@ public class ExampleMigration extends Migration {
                 .add("rate", float.class).end()
                 .end()
             .commit();
-        addendum()
+        addendum(new MockConnector(), new MockDialect())
             .apply(BlogDefinition.class)
             .createIfAbsent()
             .commit();

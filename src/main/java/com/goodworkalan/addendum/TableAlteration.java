@@ -44,7 +44,7 @@ class TableAlteration implements UpdateSchema
         if (entity.columns.put(column.getName(), column) != null) {
             throw new AddendumException(0, tableName, column.getName());
         }
-        return new UpdateDatabase() {
+        return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.addColumn(connection, tableName, column);

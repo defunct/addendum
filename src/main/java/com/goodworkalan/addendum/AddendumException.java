@@ -38,17 +38,20 @@ extends CodedDanger {
     /** Unable to connect to a JDBC data source. */
     public final static int SQL_CONNECT = 301;
     
-    /** Unable to create the update table to track updates. */
+    /** Unable to create the addenda table to track updates. */
     public final static int SQL_CREATE_ADDENDA = 302;
     
     /** Unable to determine the maximum value of the applied updates. */
     public final static int SQL_ADDENDA_COUNT = 303;
     
-    /** Unable to update the addenda table with a new addendum. */
+    /** Unable to update the addenda table with a new update. */
     public final static int SQL_ADDENDUM = 304;
     
     /** Unable to execute a SQL migration statement. */
     public final static int SQL_EXECUTION = 308;
+    
+    /** Unable to create database dialect. */
+    public final static int SQL_GET_DIALECT = 309;
     
     /** Unable to close a JDBC data source. */
     public final static int SQL_CLOSE = 399;

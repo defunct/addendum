@@ -6,11 +6,16 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.api.BlogDefinition;
 import com.goodworkalan.reflective.ReflectiveException;
 import com.goodworkalan.reflective.ReflectiveFactory;
 
+/**
+ * Unit tests for {@link Addendum}.
+ *
+ * @author Alan Gutierrez
+ */
 public class AddendumTest {
+    /** Test the failure of the creation of a {@link Definition}. */
     @Test(expectedExceptions = AddendumException.class)
     public void newDefinitionInstnace() {
         ReflectiveFactory reflective = new ReflectiveFactory() {

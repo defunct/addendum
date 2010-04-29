@@ -25,7 +25,7 @@ public class ColumnMove implements UpdateSchema {
             throw new AddendumException(0, entityName, from, to);
         }
         entity.properties.put(to, entity.properties.remove(from));
-        return new UpdateDatabase() {
+        return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
             }

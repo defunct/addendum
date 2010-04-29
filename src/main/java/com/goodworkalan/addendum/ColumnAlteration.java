@@ -46,7 +46,7 @@ class ColumnAlteration implements UpdateSchema
         }
         entity.columns.put(column.getName(), column);
         final String tableName = entity.tableName;
-        return new UpdateDatabase() {
+        return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.alterColumn(connection, tableName, oldColumnName, column);

@@ -9,6 +9,14 @@ public abstract class Migration {
     
     public abstract void create();
     
+    public Addendum addendum(Connector connector) {
+        return addenda.addendum(connector);
+    }
+    
+    public Addendum addendum(Connector connector, Dialect dialect) {
+        return addenda.addendum(connector, dialect);
+    }
+
     public Addendum addendum() {
         return addenda.addendum();
     }

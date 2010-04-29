@@ -32,7 +32,7 @@ class Execution implements UpdateSchema
      *            The pseudo-database.
      */
     public UpdateDatabase execute(Schema schema) {
-        return new UpdateDatabase() {
+        return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 executable.execute(connection, dialect);

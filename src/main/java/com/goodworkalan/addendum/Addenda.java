@@ -1,5 +1,6 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ import org.slf4j.LoggerFactory;
  * @author Alan Gutierrez
  */
 public class Addenda {
-    // FIXME Rename.
-    private final Schema database = new Schema();
+    /** The tracking schema. */
+    private final Schema schema = new Schema();
 
     /** This logger is not currently in use. */
     static final Logger log = LoggerFactory.getLogger(Addenda.class);
@@ -77,88 +78,75 @@ public class Addenda {
      * chosen from the dialects available according to their
      * <code>META-INF/com.goodworkalan.addendum.Dialect</code> files.
      * 
-     * @throws SQLException
-     *             For any SQL error.
+     * @exception AddendumException
+     *                For any SQL error.
      */
-    public void amend() throws SQLException    
-    {
+    public void amend() {
         Connection connection = connector.open();
         Dialect dialect;
-        try
-        {
+        try {
             dialect = dialectProvider.getDialect(connection);
+        } catch (SQLException e) {
+            throw new AddendumException(SQL_GET_DIALECT, e);
         }
-        catch (SQLException e)
-        {
-            throw new AddendumException(AddendumException.SQL_CREATE_ADDENDA, e);
+        try {
+            dialect.createAddendaTable(connection);
+        } catch (SQLException e) {
+            throw new AddendumException(SQL_CREATE_ADDENDA, e);
         }
-        dialect.createAddendaTable(connection);
         int max;
-        try
-        {
+        try {
             max = dialect.addendaCount(connection);
+        } catch (SQLException e) {
+            throw new AddendumException(SQL_ADDENDA_COUNT, e);
         }
-        catch (SQLException e)
-        {
-            throw new AddendumException(AddendumException.SQL_ADDENDA_COUNT, e);
-        }
-        for (int i = max; i < addenda.size(); i++)
-        {
-            ApplyAddendum applyAddendum = addenda.get(i); 
+        for (int i = max; i < addenda.size(); i++) {
+            ApplyAddendum applyAddendum = addenda.get(i);
             applyAddendum.execute();
-            try
-            {
+            try {
                 dialect.addendum(connection);
-            }
-            catch (SQLException e)
-            {
-                throw new AddendumException(AddendumException.SQL_ADDENDUM, e);
+            } catch (SQLException e) {
+                throw new AddendumException(SQL_ADDENDUM, e);
             }
         }
         connector.close(connection);
     }
 
     /**
-     * Create a new addendum that will make zero, one or more changes to a the
-     * database associated with the connector of this addenda, or to any other
-     * data resources in the application.
+     * Create a new addendum that will changes to a the database associated with
+     * the connector of this addenda, or to any other data resources in the
+     * application.
      * 
-     * @return A domain-specific language element used to specify updates to the
-     *         database.
+     * @return An addendum builder used to specify updates to the database.
      */
     // FIXME You could mix or match with a descriminator. They would still run in order.
-    public Addendum addendum()
-    {
+    public Addendum addendum() {
         return addendum(connector, dialectProvider);
     }
 
     /**
-     * Create a new addendum that will make zero, one or more changes to a the
-     * database associated with the given connector.
+     * Create a new addendum that will make changes to a the database associated
+     * with the given connector.
      * 
      * @param connector
-     *            A database connection server.
-     * @return A domain-specific language element used to specify updates to the
-     *         database.
+     *            A database connection provider.
+     * @return An addendum builder used to specify updates to the database.
      */
-    public Addendum addendum(Connector connector)
-    {
+    public Addendum addendum(Connector connector) {
         return addendum(connector, dialectProvider);
     }
 
     /**
-     * Create a new addendum that will make zero, one or more changes to a the
-     * database associated with the given connector using the given dialect.
+     * Create a new addendum that make changes to the database associated with
+     * the given connector using the given dialect.
      * 
      * @param connector
-     *            A database connection server.
+     *            A database connection provider.
      * @param dialect
      *            The dialect to use for this addendum.
-     * @return A domain-specific language element used to specify updates to the
-     *         database.
+     * @return An addendum builder used to specify updates to the database.
      */
-    public Addendum addendum(Connector connector, Dialect dialect)
-    {
+    public Addendum addendum(Connector connector, Dialect dialect) {
         return addendum(connector, new DialectInstance(dialect));
     }
 
@@ -176,10 +164,8 @@ public class Addenda {
      */
     private Addendum addendum(Connector connector, DialectProvider dialectProvider) {
         List<UpdateDatabase> updates = new ArrayList<UpdateDatabase>();
-        ApplyAddendum addendum = new ApplyAddendum(connector, dialectProvider, updates);
-        Addendum schema = new Addendum(new Script(database, updates));
-        addenda.add(addendum);
-        return schema;
+        addenda.add(new ApplyAddendum(connector, dialectProvider, updates));
+        return new Addendum(new Script(schema, updates));
     }
 }
 

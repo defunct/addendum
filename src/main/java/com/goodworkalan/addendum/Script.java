@@ -13,8 +13,8 @@ class Script {
     
     private final List<UpdateDatabase> databaseUpdates;
     
-    public Script(Schema database, List<UpdateDatabase> databaseUpdates) {
-        this.schema = database;
+    public Script(Schema schema, List<UpdateDatabase> databaseUpdates) {
+        this.schema = schema;
         this.databaseUpdates = databaseUpdates;
     }
     

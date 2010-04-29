@@ -37,7 +37,7 @@ public class ColumnDrop implements UpdateSchema {
         if (entity.columns.remove(columnName) == null) {
             throw new AddendumException(0, tableName, columnName);
         }
-        return new UpdateDatabase() {
+        return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.dropColumn(connection, tableName, columnName);

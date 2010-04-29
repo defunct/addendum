@@ -1,5 +1,5 @@
 package com.goodworkalan.addendum;
-
+import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -46,13 +46,16 @@ class ApplyAddendum
      * @throws AddendumException
      *             For any error occurring during the update.
      */
-    public void execute() throws SQLException
-    {
+    public void execute() {
         Connection connection = connector.open();
-        Dialect dialect = dialectProvider.getDialect(connection);
-        for (UpdateDatabase update : updates)
-        {
-            update.execute(connection, dialect);
+        Dialect dialect;
+        try {
+            dialect = dialectProvider.getDialect(connection);
+        } catch (SQLException e) {
+            throw new AddendumException(SQL_GET_DIALECT, e);
+        }
+        for (UpdateDatabase update : updates) {
+            update.update(connection, dialect);
         }
         connector.close(connection);
     }
