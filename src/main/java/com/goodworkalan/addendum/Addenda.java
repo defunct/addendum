@@ -189,7 +189,7 @@ public class Addenda {
      *         database.
      */
     private Addendum addendum(Connector connector, DialectProvider dialectProvider) {
-        List<Update> updates = new ArrayList<Update>();
+        List<UpdateDatabase> updates = new ArrayList<UpdateDatabase>();
         ApplyAddendum addendum = new ApplyAddendum(connector, dialectProvider, updates);
         Addendum schema = new Addendum(new Script(database, updates));
         addenda.add(addendum);

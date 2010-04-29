@@ -12,8 +12,8 @@ public class ColumnDrop implements Update {
     /** The table name. */
     private final String tableName;
 
-    /** The name of the column to drop. */
-    private final String columnName;
+    /** The name of the property to drop. */
+    private final String property;
 
     /**
      * Drop the column with the given column definition.
@@ -23,35 +23,25 @@ public class ColumnDrop implements Update {
      * @param columnName
      *            The name of the column to drop.
      */
-    public ColumnDrop(String tableName, String columnName) {
+    public ColumnDrop(String tableName, String property) {
         this.tableName = tableName;
-        this.columnName = columnName;
+        this.property = property;
     }
     
-    public void execute(Schema database) {
-        Entity table = database.tables.get(tableName);
-        if (table == null) {
+    public UpdateDatabase execute(Schema schema) {
+        Entity entity = schema.tables.get(tableName);
+        final String columnName = entity.properties.remove(property);
+        if (columnName == null) {
             throw new AddendumException(0, tableName, columnName);
         }
-        if (table.getColumns().remove(columnName) == null) {
+        if (entity.columns.remove(columnName) == null) {
             throw new AddendumException(0, tableName, columnName);
         }
-    }
-
-    /**
-     * Performs a single alter column update against the database.
-     * 
-     * @param connection
-     *            The JDBC connection.
-     * @param dialect
-     *            The SQL dialect.
-     * @throws SQLException
-     *             For any SQL error.
-     * @throws AddendumException
-     *             For any error occurring during the update.
-     */
-    public void execute(Connection connection, Dialect dialect)
-    throws SQLException {
-        dialect.dropColumn(connection, tableName, columnName);
+        return new UpdateDatabase() {
+            public void execute(Connection connection, Dialect dialect)
+            throws SQLException {
+                dialect.dropColumn(connection, tableName, columnName);
+            }
+        };
     }
 }

@@ -70,29 +70,19 @@ class Insertion implements Update
     }
 
     /**
-     * Nothing really takes place since the psuedo-database only tracks database
-     * structure.
+     * Insert the record described by this insertion statement into the database
+     * at the given connection with the given database dialect.
      * 
      * @param database
      *            The psuedo-database.
      */
-    public void execute(Schema database) {
+    public UpdateDatabase execute(Schema database) {
+        return new UpdateDatabase() {
+            public void execute(Connection connection, Dialect dialect)
+            throws SQLException {
+                dialect.insert(connection, table, columns, values);
+            }
+        };
     }
 
-    /**
-     * Insert the record described by this insertion statement into the database
-     * at the given connection with the given database dialect.
-     * 
-     * @param connection
-     *            The JDBC connection.
-     * @param dialect
-     *            The SQL dialect.
-     * @throws SQLException
-     *             For any SQL error.
-     */
-    public void execute(Connection connection, Dialect dialect) 
-        throws SQLException
-    {
-        dialect.insert(connection, table, columns, values);
-    }
 }

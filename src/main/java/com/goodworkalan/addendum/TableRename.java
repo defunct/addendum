@@ -29,12 +29,21 @@ class TableRename implements Update {
         this.from = from;
         this.to = to;
     }
-    
-    public void execute(Schema schema) {
+
+    /**
+     * Perform a single table rename update against the database.
+     */
+    public UpdateDatabase execute(Schema schema) {
         Entity entity = schema.tables.remove(from);
         entity.tableName = to;
         schema.tables.put(to, entity);
         schema.aliases.put(alias, to);
+        return new UpdateDatabase() {
+            public void execute(Connection connection, Dialect dialect)
+            throws SQLException {
+                dialect.renameTable(connection, from, to);
+            }
+        };
     }
 
     /**

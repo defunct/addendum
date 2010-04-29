@@ -3,10 +3,12 @@ package com.goodworkalan.addendum;
 public class AddColumn extends FreshColumn<AlterTable, AddColumn> {
     private final Script script;
     private final String tableName;
+    private final String property;
 
-    public AddColumn(AlterTable container, Script script, String tableName, Column column) {
+    public AddColumn(AlterTable container, Script script, String tableName, String property, Column column) {
         super(container, column);
         this.script = script;
+        this.property = property;
         this.tableName = tableName;
     }
     
@@ -17,6 +19,6 @@ public class AddColumn extends FreshColumn<AlterTable, AddColumn> {
     
     @Override
     protected void ending() {
-        script.add(new TableAlteration(tableName, column));
+        script.add(new TableAlteration(tableName, property, column));
     }
 }

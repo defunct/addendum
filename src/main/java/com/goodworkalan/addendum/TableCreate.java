@@ -24,8 +24,13 @@ class TableCreate implements Update {
         this.alias = alias;
         this.entity = entity;
     }
-    
-    public void execute(Schema schema) {
+
+    /**
+     * Create a new table on the given JDBC connection using the given SQL
+     * dialect.
+     * 
+     */
+    public UpdateDatabase execute(Schema schema) {
         if (schema.aliases.containsKey(alias)) {
             throw new AddendumException(0, alias, entity.tableName);
         }
@@ -34,23 +39,11 @@ class TableCreate implements Update {
             throw new AddendumException(0, alias, entity.tableName);
         }
         schema.tables.put(entity.tableName, entity);
-    }
-
-    /**
-     * Create a new table on the given JDBC connection using the given SQL
-     * dialect.
-     * 
-     * @param connection
-     *            The JDBC connection.
-     * @param dialect
-     *            The SQL dialect.
-     * @throws SQLException
-     *             For any SQL error.
-     * @throws AddendumException
-     *             For any error occurring during the update.
-     */
-    public void execute(Connection connection, Dialect dialect) throws SQLException
-    {
-        dialect.createTable(connection, entity.tableName, entity.getColumns().values(), entity.getPrimaryKey());
+        return new UpdateDatabase() {
+            public void execute(Connection connection, Dialect dialect)
+            throws SQLException {
+                dialect.createTable(connection, entity.tableName, entity.columns.values(), entity.primaryKey);
+            }
+        };
     }
 }

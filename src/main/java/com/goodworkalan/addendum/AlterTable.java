@@ -1,7 +1,5 @@
 package com.goodworkalan.addendum;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Begins an alter table statement in the domain-specific language for defining
@@ -20,9 +18,6 @@ public class AlterTable {
     
     private final Entity entity;
     
-    /** The list of column definitions of columns to add to the table. */
-    private final List<Column> addColumns;
-
     /**
      * Create an alter table statement for the domain-specific language.
      * 
@@ -43,15 +38,11 @@ public class AlterTable {
         this.addendum = addendum;
         this.entity = entity;
         this.script = script;
-        this.addColumns = new ArrayList<Column>();
     }
 
     public RenameColumn rename(String from) {
-        Column column = entity.getColumns().get(from);
-        if (column == null) {
-            throw new AddendumException(0, from);
-        }
-        return new RenameColumn(this, script, entity.tableName, new Column(column), from);
+        Column column = new Column(entity.getColumn(from));
+        return new RenameColumn(this, script, entity.tableName, column, from);
     }
 
     /**
@@ -63,14 +54,13 @@ public class AlterTable {
      *            The <code>java.sql.Type</code> column type.
      * @return An add column language element to define the column.
      */
-    public AddColumn addColumn(String name, int columnType) {
-        if (entity.getColumns().containsKey("name")) {
+    public AddColumn add(String name, int columnType) {
+        if (entity.properties.containsKey(name)) {
             throw new AddendumException(0, name);
         }
         Column column = new Column(name, columnType);
         column.setDefaults(columnType);
-        addColumns.add(column);
-        return new AddColumn(this, script, entity.tableName, column);
+        return new AddColumn(this, script, entity.tableName, name, column);
     }
     
     /**
@@ -84,33 +74,29 @@ public class AlterTable {
      * @return An add column language element to define the column.
      */
     public AddColumn add(String name, Class<?> nativeType) {
-        if (entity.getColumns().containsKey(name)) {
+        if (entity.properties.containsKey(name)) {
             throw new AddendumException(0, name);
         }
         Column column = new Column(name, nativeType);
         column.setDefaults(nativeType);
-        addColumns.add(column);
-        return new AddColumn(this, script, entity.tableName, column);
+        return new AddColumn(this, script, entity.tableName, name, column);
     }
 
     /**
      * Begin an alter column statement to alter the column with the given name.
      * 
-     * @param name
-     *            The name of the column to alter.
+     * @param property
+     *            The name of the property to alter.
      * @return An alter column language element to define the column changes.
      */
-    public AlterColumn alter(String name) {
-        Column column = entity.getColumns().get(name);
-        if (column == null) {
-            throw new AddendumException(0, name);
-        }
-        return new AlterColumn(this, script, entity.tableName, new Column(column));
+    public AlterColumn alter(String property) {
+        Column column = new Column(entity.getColumn(property));
+        return new AlterColumn(this, script, entity.tableName, column);
     }
     
     
-    public AlterTable drop(String name) {
-        script.add(new ColumnDrop(entity.tableName, name));
+    public AlterTable drop(String property) {
+        script.add(new ColumnDrop(entity.tableName, property));
         return this;
     }
 

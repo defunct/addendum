@@ -19,7 +19,7 @@ class ApplyAddendum
     private final DialectProvider dialectProvider;
     
     /** A list of updates to perform. */
-    private final List<Update> updates;
+    private final List<UpdateDatabase> updates;
 
     /**
      * Create a new addendum. The given list of updates is unique to this
@@ -32,7 +32,7 @@ class ApplyAddendum
      * @param updates
      *            A list of updates to perform.
      */
-    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<Update> updates)
+    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<UpdateDatabase> updates)
     {
         this.connector = connector;
         this.dialectProvider = dialectProvider;
@@ -50,7 +50,7 @@ class ApplyAddendum
     {
         Connection connection = connector.open();
         Dialect dialect = dialectProvider.getDialect(connection);
-        for (Update update : updates)
+        for (UpdateDatabase update : updates)
         {
             update.execute(connection, dialect);
         }

@@ -11,4 +11,15 @@ import java.util.Map;
 class Schema {
     public final Map<String, Entity> tables = new HashMap<String, Entity>();
     public final Map<String, String> aliases = new HashMap<String, String>();
+    public Entity getEntity(String name) {
+        String tableName = aliases.get(name);
+        if (tableName == null) {
+            throw new AddendumException(0, name);
+        }
+        Entity entity = tables.get(tableName);
+        if (entity == null) {
+            throw new AddendumException(0, name, tableName);
+        }
+        return entity;
+    }
 }

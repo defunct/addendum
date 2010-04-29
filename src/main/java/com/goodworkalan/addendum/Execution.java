@@ -25,30 +25,18 @@ class Execution implements Update
     }
 
     /**
-     * No good way to test an execution since we don't really know what it is
-     * going to do.
-     * 
-     * @param database
-     *            The pseudo-database.
-     */
-    public void execute(Schema database) {
-    }
-
-    /**
      * Perform a database update on the given JDBC connection using the given
      * SQL dialect.
      * 
-     * @param connection
-     *            The JDBC connection.
-     * @param dialect
-     *            The SQL dialect.
-     * @throws SQLException
-     *             For any SQL error.
-     * @throws AddendumException
-     *             For any error occurring during the update.
+     * @param schema
+     *            The pseudo-database.
      */
-    public void execute(Connection connection, Dialect dialect) throws SQLException
-    {
-        executable.execute(connection, dialect);
+    public UpdateDatabase execute(Schema schema) {
+        return new UpdateDatabase() {
+            public void execute(Connection connection, Dialect dialect)
+            throws SQLException {
+                executable.execute(connection, dialect);
+            }
+        };
     }
 }

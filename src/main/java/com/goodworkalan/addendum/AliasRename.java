@@ -15,14 +15,15 @@ public class AliasRename implements Update {
         this.to = to;
     }
 
-    public void execute(Schema schema) {
+    public UpdateDatabase execute(Schema schema) {
         if (schema.aliases.containsKey(to)) {
             throw new AddendumException(0, to);
         }
         schema.aliases.put(to, schema.aliases.remove(from));
-    }
-
-    public void execute(Connection connection, Dialect dialect)
-    throws SQLException {
+        return new UpdateDatabase() {
+            public void execute(Connection connection, Dialect dialect)
+            throws SQLException {
+            }
+        };
     }
 }

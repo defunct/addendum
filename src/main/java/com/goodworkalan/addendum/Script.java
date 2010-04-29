@@ -9,15 +9,14 @@ class Script {
     
     public final Map<String, Entity> tables = new HashMap<String, Entity>();
     
-    private final List<Update> updates;
+    private final List<UpdateDatabase> updates;
     
-    public Script(Schema database, List<Update> updates) {
+    public Script(Schema database, List<UpdateDatabase> updates) {
         this.database = database;
         this.updates = updates;
     }
     
     public void add(Update update) {
-        update.execute(database);
-        updates.add(update);
+        updates.add(update.execute(database));
     }
 }

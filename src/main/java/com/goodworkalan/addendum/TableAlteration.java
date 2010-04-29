@@ -12,6 +12,8 @@ class TableAlteration implements Update
 {
     /** The table name. */
     private final String tableName;
+    
+    private final String property;
 
     /** The column to create. */
     private final Column column;
@@ -24,20 +26,30 @@ class TableAlteration implements Update
      * @param addColumns
      *            The columns to add.
      */
-    public TableAlteration(String tableName, Column column)
+    public TableAlteration(String tableName, String property, Column column)
     {   
         this.tableName = tableName;
+        this.property = property;
         this.column = column;
     }
     
-    public void execute(Schema database) {
-        Entity table = database.tables.get(tableName);
-        if (table == null) {
+    public UpdateDatabase execute(Schema schema) {
+        Entity entity = schema.tables.get(tableName);
+        if (entity == null) {
             throw new AddendumException(0, tableName);
         }
-        if (table.getColumns().put(column.getName(), column) != null) {
+        if (entity.properties.put(property, column.getName()) != null) {
             throw new AddendumException(0, tableName, column.getName());
         }
+        if (entity.columns.put(column.getName(), column) != null) {
+            throw new AddendumException(0, tableName, column.getName());
+        }
+        return new UpdateDatabase() {
+            public void execute(Connection connection, Dialect dialect)
+            throws SQLException {
+                dialect.addColumn(connection, tableName, column);
+            }
+        };
     }
 
     /**

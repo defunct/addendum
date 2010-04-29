@@ -40,12 +40,16 @@ public class TableElement
      *            The column name.
      * @return The column definition.
      */
-    private Column newColumn(String name) {
-        if (entity.getColumns().containsKey(name)) {
+    private Column newColumn(String name, String columnName) {
+        if (entity.properties.containsKey(name)) {
             throw new AddendumException(0);
         }
-        Column column = new Column(name);
-        entity.getColumns().put(name, column);
+        if (entity.columns.containsKey(columnName)) {
+            throw new AddendumException(0);
+        }
+        entity.properties.put(name, columnName);
+        Column column = new Column(columnName);
+        entity.columns.put(columnName, column);
         return column;
     }
     
@@ -65,7 +69,7 @@ public class TableElement
      * @return A column builder.
      */
     public CreateColumn add(String name, int columnType) {
-        Column column = newColumn(name);
+        Column column = newColumn(name, name);
         column.setDefaults(columnType);
         return new CreateColumn(this, column);
     }
@@ -82,7 +86,7 @@ public class TableElement
      * @return A column builder.
      */
     public CreateColumn add(String name, Class<?> nativeType) {
-        Column column = newColumn(name);
+        Column column = newColumn(name, name);
         column.setDefaults(nativeType);
         return new CreateColumn(this, column);
     }
@@ -95,7 +99,7 @@ public class TableElement
      * @return This builder to continue building.
      */
     public TableElement primaryKey(String... columns) {
-        entity.getPrimaryKey().addAll(Arrays.asList(columns));
+        entity.primaryKey.addAll(Arrays.asList(columns));
         return this;
     }
 
