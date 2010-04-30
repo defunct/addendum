@@ -103,6 +103,9 @@ extends CodedDanger {
     
     /** Unable to execute arbitrary SQL statements. */
     public final static int CANNOT_EXECUTE_SQL = 502;
+    
+    /** Unable to alter a column. */
+    public final static int CANNOT_ALTER_COLUMN = 503;
 
     /**
      * Create a Sheaf exception with the given error code.

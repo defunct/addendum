@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.api.MockConnector;
+import com.goodworkalan.addendum.api.MockDialect;
 import com.goodworkalan.reflective.ReflectiveException;
 import com.goodworkalan.reflective.ReflectiveFactory;
 
@@ -307,5 +308,24 @@ public class AddendumTest {
                     }
                 })
                 .commit();
+    }
+    
+    /** Test rename property. */
+    @Test
+    public void renameProperty() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .rename("a").to("b")
+                    .end()
+                .commit();
+        addenda.amend();
     }
 }

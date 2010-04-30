@@ -1,6 +1,8 @@
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
+import static com.goodworkalan.addendum.AddendumException.*;
+
 import java.sql.SQLException;
 
 /**
@@ -10,8 +12,8 @@ import java.sql.SQLException;
  */
 class ColumnAlteration implements UpdateSchema
 {
-    /** The entity name. */
-    private final String entityName;
+    /** The entity table name. */
+    private final String tableName;
     
     /** The existing column name. */
     private final String propertyName;
@@ -24,21 +26,30 @@ class ColumnAlteration implements UpdateSchema
      * column name and the given column definition.
      * 
      * @param tableName
-     *            The entity name.
+     *            The entity table name.
      * @param oldProperty
      *            The existing column name.
      * @param column
      *            The column definition.
      */
-    public ColumnAlteration(String entityName, String propertyName, Column column)
+    public ColumnAlteration(String tableName, String propertyName, Column column)
     {
-        this.entityName = entityName;
+        this.tableName = tableName;
         this.propertyName = propertyName;
         this.column = column;
     }
-    
+
+    /**
+     * Update schema with new column definition, updating the property mapping
+     * if the column has been renamed. Return a database update that will alter
+     * and possibly rename the column.
+     * 
+     * @param schema
+     *            The tracking schema.
+     * @return A column alteration database update.
+     */
     public UpdateDatabase execute(Schema schema) {
-        Entity entity = schema.getEntity(entityName);
+        Entity entity = schema.entities.get(tableName);
         final String oldColumnName = entity.properties.get(propertyName);
         if (!column.getName().equals(oldColumnName)) {
             entity.columns.remove(entity.properties.remove(propertyName));
@@ -46,7 +57,7 @@ class ColumnAlteration implements UpdateSchema
         }
         entity.columns.put(column.getName(), column);
         final String tableName = entity.tableName;
-        return new UpdateDatabase(0) {
+        return new UpdateDatabase(CANNOT_ALTER_COLUMN, tableName, oldColumnName) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.alterColumn(connection, tableName, oldColumnName, column);

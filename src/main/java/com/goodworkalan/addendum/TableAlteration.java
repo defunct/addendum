@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 /**
  * Perform a table alteration update against the database.
+ * <p>
+ * FIXME rename ColumnAdd.
  * 
  * @author Alan Gutierrez
  */

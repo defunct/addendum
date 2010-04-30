@@ -1,5 +1,6 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.CANNOT_ALTER_COLUMN;
 import static com.goodworkalan.addendum.AddendumException.CANNOT_CREATE_TABLE;
 import static org.testng.Assert.assertEquals;
 
@@ -26,6 +27,23 @@ public class UpdateDatabaseTest {
             }.update(null, null);
         } catch (AddendumException e) {
             assertEquals(e.getCode(), CANNOT_CREATE_TABLE);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    /** Test the cannot alter column error message. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void cannotAlterColumnMessage() {
+        try {
+            new UpdateDatabase(CANNOT_ALTER_COLUMN, "a", "a") {
+                public void execute(Connection connection, Dialect dialect)
+                        throws SQLException {
+                    throw new SQLException();
+                }
+            }.update(null, null);
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), CANNOT_ALTER_COLUMN);
             System.out.println(e.getMessage());
             throw e;
         }

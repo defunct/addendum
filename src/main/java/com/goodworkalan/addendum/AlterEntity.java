@@ -13,7 +13,7 @@ public class AlterEntity {
     /** The database migration script. */
     private final Script script;
     
-    /** A copy of the entity to alter. */
+    /** The entity to alter. */
     private final Entity entity;
 
     /**
@@ -22,7 +22,7 @@ public class AlterEntity {
      * @param addendum
      *            The addendum builder to return when this builder terminates.
      * @param entity
-     *            A copy of the entity to alter.
+     *            The entity to alter.
      * @param script
      *            The database migration script.
      */
@@ -32,6 +32,14 @@ public class AlterEntity {
         this.script = script;
     }
 
+    /**
+     * Rename the given property. Returns a property rename builder to specify
+     * the new name.
+     * 
+     * @param from
+     *            The name of the property to rename.
+     * @return A property rename builder.
+     */
     public RenameProperty rename(String from) {
         Column column = new Column(entity.getColumn(from));
         return new RenameProperty(this, script, entity.tableName, column, from);

@@ -23,9 +23,9 @@ public class RenameEntity {
      * @param addendum
      *            The addendum builder to return when this builder terminates.
      * @param script
-     *            The current entity name.
-     * @param from
      *            The database migration script.
+     * @param from
+     *            The current entity name.
      */
     public RenameEntity(Addendum addendum, Script script, String from) {
         this.addendum = addendum;
@@ -43,8 +43,8 @@ public class RenameEntity {
     public Addendum to(String to) {
         script.add(new AliasRename(from, to));
         Schema schema = script.schema;
-        Entity table = schema.entities.get(schema.aliases.get(to));
-        if (table.tableName.equals(from)) {
+        Entity entity = schema.entities.get(schema.aliases.get(to));
+        if (entity.tableName.equals(from)) {
             script.add(new TableRename(to, from, to));
         }
         return addendum;
