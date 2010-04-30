@@ -209,29 +209,22 @@ class PropertyInfo
      * @return The type of the entity class id, or null if the entity class has
      *         no id.
      */
-    static Class<?> getId(Class<?> entityClass)
-    {
+    static Class<?> getId(Class<?> entityClass) {
         Class<?> current = entityClass;
-        while (!current.equals(Object.class))
-        {
-            for (Field id : entityClass.getFields())
-            {
-                if (id.getAnnotation(Id.class) != null)
-                {
+        while (!current.equals(Object.class)) {
+            for (Field id : entityClass.getFields()) {
+                if (id.getAnnotation(Id.class) != null) {
                     return id.getType();
                 }
             }
             current = current.getSuperclass();
         }
         BeanInfo beanInfo = EntityInfo.introspect(entityClass, Object.class);
-        for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors())
-        {
-            if (desc.getWriteMethod() != null && desc.getWriteMethod().getAnnotation(Id.class) != null)
-            {
+        for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors()) {
+            if (desc.getWriteMethod() != null && desc.getWriteMethod().getAnnotation(Id.class) != null) {
                 return desc.getPropertyType();
             }
-            if (desc.getReadMethod() != null && desc.getReadMethod().getAnnotation(Id.class) != null)
-            {
+            if (desc.getReadMethod() != null && desc.getReadMethod().getAnnotation(Id.class) != null) {
                 return desc.getPropertyType();
             }
         }
