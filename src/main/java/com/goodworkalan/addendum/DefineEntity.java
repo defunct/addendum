@@ -58,7 +58,6 @@ public class DefineEntity {
         entity.properties.put(name, columnName);
         Column column = new Column(columnName);
         entity.columns.put(columnName, column);
-        column.setDefaults(columnType);
         return new AddProperty(this, column);
     }
 

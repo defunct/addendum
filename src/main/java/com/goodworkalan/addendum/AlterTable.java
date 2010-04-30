@@ -59,7 +59,6 @@ public class AlterTable {
             throw new AddendumException(0, name);
         }
         Column column = new Column(name, columnType);
-        column.setDefaults(columnType);
         return new AddColumn(this, script, entity.tableName, name, column);
     }
     
@@ -78,7 +77,6 @@ public class AlterTable {
             throw new AddendumException(0, name);
         }
         Column column = new Column(name, nativeType);
-        column.setDefaults(nativeType);
         return new AddColumn(this, script, entity.tableName, name, column);
     }
 

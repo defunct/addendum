@@ -76,7 +76,6 @@ public class AbstractDialectTest {
         ConcreteDialect dialect = new ConcreteDialect();
         List<Column> columns = new ArrayList<Column>();
         Column a = new Column("a", int.class);
-        a.setDefaults(int.class);
         columns.add(a);
         dialect.createTable(connection, "A", columns, Arrays.asList("a"));
         assertTable(connection, "A");
@@ -94,7 +93,6 @@ public class AbstractDialectTest {
         ConcreteDialect dialect = new ConcreteDialect();
         List<Column> columns = new ArrayList<Column>();
         Column a = new Column("a", int.class);
-        a.setDefaults(int.class);
         columns.add(a);
         dialect.createTable(connection, "A", columns, Collections.<String>emptyList());
         assertTable(connection, "A");
@@ -103,29 +101,9 @@ public class AbstractDialectTest {
     }
     
     @Test
-    public void getMetaColumn() throws SQLException, ClassNotFoundException {
-        Class.forName("org.h2.Driver");
-        Connector connector = newConnector(getDatabasePath());
-        Connection connection = connector.open();
-        
-        ConcreteDialect dialect = new ConcreteDialect();
-        List<Column> columns = new ArrayList<Column>();
-        Column a = new Column("a", int.class);
-        a.setDefaults(int.class);
-        columns.add(a);
-        dialect.createTable(connection, "A", columns, Arrays.asList("a"));
-        assertTable(connection, "A");
-        
-        dialect.getMetaColumn(connection, "A", "A");
-        
-        connection.close();
-    }
-    
-    @Test
     public void defineText() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", String.class);
-        a.setDefaults(String.class);
         a.setLength(Integer.MAX_VALUE);
         StringBuilder sql = new StringBuilder();
         dialect.columnDefinition(sql, a, true);
@@ -136,7 +114,6 @@ public class AbstractDialectTest {
     public void defineLargerString() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", String.class);
-        a.setDefaults(String.class);
         a.setLength(70000);
         StringBuilder sql = new StringBuilder();
         dialect.columnDefinition(sql, a, true);
@@ -152,7 +129,6 @@ public class AbstractDialectTest {
         ConcreteDialect dialect = new ConcreteDialect();
         List<Column> columns = new ArrayList<Column>();
         Column a = new Column("a", int.class);
-        a.setDefaults(int.class);
         columns.add(a);
         dialect.createTable(connection, "A", columns, Arrays.asList("a"));
         assertTable(connection, "A");
@@ -178,10 +154,8 @@ public class AbstractDialectTest {
         ConcreteDialect dialect = new ConcreteDialect();
         List<Column> columns = new ArrayList<Column>();
         Column a = new Column("a", int.class);
-        a.setDefaults(int.class);
         columns.add(a);
         Column b = new Column("b", int.class);
-        b.setDefaults(int.class);
         columns.add(b);
         dialect.createTable(connection, "A", columns, Arrays.asList("a"));
         assertTable(connection, "A");
@@ -200,10 +174,8 @@ public class AbstractDialectTest {
         ConcreteDialect dialect = new ConcreteDialect();
         List<Column> columns = new ArrayList<Column>();
         Column a = new Column("a", int.class);
-        a.setDefaults(int.class);
         columns.add(a);
         Column b = new Column("b", int.class);
-        b.setDefaults(int.class);
         columns.add(b);
         dialect.createTable(connection, "A", columns, Arrays.asList("a"));
         assertTable(connection, "A");

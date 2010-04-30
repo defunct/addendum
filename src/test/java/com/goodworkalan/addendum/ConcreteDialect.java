@@ -28,10 +28,6 @@ public class ConcreteDialect extends AbstractDialect {
     public void columnDefinition(StringBuilder sql, Column column, boolean canNull) {
         super.columnDefinition(sql, column, canNull);
     }
-    
-    public Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException {
-        return super.getMetaColumn(connection, tableName, columnName);
-    }   
 
     @Override
     public void addendum(Connection connection) throws SQLException {

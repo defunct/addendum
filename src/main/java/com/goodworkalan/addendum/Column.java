@@ -6,6 +6,8 @@ import java.sql.Types;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.goodworkalan.utility.Primitives;
+
 /**
  * A mutable object that models a column specification.
  * 
@@ -16,7 +18,7 @@ public class Column {
     private String name;
 
     /** The <code>java.sql.Types</code> column type. */
-    private Integer columnType;
+    private int columnType;
 
     /** True if there is a default value. */
     private boolean hasDefaultValue;
@@ -25,7 +27,7 @@ public class Column {
     private Object defaultValue;
 
     /** The not null flag. */
-    private Boolean notNull;
+    private boolean notNull;
 
     /** The column length. */
     private Integer length;
@@ -92,35 +94,6 @@ public class Column {
     }
 
     /**
-     * Populate the column properties with the given <code>java.sql.Types</code>
-     * column type and acceptable default values.
-     * 
-     * @param columnType
-     *            The <code>java.sql.Types</code> column type.
-     */
-    public void setDefaults(int columnType) {
-        setColumnType(columnType);
-        setNotNull(false);
-        setLength(0);
-        setPrecision(0);
-        setScale(0);
-        setDefaultValue(null);
-        setGeneratorType(GeneratorType.NONE);
-    }
-
-    /**
-     * Populate the column properties with a <code>java.sql.Types</code> column
-     * type appropriate for the given native Java type and acceptable default
-     * values.
-     * 
-     * @param nativeType
-     *            The native column type.
-     */
-    public void setDefaults(Class<?> nativeType) {
-        setDefaults(Column.getColumnType(nativeType));
-    }
-
-    /**
      * Return a <code>java.sql.Types</code> type appropriate for the given
      * native type.
      * 
@@ -129,26 +102,20 @@ public class Column {
      * @return An SQL type that can store the given native type.
      */
     public static int getColumnType(Class<?> nativeType) {
-        if (nativeType.equals(boolean.class)
-                || nativeType.equals(Boolean.class)) {
+        nativeType = Primitives.box(nativeType);
+        if (nativeType.equals(Boolean.class)) {
             return Types.BIT;
-        } else if (nativeType.equals(short.class)
-                || nativeType.equals(Short.class)) {
+        } else if (nativeType.equals(Short.class)) {
             return Types.TINYINT;
-        } else if (nativeType.equals(char.class)
-                || nativeType.equals(Character.class)) {
+        } else if (nativeType.equals(Character.class)) {
             return Types.SMALLINT;
-        } else if (nativeType.equals(int.class)
-                || nativeType.equals(Integer.class)) {
+        } else if (nativeType.equals(Integer.class)) {
             return Types.INTEGER;
-        } else if (nativeType.equals(long.class)
-                || nativeType.equals(Long.class)) {
+        } else if (nativeType.equals(Long.class)) {
             return Types.BIGINT;
-        } else if (nativeType.equals(float.class)
-                || nativeType.equals(Float.class)) {
+        } else if (nativeType.equals(Float.class)) {
             return Types.FLOAT;
-        } else if (nativeType.equals(double.class)
-                || nativeType.equals(Double.class)) {
+        } else if (nativeType.equals(Double.class)) {
             return Types.DOUBLE;
         } else if (BigDecimal.class.isAssignableFrom(nativeType)) {
             return Types.NUMERIC;
@@ -188,7 +155,7 @@ public class Column {
      * 
      * @return The <code>java.sql.Types</code> column type.
      */
-    public Integer getColumnType() {
+    public int getColumnType() {
         return columnType;
     }
 
@@ -198,7 +165,7 @@ public class Column {
      * @param columnType
      *            The <code>java.sql.Types</code> column type.
      */
-    public void setColumnType(Integer columnType) {
+    public void setColumnType(int columnType) {
         this.columnType = columnType;
     }
 
@@ -218,7 +185,7 @@ public class Column {
      * 
      * @return The not null flag.
      */
-    public Boolean getNotNull() {
+    public boolean isNotNull() {
         return notNull;
     }
 
@@ -228,7 +195,7 @@ public class Column {
      * @param notNull
      *            The not null flag.
      */
-    public void setNotNull(Boolean notNull) {
+    public void setNotNull(boolean notNull) {
         this.notNull = notNull;
     }
 

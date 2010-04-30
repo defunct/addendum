@@ -1,10 +1,7 @@
 package com.goodworkalan.addendum;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
@@ -31,6 +28,9 @@ public abstract class AbstractDialect implements Dialect {
     
     /** A map of SQL type flags to their SQL type names for the dialect. */
     private final Map<Integer, int[]> defaultPrecisionScale;
+    
+    /** A map of default lengths. */
+    private final Map<Integer, Integer> defaultLengths;
 
     /**
      * Create a base dialect.
@@ -38,6 +38,7 @@ public abstract class AbstractDialect implements Dialect {
     protected AbstractDialect() {
         this.typeNames = new HashMap<Integer, SortedMap<Integer, String>>();
         this.defaultPrecisionScale = new HashMap<Integer, int[]>();
+        this.defaultLengths = new HashMap<Integer, Integer>();
     }
 
     /**
@@ -92,7 +93,19 @@ public abstract class AbstractDialect implements Dialect {
     protected void setDefaultPrecisionScale(int type, int precision, int scale) {
         defaultPrecisionScale.put(type, new int[] { precision, scale });
     }
-    
+
+    /**
+     * Set the default length for the given SQL type to the given length.
+     * 
+     * @param type
+     *            The SQL type.
+     * @param length
+     *            The default length.
+     */
+    protected void setDefaultLength(int type, int length) {
+        defaultLengths.put(type, length);
+    }
+
     /**
      * Create the table used to store the applied addenda.
      * 
@@ -207,7 +220,23 @@ public abstract class AbstractDialect implements Dialect {
         sql.append(column.getName()).append(" ");
         String pattern = null;
         
-        int length = column.getLength();
+        Integer length = column.getLength();
+        if (length == null) {
+            length = defaultLengths.get(column.getColumnType());
+        }
+        if (length == null) {
+            length = 0;
+        }
+        
+        int[] precisionScale = defaultPrecisionScale.get(column.getColumnType());
+        if (precisionScale != null) {
+            if (column.getPrecision() == null) {
+                column.setPrecision(precisionScale[0]);
+            }
+            if (column.getScale() == null) {
+                column.setScale(precisionScale[1]);
+            }
+        }
         
         if (!typeNames.containsKey(column.getColumnType())) {
             throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
@@ -224,7 +253,7 @@ public abstract class AbstractDialect implements Dialect {
         
         sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
         
-        if (canNull && column.getNotNull()) {
+        if (canNull && column.isNotNull()) {
             sql.append(" NOT NULL");
         }
 
@@ -256,80 +285,6 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * Perform a case transform on the given table name for use as a metadata
-     * selection criteria.
-     * 
-     * @param tableName
-     *            The table name.
-     * @return The table name with the correct case for use as a metadata
-     *         selection criteria.
-     */
-    protected String columnCase(String columnName) {
-        return columnName;
-    }
-    
-    /**
-     * Perform a case transform on the given column name for use as a metadata
-     * selection criteria.
-     * 
-     * @param columnName
-     *            The table name.
-     * @return The column name with the correct case for use as a metadata
-     *         selection criteria.
-     */
-    protected String tableCase(String tableName) {
-        return tableName;
-    }
-
-    /**
-     * Create a column containing the column metadata for the given column in
-     * the given table.
-     * <p>
-     * FIXME Alter not based on meta column data, instead based on tracking
-     * schema.
-     * <p>
-     * FIXME Outgoing.
-     * 
-     * @param connection
-     *            The JDBC connection.
-     * @param tableName
-     *            The table name.
-     * @param columnName
-     *            The column name.
-     * @return A column containing the column metadata.
-     * @throws SQLException
-     *             For any reason, any reason at all.
-     */
-    protected Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException {
-        Column column = new Column(columnName);
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT " + columnCase(column.getName()) + " FROM " + tableCase(tableName));
-        ResultSetMetaData meta = rs.getMetaData();
-        if (meta.isAutoIncrement(1)) {
-            column.setGeneratorType(GeneratorType.IDENTITY);
-        }
-        column.setColumnType(meta.getColumnType(1));
-        column.setPrecision(meta.getPrecision(1));
-        column.setScale(meta.getScale(1));
-        rs.close();
-        statement.close();
-        
-        rs = connection.getMetaData().getColumns(null, null, tableCase(tableName), columnCase(columnName));
-        if (!rs.next()) {
-            throw new RuntimeException("Table: " + tableName + ", column: " + columnName);
-        }
-        column.setNotNull(rs.getInt("NULLABLE") == DatabaseMetaData.columnNoNulls);
-//        column.setHasDefaultValue(rs.getObject("COLUMN_DEF") != null);
-//        column.setDefaultValue(rs.getObject("COLUMN_DEF"));
-        switch (column.getColumnType()) {
-        case Types.CHAR:
-        case Types.VARCHAR:
-            column.setLength(rs.getInt("COLUMN_SIZE"));
-        }
-        return column;
-    }
-
-    /**
      * Add a the given column definition to the the given table.
      * 
      * @param connection
@@ -356,7 +311,7 @@ public abstract class AbstractDialect implements Dialect {
         statement.execute(addSql.toString());
         statement.close();
         
-        if (column.getNotNull()) {
+        if (column.isNotNull()) {
             StringBuilder updateSql = new StringBuilder();
             updateSql.append("UPDATE ").append(tableName)
                      .append(" SET ").append(column.getName()).append(" = ?");
@@ -396,41 +351,6 @@ public abstract class AbstractDialect implements Dialect {
         Statement statement = connection.createStatement();
         statement.execute(String.format("ALTER TABLE %s DROP COLUMN %s", tableName, columnName));
         statement.close();
-    }
-
-    /**
-     * Inherit the properties of the given full column by assigning them to
-     * unspecified values in the partial column.
-     * <p>
-     * FIXME Outgoing.
-     * 
-     * @param partial
-     *            The partial column that inherits.
-     * @param full
-     *            The full column to inherit from.
-     */
-    protected void inherit(Column partial, Column full) {
-        if (partial.getColumnType() == null) {
-            partial.setColumnType(full.getColumnType());
-        }
-        if (partial.getLength() == null) {
-            partial.setLength(full.getLength());
-        }
-        if (partial.getPrecision() == null) {
-            partial.setPrecision(full.getPrecision());
-        }
-        if (partial.getScale() == null) {
-            partial.setScale(full.getScale());
-        }
-        if (partial.getDefaultValue() == null) {
-            partial.setDefaultValue(full.getDefaultValue());
-        }
-        if (partial.getNotNull() == null) {
-            partial.setNotNull(full.getNotNull());
-        }
-        if (partial.getGeneratorType() == null) {
-            partial.setGeneratorType(full.getGeneratorType());
-        }
     }
 
     /**
