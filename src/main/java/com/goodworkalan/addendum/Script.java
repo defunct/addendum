@@ -11,7 +11,7 @@ import java.util.List;
  * 
  * @author Alan Gutierrez
  */
-class ApplyAddendum
+class Script
 {
     /** A factory for JDBC connections. */
     private final Connector connector;
@@ -33,7 +33,7 @@ class ApplyAddendum
      * @param updates
      *            A list of updates to perform.
      */
-    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<DatabaseUpdate> updates) {
+    public Script(Connector connector, DialectProvider dialectProvider, List<DatabaseUpdate> updates) {
         this.connector = connector;
         this.dialectProvider = dialectProvider;
         this.updates = updates;

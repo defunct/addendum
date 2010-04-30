@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 
 /**
- * Unit tests for the {@link ApplyAddendum} class.
+ * Unit tests for the {@link Script} class.
  *
  * @author Alan Gutierrez
  */
@@ -20,7 +20,7 @@ public class ScriptTest {
     @Test(expectedExceptions = AddendumException.class)
     public void dialectSqlError() {
         try {
-            new ApplyAddendum(new MockConnector(), new DialectProvider() {
+            new Script(new MockConnector(), new DialectProvider() {
                 public Dialect getDialect(Connection connection)
                 throws SQLException {
                     throw new SQLException();

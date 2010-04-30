@@ -27,7 +27,7 @@ public class Addenda {
     static final Logger log = LoggerFactory.getLogger(Addenda.class);
     
     /** A list of changes to apply to the database. */
-    private final List<ApplyAddendum> addenda = new ArrayList<ApplyAddendum>();
+    private final List<Script> scripts = new ArrayList<Script>();
     
     /**
      * Update versions are stored in the data sources return by this connection
@@ -104,9 +104,9 @@ public class Addenda {
         } catch (SQLException e) {
             throw new AddendumException(SQL_ADDENDA_COUNT, e);
         }
-        for (int i = max; i < addenda.size(); i++) {
-            ApplyAddendum applyAddendum = addenda.get(i);
-            applyAddendum.execute();
+        for (int i = max; i < scripts.size(); i++) {
+            Script script = scripts.get(i);
+            script.execute();
             try {
                 dialect.addendum(connection);
             } catch (SQLException e) {
@@ -170,7 +170,7 @@ public class Addenda {
      */
     private Addendum addendum(Connector connector, DialectProvider dialectProvider) {
         List<DatabaseUpdate> updates = new ArrayList<DatabaseUpdate>();
-        addenda.add(new ApplyAddendum(connector, dialectProvider, updates));
+        scripts.add(new Script(connector, dialectProvider, updates));
         return new Addendum(new Patch(schema, updates));
     }
 }
