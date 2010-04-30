@@ -54,12 +54,12 @@ public class AlterTable {
      *            The <code>java.sql.Type</code> column type.
      * @return An add column language element to define the column.
      */
-    public AddColumn add(String name, int columnType) {
+    public AddProperty add(String name, int columnType) {
         if (entity.properties.containsKey(name)) {
             throw new AddendumException(0, name);
         }
         Column column = new Column(name, columnType);
-        return new AddColumn(this, script, entity.tableName, name, column);
+        return new AddProperty(this, script, entity.tableName, name, column);
     }
     
     /**
@@ -72,12 +72,12 @@ public class AlterTable {
      *            The native column type.
      * @return An add column language element to define the column.
      */
-    public AddColumn add(String name, Class<?> nativeType) {
+    public AddProperty add(String name, Class<?> nativeType) {
         if (entity.properties.containsKey(name)) {
             throw new AddendumException(0, name);
         }
         Column column = new Column(name, nativeType);
-        return new AddColumn(this, script, entity.tableName, name, column);
+        return new AddProperty(this, script, entity.tableName, name, column);
     }
 
     /**
