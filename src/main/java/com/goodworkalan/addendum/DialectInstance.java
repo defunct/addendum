@@ -21,15 +21,23 @@ class DialectInstance implements DialectProvider
      * @param dialect
      *            The dialect to provide.
      */
-    public DialectInstance(Dialect dialect)
-    {
+    public DialectInstance(Dialect dialect) {
         this.dialect = dialect;
     }
 
-    public Dialect getDialect(Connection connection) throws SQLException
-    {
-        if (!dialect.canTranslate(connection))
-        {
+    /**
+     * Return the dialect instance. If the given connection is not supported by
+     * the dialect instance an addendum exception is thrown.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @return The dialect instance.
+     * @exception AddendumException
+     *                If the dialect instance does not support the JDBC
+     *                connection.
+     */
+    public Dialect getDialect(Connection connection) throws SQLException {
+        if (!dialect.canTranslate(connection)) {
             throw new AddendumException(DIALECT_DOES_NOT_SUPPORT_CONNECTION);
         }
         return dialect;
