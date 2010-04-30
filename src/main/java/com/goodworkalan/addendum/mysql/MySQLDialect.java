@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import com.goodworkalan.addendum.AbstractDialect;
-import com.goodworkalan.addendum.Column;
+import com.goodworkalan.addendum.dialect.AbstractDialect;
+import com.goodworkalan.addendum.dialect.Column;
 import com.goodworkalan.notice.event.Entry;
 import com.goodworkalan.notice.event.Logger;
 import com.goodworkalan.notice.event.LoggerFactory;
@@ -42,18 +42,7 @@ public class MySQLDialect extends AbstractDialect
         setType(Types.TIMESTAMP, "TIMESTAMP");
         setType(Types.NUMERIC, "NUMERIC(%2$d, %3$d)");
     }
-    
-    @Override
-    protected String columnCase(String columnName)
-    {
-        return columnName;
-    }
-    
-    @Override
-    protected String tableCase(String tableName)
-    {
-        return tableName;
-    }
+
     
     @Override
     protected Logger getLogger()
@@ -111,18 +100,11 @@ public class MySQLDialect extends AbstractDialect
         return connection.getMetaData().getDatabaseProductName().equals("MySQL");
     }
     
-    public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException
-    {
+    public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException {
         Entry info = logger.info("alter.column");
         
         info.put("tableName", tableName).put("oldName", oldName).put("column", column);
         
-        Column meta = getMetaColumn(connection, tableName, oldName);
-        
-        info.put("meta", meta);
-        
-        inherit(column, meta);
-
         StringBuilder sql = new StringBuilder();
         
         sql.append("ALTER TABLE ").append(tableName)
@@ -137,6 +119,34 @@ public class MySQLDialect extends AbstractDialect
         Statement statement = connection.createStatement();
         statement.execute(sql.toString());
         statement.close();
+    }
+    
+    /**
+     * Rename a table form the given old name to the given new name.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param oldName
+     *            The old table name.
+     * @param newName
+     *            The new table name.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
+    public void renameTable(Connection connection, String oldName, String newName) throws SQLException {
+        Entry info = getLogger().info("rename");
+
+        info.put("oldName", oldName).put("newName", newName);
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("RENAME TABLE ").append(oldName).append(" TO ").append(newName);
         
+        info.put("sql", sql);
+        
+        info.send();
+
+        Statement statement = connection.createStatement();
+        statement.execute(sql.toString());
+        statement.close();
     }
 }
