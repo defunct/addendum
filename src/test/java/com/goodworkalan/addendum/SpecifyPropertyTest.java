@@ -15,7 +15,7 @@ public class SpecifyPropertyTest {
     @Test
     public void scale() {
         Column column = new Column("a", int.class);
-        AddProperty add = new AddProperty(null, column);
+        CreateProperty add = new CreateProperty(null, column);
         assertSame(add, add.scale(1));
         assertEquals(column.getScale(), new Integer(1));
     }
@@ -24,7 +24,7 @@ public class SpecifyPropertyTest {
     @Test
     public void precision() {
         Column column = new Column("a", int.class);
-        AddProperty add = new AddProperty(null, column);
+        CreateProperty add = new CreateProperty(null, column);
         assertSame(add, add.precision(1));
         assertEquals(column.getPrecision(), new Integer(1));
     }

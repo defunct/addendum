@@ -48,7 +48,7 @@ public class DefineEntity {
      *            The SQL column type.
      * @return A new property builder.
      */
-    public AddProperty add(String name, String columnName, int columnType) {
+    public CreateProperty add(String name, String columnName, int columnType) {
         if (entity.properties.containsKey(name)) {
             throw new AddendumException(PROPERTY_EXISTS, name);
         }
@@ -58,7 +58,7 @@ public class DefineEntity {
         entity.properties.put(name, columnName);
         Column column = new Column(columnName);
         entity.columns.put(columnName, column);
-        return new AddProperty(this, column);
+        return new CreateProperty(this, column);
     }
 
     /**
@@ -71,7 +71,7 @@ public class DefineEntity {
      *            The SQL column type.
      * @return A new property builder.
      */
-    public AddProperty add(String name, int columnType) {
+    public CreateProperty add(String name, int columnType) {
         return add(name, name, columnType);
     }
 
@@ -88,7 +88,7 @@ public class DefineEntity {
      *            The native column type.
      * @return A column builder.
      */
-    public AddProperty add(String name, String columnName, Class<?> nativeType) {
+    public CreateProperty add(String name, String columnName, Class<?> nativeType) {
         return add(name, columnName, Column.getColumnType(nativeType));
     }
 
@@ -103,7 +103,7 @@ public class DefineEntity {
      *            The native column type.
      * @return A column builder.
      */
-    public AddProperty add(String name, Class<?> nativeType) {
+    public CreateProperty add(String name, Class<?> nativeType) {
         return add(name, name, nativeType);
     }
 
