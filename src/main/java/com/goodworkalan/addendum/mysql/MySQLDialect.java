@@ -19,15 +19,13 @@ import com.goodworkalan.notice.event.LoggerFactory;
  * 
  * @author Alan Gutierrez
  */
-public class MySQLDialect extends AbstractDialect
-{
+public class MySQLDialect extends AbstractDialect {
     private final Logger logger = LoggerFactory.getLogger(MySQLDialect.class);
-    
+
     /**
      * Create a new MySQL dialect.
      */
-    public MySQLDialect()
-    {
+    public MySQLDialect() {
         super();
         setType(Types.BIT, "BIT");
         setType(Types.BOOLEAN, "BIT");
@@ -45,11 +43,10 @@ public class MySQLDialect extends AbstractDialect
 
     
     @Override
-    protected Logger getLogger()
-    {
+    protected Logger getLogger() {
         return logger;
     }
-    
+
     /**
      * Create the table used to store the applied addenda.
      * 
@@ -59,8 +56,7 @@ public class MySQLDialect extends AbstractDialect
      * @throws SQLException
      *             For any SQL error.
      */
-    public void createAddendaTable(Connection connection) throws SQLException
-    {
+    public void createAddendaTable(Connection connection) throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
         ResultSet results = metaData.getTables(null, null, "Addenda", null);
         boolean build = !results.next();
@@ -73,8 +69,7 @@ public class MySQLDialect extends AbstractDialect
         }
     }
     
-    public int addendaCount(Connection connection) throws SQLException
-    {
+    public int addendaCount(Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet results = statement.executeQuery("SELECT COALESCE(MAX(addendum), 0) FROM Addenda");
         results.next();
@@ -83,8 +78,7 @@ public class MySQLDialect extends AbstractDialect
         return max;
     }
     
-    public void addendum(Connection connection) throws SQLException
-    {
+    public void addendum(Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("INSERT INTO Addenda SELECT COALESCE(MAX(addendum), 0) + 1 FROM Addenda");
         statement.close();
@@ -95,8 +89,7 @@ public class MySQLDialect extends AbstractDialect
      * 
      * @return True if the database is a MySQL database.
      */
-    public boolean canTranslate(Connection connection) throws SQLException
-    {
+    public boolean canTranslate(Connection connection) throws SQLException {
         return connection.getMetaData().getDatabaseProductName().equals("MySQL");
     }
     
