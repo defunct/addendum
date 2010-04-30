@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.goodworkalan.addendum.connector.Connector;
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * A collection of updates to performed on an SQL database or on related data
  * structures in an application.

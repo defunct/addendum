@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.connector.MockConnector;
+import com.goodworkalan.addendum.dialect.Dialect;
+
 
 /**
  * Unit tests for the {@link Script} class.

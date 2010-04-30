@@ -5,6 +5,9 @@ import static com.goodworkalan.addendum.AddendumException.*;
 
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * Performs a single alter column update against the database.
  *

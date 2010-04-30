@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * An update action that inserts a record into the database.
  * 

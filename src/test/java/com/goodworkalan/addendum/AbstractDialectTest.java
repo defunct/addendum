@@ -21,6 +21,12 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.connector.Connector;
+import com.goodworkalan.addendum.connector.DriverManagerConnector;
+import com.goodworkalan.addendum.dialect.AbstractDialect;
+import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.addendum.dialect.ConcreteDialect;
+
 /**
  * Unit tests for the {@link AbstractDialect} class.
  *
@@ -369,7 +375,7 @@ public class AbstractDialectTest {
  
     /** Test the unimplemented verify table method. */
     @Test
-    public void verifyTable() {
-        new ConcreteDialect().verifyTable(null, null);
+    public void verifyTable() throws SQLException {
+        new ConcreteDialect().verifyTable(null, null, null);
     }
 }

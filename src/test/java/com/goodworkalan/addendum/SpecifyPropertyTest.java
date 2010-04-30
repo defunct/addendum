@@ -5,6 +5,8 @@ import static org.testng.Assert.assertSame;
 
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * Unit tests for {@link SpecifyProperty}.
  * 

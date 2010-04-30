@@ -1,5 +1,8 @@
 package com.goodworkalan.addendum;
 
+import com.goodworkalan.addendum.connector.Connector;
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * Definition of an entire migration for the life of a database schema.
  * <p>

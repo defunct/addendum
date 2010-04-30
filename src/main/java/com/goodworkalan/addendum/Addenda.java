@@ -13,6 +13,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.goodworkalan.addendum.connector.Connector;
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * A collection of {@link Addendum} instances with changes to apply to an
  * application's data structures.

@@ -3,6 +3,7 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Dialect;
 import com.goodworkalan.furnish.Furnish;
 
 /**

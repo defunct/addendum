@@ -3,6 +3,8 @@ package com.goodworkalan.addendum;
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * Builds an entity alteration that can change the underlying table name, alter
  * properties, add new properties or drop properties.

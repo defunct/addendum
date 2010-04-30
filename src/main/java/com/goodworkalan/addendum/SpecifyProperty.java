@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * A generic column builder that specifies precision, scale length and default
  * value. This builder sets the attributes common to all properties. Derived

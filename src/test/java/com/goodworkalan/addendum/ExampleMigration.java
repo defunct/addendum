@@ -2,6 +2,8 @@ package com.goodworkalan.addendum;
 
 import com.goodworkalan.addendum.Addenda;
 import com.goodworkalan.addendum.Migration;
+import com.goodworkalan.addendum.connector.MockConnector;
+import com.goodworkalan.addendum.dialect.MockDialect;
 
 public class ExampleMigration extends Migration {
     public ExampleMigration(Addenda addenda) {

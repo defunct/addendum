@@ -2,6 +2,8 @@ package com.goodworkalan.addendum;
 
 import java.sql.Connection;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * A do nothing implementation for updates that only effect the tracking schema.
  *

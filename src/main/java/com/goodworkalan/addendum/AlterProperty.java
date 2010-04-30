@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * An element in the domain-specific language that alters existing columns in an
  * existing table.

@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * Base builder for property definition builders for properties added to
  * entities.

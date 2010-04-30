@@ -6,6 +6,8 @@ import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 
 import java.util.Arrays;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * Builds an entity definition specifying the entity primary key and entity
  * properties.

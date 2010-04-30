@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * A builder for properties that already exists that can change the type or name
  * of a property and that insists that a default value is provided if the

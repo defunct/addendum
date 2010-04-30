@@ -11,6 +11,10 @@ import java.sql.SQLException;
 
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.connector.MockConnector;
+import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.addendum.dialect.MockDialect;
+
 
 public class AddendaTest {
     @Test(expectedExceptions = AddendumException.class)

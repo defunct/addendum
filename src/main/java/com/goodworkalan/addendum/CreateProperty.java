@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * Builds a new property for an entity specifying the type, length, scale,
  * precision, nullability, and default value.

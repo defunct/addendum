@@ -3,6 +3,9 @@ import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * An update that adds a column to an existing entity.
  * 

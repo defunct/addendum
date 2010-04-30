@@ -3,6 +3,8 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * An update performed against the underlying database. Instances of this class
  * are returned by {@link SchemaUpdate#execute(Schema)} to be stored in the

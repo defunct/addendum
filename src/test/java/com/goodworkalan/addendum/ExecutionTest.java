@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * Unit tests for the {@link Execution} class.
  *

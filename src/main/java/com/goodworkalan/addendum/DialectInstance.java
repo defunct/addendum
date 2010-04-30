@@ -5,6 +5,8 @@ import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPO
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * A dialect provider that provides a specific instance of a dialect.
  * 

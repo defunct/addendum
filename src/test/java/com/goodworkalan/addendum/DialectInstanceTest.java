@@ -11,6 +11,8 @@ import java.sql.SQLException;
 
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.dialect.MockDialect;
+
 /**
  * Unit tests for the {@link DialectInstance} class.
  *

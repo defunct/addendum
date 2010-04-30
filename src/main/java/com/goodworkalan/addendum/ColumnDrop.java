@@ -5,6 +5,8 @@ import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * Drops a property from an entity in the database.
  *

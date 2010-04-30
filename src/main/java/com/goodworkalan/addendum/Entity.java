@@ -8,12 +8,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.goodworkalan.addendum.dialect.Column;
+
 /**
  * A mutable object that models a table specification.
  * 
  * @author Alan Gutierrez
  */
-public class Entity {
+class Entity {
    /** The table name. */
     public String tableName;
 

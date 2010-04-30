@@ -4,6 +4,8 @@ import java.sql.Connection;
 import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * An update that will run arbitrary SQL in an {@link Executable}.
  * 

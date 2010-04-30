@@ -3,6 +3,8 @@ package com.goodworkalan.addendum;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * Allows users to specify application specific SQL updates against the
  * database.

@@ -4,6 +4,8 @@ import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.goodworkalan.addendum.dialect.Dialect;
+
 /**
  * Creates a new entity in the schema.
  * 
