@@ -272,7 +272,7 @@ public class AddendumTest {
                     .add("a", int.class).end()
                     .end()
                 .rename("a").to("b")
-                    .commit();
+                .commit();
     }
     
     
