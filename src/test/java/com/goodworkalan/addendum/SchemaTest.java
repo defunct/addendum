@@ -2,7 +2,7 @@ package com.goodworkalan.addendum;
 
 import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 import org.testng.annotations.Test;
 
@@ -37,5 +37,14 @@ public class SchemaTest {
             System.out.println(e.getMessage());
             throw e;
         }
+    }
+    
+    /** Test table name not found. */
+    @Test
+    public void entityNameNotFound() {
+        Schema schema = new Schema();
+        schema.aliases.put("a", "a");
+        schema.aliases.put("b", "b");
+        assertNull(schema.getEntityName("c"));
     }
 }
