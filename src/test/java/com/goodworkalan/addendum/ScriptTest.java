@@ -18,8 +18,8 @@ public class ScriptTest {
     @Test(expectedExceptions = AddendumException.class)
     public void entityMissing() {
         try {
-            Script script = new Script(new Schema(), new ArrayList<UpdateDatabase>());
-            script.getEntity("a");
+            Script migration = new Script(new Schema(), new ArrayList<DatabaseUpdate>());
+            migration.getEntity("a");
         } catch (AddendumException e) {
             assertEquals(e.getCode(), ADDENDUM_ENTITY_MISSING);
             System.out.println(e.getMessage());
@@ -31,9 +31,9 @@ public class ScriptTest {
     @Test(expectedExceptions = AddendumException.class)
     public void tableMissing() {
         try {
-            Script script = new Script(new Schema(), new ArrayList<UpdateDatabase>());
-            script.aliases.put("a", "a");
-            script.getEntity("a");
+            Script migration = new Script(new Schema(), new ArrayList<DatabaseUpdate>());
+            migration.aliases.put("a", "a");
+            migration.getEntity("a");
         } catch (AddendumException e) {
             assertEquals(e.getCode(), ADDENDUM_TABLE_MISSING);
             System.out.println(e.getMessage());

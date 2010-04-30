@@ -46,12 +46,12 @@ class PropertyRename implements UpdateSchema {
      *            The tracking schema.
      * @return An update to be performed against the database.
      */
-    public UpdateDatabase execute(Schema schema) {
+    public DatabaseUpdate execute(Schema schema) {
         Entity entity = schema.entities.get(tableName);
         if (entity.properties.containsKey(to)) {
             throw new AddendumException(PROPERTY_EXISTS, to);
         }
         schema.aliases.put(to, schema.aliases.remove(from));
-        return new NullUpdateDatabase();
+        return new NullDatabaseUpdate();
     }
 }

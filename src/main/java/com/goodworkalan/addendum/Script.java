@@ -26,7 +26,7 @@ class Script {
     public final Map<String, Entity> entities = new HashMap<String, Entity>();
     
     /** The list of database updates. */
-    private final List<UpdateDatabase> databaseUpdates;
+    private final List<DatabaseUpdate> databaseUpdates;
 
     /**
      * Create a new migration with the given schema and record updates in the
@@ -37,7 +37,7 @@ class Script {
      * @param databaseUpdates
      *            The list of database updates.
      */
-    public Script(Schema schema, List<UpdateDatabase> databaseUpdates) {
+    public Script(Schema schema, List<DatabaseUpdate> databaseUpdates) {
         this.schema = schema;
         this.databaseUpdates = databaseUpdates;
     }

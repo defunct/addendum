@@ -7,11 +7,11 @@ import java.sql.Connection;
  *
  * @author Alan Gutierrez
  */
-class NullUpdateDatabase extends UpdateDatabase {
+class NullDatabaseUpdate extends DatabaseUpdate {
     /**
      * Create a do nothing database update.
      */
-    public NullUpdateDatabase() {
+    public NullDatabaseUpdate() {
         super(0);
     }
 

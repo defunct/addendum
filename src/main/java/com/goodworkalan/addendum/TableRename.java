@@ -38,12 +38,12 @@ class TableRename implements UpdateSchema {
      *            The tracking schema.
      * @return The table rename to perform against the database.
      */
-    public UpdateDatabase execute(Schema schema) {
+    public DatabaseUpdate execute(Schema schema) {
         Entity entity = schema.entities.remove(from);
         entity.tableName = to;
         schema.entities.put(to, entity);
         schema.aliases.put(alias, to);
-        return new UpdateDatabase(0) {
+        return new DatabaseUpdate(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.renameTable(connection, from, to);

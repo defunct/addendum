@@ -18,5 +18,5 @@ interface UpdateSchema {
      *            The tracking schema.
      * @return An update to be performed against the database.
      */
-    public UpdateDatabase execute(Schema schema);
+    public DatabaseUpdate execute(Schema schema);
 }

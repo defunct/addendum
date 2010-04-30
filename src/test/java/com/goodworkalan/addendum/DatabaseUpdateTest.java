@@ -11,16 +11,16 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for the {@link UpdateDatabase} class.
+ * Unit tests for the {@link DatabaseUpdate} class.
  * 
  * @author AlanGutierrez
  */
-public class UpdateDatabaseTest {
+public class DatabaseUpdateTest {
     /** Test the cannot create table error message. */
     @Test(expectedExceptions = AddendumException.class)
     public void cannotCreateTableMessage() {
         try {
-            new UpdateDatabase(CANNOT_CREATE_TABLE, "a", "a") {
+            new DatabaseUpdate(CANNOT_CREATE_TABLE, "a", "a") {
                 public void execute(Connection connection, Dialect dialect)
                         throws SQLException {
                     throw new SQLException();
@@ -37,7 +37,7 @@ public class UpdateDatabaseTest {
     @Test(expectedExceptions = AddendumException.class)
     public void cannotAlterColumnMessage() {
         try {
-            new UpdateDatabase(CANNOT_ALTER_COLUMN, "a", "a") {
+            new DatabaseUpdate(CANNOT_ALTER_COLUMN, "a", "a") {
                 public void execute(Connection connection, Dialect dialect)
                         throws SQLException {
                     throw new SQLException();
@@ -54,7 +54,7 @@ public class UpdateDatabaseTest {
     @Test(expectedExceptions = AddendumException.class)
     public void cannotAddColumnMessage() {
         try {
-            new UpdateDatabase(CANNOT_ADD_COLUMN, "a", "a") {
+            new DatabaseUpdate(CANNOT_ADD_COLUMN, "a", "a") {
                 public void execute(Connection connection, Dialect dialect)
                         throws SQLException {
                     throw new SQLException();

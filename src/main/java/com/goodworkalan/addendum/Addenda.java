@@ -167,7 +167,7 @@ public class Addenda {
      *         database.
      */
     private Addendum addendum(Connector connector, DialectProvider dialectProvider) {
-        List<UpdateDatabase> updates = new ArrayList<UpdateDatabase>();
+        List<DatabaseUpdate> updates = new ArrayList<DatabaseUpdate>();
         addenda.add(new ApplyAddendum(connector, dialectProvider, updates));
         return new Addendum(new Script(schema, updates));
     }

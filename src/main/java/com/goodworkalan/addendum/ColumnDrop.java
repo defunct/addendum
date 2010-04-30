@@ -39,14 +39,14 @@ class ColumnDrop implements UpdateSchema {
      * @return A database update that will drop the column in the database.
      * @exception AddendumException If the property does not exist.
      */
-    public UpdateDatabase execute(Schema schema) {
+    public DatabaseUpdate execute(Schema schema) {
         Entity entity = schema.entities.get(tableName);
         final String columnName = entity.properties.remove(property);
         if (columnName == null) {
             throw new AddendumException(PROPERTY_MISSING, property, schema.getEntityName(tableName));
         }
         entity.columns.remove(columnName);
-        return new UpdateDatabase(0) {
+        return new DatabaseUpdate(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.dropColumn(connection, tableName, columnName);

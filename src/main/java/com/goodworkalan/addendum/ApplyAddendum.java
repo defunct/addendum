@@ -20,7 +20,7 @@ class ApplyAddendum
     private final DialectProvider dialectProvider;
     
     /** A list of updates to perform. */
-    private final List<UpdateDatabase> updates;
+    private final List<DatabaseUpdate> updates;
 
     /**
      * Create a new addendum. The given list of updates is unique to this
@@ -33,7 +33,7 @@ class ApplyAddendum
      * @param updates
      *            A list of updates to perform.
      */
-    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<UpdateDatabase> updates)
+    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<DatabaseUpdate> updates)
     {
         this.connector = connector;
         this.dialectProvider = dialectProvider;
@@ -55,7 +55,7 @@ class ApplyAddendum
         } catch (SQLException e) {
             throw new AddendumException(SQL_GET_DIALECT, e);
         }
-        for (UpdateDatabase update : updates) {
+        for (DatabaseUpdate update : updates) {
             update.update(connection, dialect);
         }
         connector.close(connection);

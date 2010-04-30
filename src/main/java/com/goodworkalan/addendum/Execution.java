@@ -30,8 +30,8 @@ class Execution implements UpdateSchema {
      * @param schema
      *            The tracking schema.
      */
-    public UpdateDatabase execute(Schema schema) {
-        return new UpdateDatabase(CANNOT_EXECUTE_SQL) {
+    public DatabaseUpdate execute(Schema schema) {
+        return new DatabaseUpdate(CANNOT_EXECUTE_SQL) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 executable.execute(connection, dialect);

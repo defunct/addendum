@@ -43,11 +43,11 @@ class ColumnAdd implements UpdateSchema
      *            The tracking schema.
      * @return A column add update to perform against the database.
      */
-    public UpdateDatabase execute(Schema schema) {
+    public DatabaseUpdate execute(Schema schema) {
         Entity entity = schema.entities.get(tableName);
         entity.properties.put(property, column.getName());
         entity.columns.put(column.getName(), column);
-        return new UpdateDatabase(CANNOT_ADD_COLUMN, column.getName(), tableName) {
+        return new DatabaseUpdate(CANNOT_ADD_COLUMN, column.getName(), tableName) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.addColumn(connection, tableName, column);

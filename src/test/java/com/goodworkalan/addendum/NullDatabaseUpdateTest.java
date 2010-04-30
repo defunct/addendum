@@ -3,14 +3,14 @@ package com.goodworkalan.addendum;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for the {@link UpdateDatabase} class.
+ * Unit tests for the {@link DatabaseUpdate} class.
  * 
  * @author Alan Gutierrez
  */
-public class NullUpdateDatabaseTest {
+public class NullDatabaseUpdateTest {
     /** Test execute. */
     @Test
     public void execute() {
-        new NullUpdateDatabase().execute(null, null);
+        new NullDatabaseUpdate().execute(null, null);
     }
 }

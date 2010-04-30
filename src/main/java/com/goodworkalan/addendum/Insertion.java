@@ -76,8 +76,8 @@ class Insertion implements UpdateSchema
      * @param database
      *            The psuedo-database.
      */
-    public UpdateDatabase execute(Schema database) {
-        return new UpdateDatabase(0) {
+    public DatabaseUpdate execute(Schema database) {
+        return new DatabaseUpdate(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.insert(connection, table, columns, values);

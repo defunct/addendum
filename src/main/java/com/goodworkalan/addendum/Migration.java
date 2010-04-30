@@ -1,5 +1,12 @@
 package com.goodworkalan.addendum;
 
+/**
+ * Definition of an entire migration for the life of a database schema.
+ * <p>
+ * FIXME Script should be called Migration. 
+ * 
+ * @author Alan Gutierrez
+ */
 public abstract class Migration {
     private final Addenda addenda;
     

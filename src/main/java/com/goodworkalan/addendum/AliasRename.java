@@ -41,11 +41,11 @@ class AliasRename implements UpdateSchema {
      * @exception AddendumException
      *                If the new name already exists in the schema.
      */
-    public UpdateDatabase execute(Schema schema) {
+    public DatabaseUpdate execute(Schema schema) {
         if (schema.aliases.containsKey(to)) {
             throw new AddendumException(ENTITY_EXISTS, to);
         }
         schema.aliases.put(to, schema.aliases.remove(from));
-        return new NullUpdateDatabase();
+        return new NullDatabaseUpdate();
     }
 }

@@ -35,7 +35,7 @@ class TableCreate implements UpdateSchema {
      * dialect.
      * 
      */
-    public UpdateDatabase execute(Schema schema) {
+    public DatabaseUpdate execute(Schema schema) {
         if (schema.aliases.containsKey(entityName)) {
             throw new AddendumException(ENTITY_EXISTS, entityName);
         }
@@ -44,7 +44,7 @@ class TableCreate implements UpdateSchema {
             throw new AddendumException(TABLE_EXISTS, entity.tableName);
         }
         schema.entities.put(entity.tableName, entity);
-        return new UpdateDatabase(CANNOT_CREATE_TABLE, entityName, entity.tableName) {
+        return new DatabaseUpdate(CANNOT_CREATE_TABLE, entityName, entity.tableName) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.createTable(connection, entity.tableName, entity.columns.values(), entity.primaryKey);

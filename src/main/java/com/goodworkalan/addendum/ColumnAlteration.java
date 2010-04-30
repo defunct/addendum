@@ -48,7 +48,7 @@ class ColumnAlteration implements UpdateSchema
      *            The tracking schema.
      * @return A column alteration database update.
      */
-    public UpdateDatabase execute(Schema schema) {
+    public DatabaseUpdate execute(Schema schema) {
         Entity entity = schema.entities.get(tableName);
         final String oldColumnName = entity.properties.get(propertyName);
         if (!column.getName().equals(oldColumnName)) {
@@ -57,7 +57,7 @@ class ColumnAlteration implements UpdateSchema
         }
         entity.columns.put(column.getName(), column);
         final String tableName = entity.tableName;
-        return new UpdateDatabase(CANNOT_ALTER_COLUMN, tableName, oldColumnName) {
+        return new DatabaseUpdate(CANNOT_ALTER_COLUMN, tableName, oldColumnName) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.alterColumn(connection, tableName, oldColumnName, column);
