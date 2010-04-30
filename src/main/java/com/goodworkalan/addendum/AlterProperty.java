@@ -7,7 +7,7 @@ package com.goodworkalan.addendum;
  * @author Alan Gutierrez
  */
 public class AlterProperty
-extends ExistingColumn<AlterEntity, AlterProperty> {
+extends ExistingProperty<AlterEntity, AlterProperty> {
     /** The database migration. */
     private final Patch patch;
     

@@ -12,7 +12,7 @@ package com.goodworkalan.addendum;
  * @param <Element>
  *            The type of the sub-classed proeprty builder.
  */
-public abstract class ExistingColumn<Container, Element>
+public abstract class ExistingProperty<Container, Element>
 extends SpecifyProperty<Container, Element> {
     /**
      * Create an alter property element that defines the given column and
@@ -23,7 +23,7 @@ extends SpecifyProperty<Container, Element> {
      * @param column
      *            The column definition.
      */
-    public ExistingColumn(Container container, Column column) {
+    public ExistingProperty(Container container, Column column) {
         super(container, column);
     }
 
