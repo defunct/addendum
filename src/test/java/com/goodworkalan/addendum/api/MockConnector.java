@@ -17,6 +17,10 @@ public class MockConnector implements Connector {
             when(connection.getMetaData()).thenReturn(meta);
         } catch (SQLException e) {
         }
+        try {
+            when(meta.getDatabaseProductName()).thenReturn("MOCK");
+        } catch (SQLException e) {
+        }
         return connection;
     }
     

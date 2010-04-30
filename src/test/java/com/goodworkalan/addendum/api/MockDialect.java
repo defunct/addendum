@@ -54,9 +54,8 @@ public class MockDialect implements Dialect
         addColumns.add(new AddColumn(tableName, column));
     }
 
-    public boolean canTranslate(Connection connection) throws SQLException
-    {
-        return true;
+    public boolean canTranslate(Connection connection) throws SQLException {
+        return connection.getMetaData().getDatabaseProductName().equals("MOCK");
     }
 
     public void createTable(Connection connection, String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException

@@ -11,19 +11,17 @@ import com.goodworkalan.furnish.Furnish;
  * 
  * @author Alan Gutierrez
  */
-class DialectLibrary implements DialectProvider  
-{
+class DialectLibrary implements DialectProvider {
     /** The singleton instance of the library. */
-    private final static DialectLibrary INSTNACE = new DialectLibrary(); 
+    private final static DialectLibrary INSTNACE = new DialectLibrary();
 
     /** A service loader for the Dialect service. */
     private Iterable<Dialect> dialects = new Furnish<Dialect>(Dialect.class);
-    
+
     /**
      * Create a dialect library.
      */
-    private DialectLibrary()
-    {
+    private DialectLibrary() {
     }
 
     /**
@@ -31,8 +29,7 @@ class DialectLibrary implements DialectProvider
      * 
      * @return The singleton instance of the dialect library.
      */
-    public static DialectLibrary getInstance()
-    {
+    public static DialectLibrary getInstance() {
         return INSTNACE;
     }
 
@@ -41,12 +38,9 @@ class DialectLibrary implements DialectProvider
      * 
      * @return The SQL dialect for the given connection.
      */
-    public Dialect getDialect(Connection connection) throws SQLException
-    {
-        for (Dialect dialect : dialects)
-        {
-            if (dialect.canTranslate(connection))
-            {
+    public Dialect getDialect(Connection connection) throws SQLException {
+        for (Dialect dialect : dialects) {
+            if (dialect.canTranslate(connection)) {
                 return dialect;
             }
         }
