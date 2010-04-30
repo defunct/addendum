@@ -456,4 +456,23 @@ public class AddendumTest {
             throw e;
         }
     }
+    
+    /** Test drop property. */
+    @Test
+    public void setColumn() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .alter("a").column("b").end()
+                    .end()
+                .commit();
+        addenda.amend();
+    }
 }
