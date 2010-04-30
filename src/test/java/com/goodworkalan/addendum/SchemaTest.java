@@ -1,6 +1,7 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
+import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;

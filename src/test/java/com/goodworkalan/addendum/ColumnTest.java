@@ -1,4 +1,5 @@
 package com.goodworkalan.addendum;
+
 import static com.goodworkalan.addendum.AddendumException.UNMAPPABLE_TYPE;
 import static org.testng.Assert.assertEquals;
 
