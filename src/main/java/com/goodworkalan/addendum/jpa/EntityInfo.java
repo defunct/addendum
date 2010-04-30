@@ -6,8 +6,10 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -19,8 +21,7 @@ import javax.persistence.Table;
  * 
  * @author Alan Gutierrez
  */
-class EntityInfo
-{
+class EntityInfo {
     /** The entity name. */
     private final String name;
     
@@ -29,9 +30,6 @@ class EntityInfo
     
     /** The discriminator column for the discriminator inheritance strategy. */
     private final DiscriminatorColumn discriminator;
-    
-    /** The entity class. */
-    private final Class<?> entityClass;
     
     /** The entity properties. */
     private final Map<String, PropertyInfo> properties;
@@ -44,29 +42,16 @@ class EntityInfo
      *            The entity name.
      * @param tableName
      *            The table name mapped to the entity.
-     * @param entityClass
-     *            The entity class.
      * @param discriminator
      *            The discriminator column.
      * @param properties
      *            The entity properties.
      */
-    public EntityInfo(String name, String tableName, Class<?> entityClass, DiscriminatorColumn discriminator, Map<String, PropertyInfo> properties) {
+    public EntityInfo(String name, String tableName, DiscriminatorColumn discriminator, Map<String, PropertyInfo> properties) {
         this.name = name;
         this.tableName = tableName;
-        this.entityClass = entityClass;
         this.discriminator = discriminator;
         this.properties = Collections.unmodifiableMap(properties);
-    }
-
-    /**
-     * Get the entity class.
-     * 
-     * @return The entity class.
-     */
-    public Class<?> getEntityClass()
-    {
-        return entityClass;
     }
 
     /**
@@ -74,8 +59,7 @@ class EntityInfo
      * 
      * @return The entity name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -84,8 +68,7 @@ class EntityInfo
      * 
      * @return The table name mapped to the entity.
      */
-    public String getTableName()
-    {
+    public String getTableName() {
         return tableName;
     }
 
@@ -103,8 +86,7 @@ class EntityInfo
      * 
      * @return An unmodifiable map of the entity properties.
      */
-    public Map<String, PropertyInfo> getProperties()
-    {
+    public Map<String, PropertyInfo> getProperties() {
         return properties;
     }
 
@@ -119,12 +101,9 @@ class EntityInfo
      * @param fields
      *            A map of fields indexed by field name.
      */
-    private static void addFields(Class<?> entityClass, Map<String, Field> fields)
-    {
-        if (!entityClass.equals(Object.class))
-        {
-            for (Field field : entityClass.getFields())
-            {
+    private static void addFields(Class<?> entityClass, Map<String, Field> fields) {
+        if (!entityClass.equals(Object.class)) {
+            for (Field field : entityClass.getFields()) {
                 fields.put(field.getName(), field);
             }
             addFields(entityClass.getSuperclass(), fields);
@@ -176,17 +155,8 @@ class EntityInfo
      *            The entity class.
      * @return The entity information for the entity class.
      */
-    public static EntityInfo getInstance(Class<?> entityClass)
-    {
-        BeanInfo beanInfo;
-        try
-        {
-            beanInfo = Introspector.getBeanInfo(entityClass, Object.class);
-        }
-        catch (IntrospectionException e)
-        {
-            throw new RuntimeException(e);
-        }
+    public static EntityInfo getInstance(Class<?> entityClass) {
+        BeanInfo beanInfo = introspect(entityClass, Object.class);
         Map<String, PropertyInfo> properties = new LinkedHashMap<String, PropertyInfo>();
         Map<String, PropertyDescriptor> descriptors = new LinkedHashMap<String, PropertyDescriptor>();
         for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors())
@@ -195,22 +165,12 @@ class EntityInfo
         }
         Map<String, Field> fields = new LinkedHashMap<String, Field>();
         addFields(entityClass, fields);
-        for (String name : fields.keySet())
-        {
-            for (PropertyInfo propertyInfo : PropertyInfo.getInstances(name, fields.get(name), descriptors.get(name)))
-            {
-                if (propertyInfo != null)
-                {
-                    properties.put(name, propertyInfo);
-                }
-            }
-        }
-        for (String name : descriptors.keySet())
-        {
-            for (PropertyInfo propertyInfo : PropertyInfo.getInstances(name, fields.get(name), descriptors.get(name)))
-            {
-                if (propertyInfo != null)
-                {
+        Set<String> names = new HashSet<String>();
+        names.addAll(fields.keySet());
+        names.addAll(descriptors.keySet());
+        for (String name : names) {
+            for (PropertyInfo propertyInfo : PropertyInfo.getInstances(name, fields.get(name), descriptors.get(name))) {
+                if (propertyInfo != null) {
                     properties.put(name, propertyInfo);
                 }
             }
@@ -220,10 +180,9 @@ class EntityInfo
         name = name.substring(name.lastIndexOf('.') + 1);
         String tableName = name;
         Table table = entityClass.getAnnotation(Table.class);
-        if (table != null)
-        {
+        if (table != null) {
             tableName = table.name();
         }
-        return new EntityInfo(name, tableName, entityClass, discriminatorColumn, properties);
+        return new EntityInfo(name, tableName, discriminatorColumn, properties);
     }
 }
