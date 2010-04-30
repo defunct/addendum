@@ -123,9 +123,9 @@ public class AlterEntity {
      *            The name of the property to alter.
      * @return An alter column language element to define the column changes.
      */
-    public AlterColumn alter(String property) {
+    public AlterProperty alter(String property) {
         Column column = new Column(entity.getColumn(property));
-        return new AlterColumn(this, script, entity.tableName, column);
+        return new AlterProperty(this, script, entity.tableName, column);
     }
 
     /**

@@ -6,7 +6,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AlterColumn extends ExistingColumn<AlterEntity, AlterColumn>
+public class AlterProperty extends ExistingColumn<AlterEntity, AlterProperty>
 {
     private final Script script;
     
@@ -21,7 +21,7 @@ public class AlterColumn extends ExistingColumn<AlterEntity, AlterColumn>
      * @param column
      *            The column name.
      */
-    public AlterColumn(AlterEntity alterTable, Script script, String tableName, Column column) {
+    public AlterProperty(AlterEntity alterTable, Script script, String tableName, Column column) {
         super(alterTable, column);
         this.tableName = tableName;
         this.script = script;
@@ -35,7 +35,7 @@ public class AlterColumn extends ExistingColumn<AlterEntity, AlterColumn>
      * @return This alter column element to continue the domain-specific
      *         language statement.
      */
-    public AlterColumn rename(String name)
+    public AlterProperty rename(String name)
     {
         column.setName(name);
         return this;
@@ -48,7 +48,7 @@ public class AlterColumn extends ExistingColumn<AlterEntity, AlterColumn>
      * @return The column specification language element.
      */
     @Override
-    protected AlterColumn getElement()
+    protected AlterProperty getElement()
     {
         return this;
     }
