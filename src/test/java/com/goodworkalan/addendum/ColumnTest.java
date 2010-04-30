@@ -1,4 +1,5 @@
 package com.goodworkalan.addendum;
+import static com.goodworkalan.addendum.AddendumException.UNMAPPABLE_TYPE;
 import static org.testng.Assert.assertEquals;
 
 import java.math.BigDecimal;
@@ -9,15 +10,6 @@ import java.util.Calendar;
 import org.testng.annotations.Test;
 
 import sun.nio.ByteBuffered;
-import static com.goodworkalan.addendum.AddendumException.UNMAPPABLE_TYPE;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Types;
-import java.util.Calendar;
-import java.util.Date;
-
-import com.goodworkalan.utility.Primitives;
 
 /**
  * Unit tests for the {@link Column} class.

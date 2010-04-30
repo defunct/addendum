@@ -13,14 +13,15 @@ public class ConcreteDialect extends AbstractDialect {
     public ConcreteDialect() {
         super();
         setType(Types.INTEGER, "INTEGER");
-        setType(Types.DECIMAL, "DECIMAL");
+        setType(Types.NUMERIC, "NUMERIC(%2$d, %3$d)");
         setType(Types.VARCHAR, "VARCHAR(%1$d)", 65535);
         setType(Types.VARCHAR, "BLURDY(%1$d)", 70000);
+        setType(Types.CHAR, "CHAR(%1$d)", 255);
         setType(Types.VARCHAR, "TEXT");
-        setDefaultPrecisionScale(Types.DECIMAL, 10, 2);
+        setDefaultLength(Types.VARCHAR, 225);
+        setDefaultPrecisionScale(Types.NUMERIC, 10, 2);
     }
 
-    @Override
     public int addendaCount(Connection connection) throws SQLException {
         return 0;
     }
@@ -29,16 +30,13 @@ public class ConcreteDialect extends AbstractDialect {
         super.columnDefinition(sql, column, canNull);
     }
 
-    @Override
     public void addendum(Connection connection) throws SQLException {
     }
 
-    @Override
     public boolean canTranslate(Connection connection) throws SQLException {
         return false;
     }
 
-    @Override
     public void createAddendaTable(Connection connection) throws SQLException {
     }
 
@@ -51,10 +49,7 @@ public class ConcreteDialect extends AbstractDialect {
     throws SQLException {
     }
 
-    @Override
-    public void renameTable(Connection connection, String oldName,
-            String newName) throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void renameTable(Connection connection, String oldName, String newName)
+    throws SQLException {
     }
 }

@@ -1,6 +1,10 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDA_COUNT;
+import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDUM;
+import static com.goodworkalan.addendum.AddendumException.SQL_CREATE_ADDENDA;
+import static com.goodworkalan.addendum.AddendumException.SQL_GET_DIALECT;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;

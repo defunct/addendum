@@ -1,5 +1,8 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR;
+import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -17,8 +20,7 @@ import com.goodworkalan.notice.event.Logger;
 
 /**
  * An abstract dialect with default implementations of create table and insert
- * using standard SQL. The dialect includes methods for escaping SQL and
- * obtaining column metadata.
+ * using standard SQL.
  * 
  * @author Alan Gutierrez
  */
@@ -107,51 +109,6 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * Create the table used to store the applied addenda.
-     * 
-     * @param connection
-     *            An SQL connection on the database.
-     * 
-     * @throws SQLException
-     *             For any SQL error.
-     */
-    public abstract void createAddendaTable(Connection connection) throws SQLException;
-    
-    /**
-     * Get the maximum update applied.
-     * 
-     * @param connection
-     *            An SQL connection on the database.
-     * 
-     * @return The maximum update applied.
-     * @throws SQLException
-     *             For any SQL error.
-     */
-    public abstract int addendaCount(Connection connection) throws SQLException;
-
-    /**
-     * Increment the update number in the database.
-     * 
-     * @param connection
-     *            An SQL connection on the database.
-     * 
-     * @throws SQLException
-     *             For any SQL error.
-     */
-    public abstract void addendum(Connection connection) throws SQLException;
-    
-    /**
-     * Determine if the dialect can translate for the given connection.
-     * 
-     * @param connection
-     *            The database connection.
-     * @return True if this dialect can translate for the given connection.
-     * @throws SQLException
-     *             For any SQL error.
-     */
-    public abstract boolean canTranslate(Connection connection) throws SQLException;
-
-    /**
      * Create a table with the given table name, given columns and the given
      * primary key fields.
      * 
@@ -202,6 +159,15 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
+     * Cobertura has a bug where each branch of an enum switch statement must
+     * execute a line of code for it to be counted. I've put this in place to
+     * remind myself why I've done this. It is not just a compulsion, I do want
+     * to be able to see that all of the branches are covered.
+     */
+    private void coberturaFallThrough() {
+    }
+
+    /**
      * Append the column definition SQL to the given string buffer. If the given
      * <code>canNull</code> parameter is false, than the <strong>
      * <code>NOT NULL</code></strong> modifier will not be added to the column
@@ -239,7 +205,7 @@ public abstract class AbstractDialect implements Dialect {
         }
         
         if (!typeNames.containsKey(column.getColumnType())) {
-            throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
+            throw new AddendumException(DIALECT_DOES_NOT_SUPPORT_TYPE, column.getColumnType());
         }
 
         for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet()) {
@@ -259,21 +225,28 @@ public abstract class AbstractDialect implements Dialect {
 
         if (column.getGeneratorType() != null) {
             switch (column.getGeneratorType()) {
+            case NONE:
+                break;
             case IDENTITY:
+                coberturaFallThrough();
             case AUTO:
                 sql.append(" AUTO_INCREMENT");
                 break;
-            case SEQUENCE:
-                throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR, "SEQUENCE");
+            default:
+                throw new AddendumException(DIALECT_DOES_NOT_SUPPORT_GENERATOR, column.getGeneratorType().toString());
             }
         }
         
-        if (column.getDefaultValue() != null) {
+        if (column.getHasDefaultValue()) {
             switch (column.getColumnType()) {
             case Types.CHAR:
+                coberturaFallThrough();
             case Types.VARCHAR:
+                coberturaFallThrough();
             case Types.DATE:
+                coberturaFallThrough();
             case Types.TIME:
+                coberturaFallThrough();
             case Types.TIMESTAMP:
                 sql.append(" DEFAULT ").append("'" + column.getDefaultValue().toString().replace("'", "''") + "'");
                 break;
@@ -365,20 +338,6 @@ public abstract class AbstractDialect implements Dialect {
      */
     public void verifyTable(Connection connection, Entity table) {
     }
-
-    /**
-     * Rename a table form the given old name to the given new name.
-     * 
-     * @param connection
-     *            The JDBC connection.
-     * @param oldName
-     *            The old table name.
-     * @param newName
-     *            The new table name.
-     * @throws SQLException
-     *             For any reason, any reason at all.
-     */
-    public abstract void renameTable(Connection connection, String oldName, String newName) throws SQLException;
 
     /**
      * Insert a row into the given table. The column names are specified by the
