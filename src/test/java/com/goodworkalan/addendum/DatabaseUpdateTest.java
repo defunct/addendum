@@ -100,4 +100,21 @@ public class DatabaseUpdateTest {
             throw e;
         }
     }
+
+    /** Test the cannot insert error message. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void cannotRenameTableMessage() {
+        try {
+            new DatabaseUpdate(CANNOT_RENAME_TABLE, "a", "b") {
+                public void execute(Connection connection, Dialect dialect)
+                throws SQLException {
+                    throw new SQLException();
+                }
+            }.update(null, null);
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), CANNOT_RENAME_TABLE);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
 }

@@ -121,6 +121,9 @@ extends CodedDanger {
     
     /** Unable to insert values. */
     public final static int CANNOT_INSERT = 506;
+    
+    /** Unable to rename a table. */
+    public final static int CANNOT_RENAME_TABLE = 507;
 
     /**
      * Create a Sheaf exception with the given error code.

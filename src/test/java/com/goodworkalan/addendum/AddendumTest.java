@@ -275,6 +275,19 @@ public class AddendumTest {
                 .commit();
     }
     
+    /** Test rename. */
+    @Test
+    public void rename() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                    .add("a", int.class).end()
+                    .end()
+                .rename("a").to("b")
+                .commit();
+        addenda.amend();
+    }
     
     /** Test entity rename to existing entity name. */
     @Test(expectedExceptions = AddendumException.class)
