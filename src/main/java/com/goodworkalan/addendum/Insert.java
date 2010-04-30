@@ -1,15 +1,14 @@
 package com.goodworkalan.addendum;
 
 /**
- * An update action that inserts a record into the database.
- *  
+ * A builder that specifies the columns of an insert statement.
+ * 
  * @author Alan Gutierrez
  */
-public class Insert
-{
+public class Insert {
     /** The root language element for schema definitions. */
     private final Addendum schema;
-    
+
     /** The update action that will insert the record. */
     private final Insertion insertion;
 
@@ -23,8 +22,7 @@ public class Insert
      * @param insertion
      *            The update action that will insert the record.
      */
-    Insert(Addendum schema, Insertion insertion)
-    {
+    Insert(Addendum schema, Insertion insertion) {
         this.schema = schema;
         this.insertion = insertion;
     }
@@ -36,8 +34,7 @@ public class Insert
      *            The column names in the insert statement.
      * @return A values element with which to specify the insert values.
      */
-    public Values columns(String... columns)
-    {
+    public Values columns(String... columns) {
         insertion.columns(columns);
         return new Values(schema, insertion);
     }

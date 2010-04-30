@@ -117,8 +117,7 @@ public class AddendaTest {
                     .add("zip", String.class).length(64).end()
                     .end()
                .insert("Person")
-                   .columns("firstName", "lastName").values("Alan", "Gutierrez")
-                   .end();
+                   .columns("firstName", "lastName").values("Alan", "Gutierrez");
     }
 
     @Test

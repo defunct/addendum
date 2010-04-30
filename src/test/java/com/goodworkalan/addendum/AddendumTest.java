@@ -552,7 +552,7 @@ public class AddendumTest {
                         .add("a", int.class).end()
                         .add("b", int.class).end()
                         .end()
-                    .insert("a").columns("a", "b").values("1").end()
+                    .insert("a").columns("a", "b").values("1")
                     .commit();
             addenda.amend();
         } catch (AddendumException e) {

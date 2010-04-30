@@ -1,13 +1,13 @@
 package com.goodworkalan.addendum;
 
 /**
- * A domain-specific language element to set the values of an insert statement.
+ * A builder that sets the values of an insert statement.
  * 
  * @author Alan Gutierrez
  */
 public class Values {
-    /** The root language element for schema definitions. */
-    private final Addendum schema;
+    /** The addendum builder. */
+    private final Addendum addendum;
 
     /** The update action that will insert the record. */
     private final Insertion insertion;
@@ -17,13 +17,13 @@ public class Values {
      * insertion. The end method of the insert statement will return the given
      * schema.
      * 
-     * @param schema
-     *            The root language element for schema definitions.
+     * @param addendum
+     *           The addendum builder.
      * @param insertion
      *            The update action that will insert the record.
      */
-    Values(Addendum schema, Insertion insertion) {
-        this.schema = schema;
+    Values(Addendum addendum, Insertion insertion) {
+        this.addendum = addendum;
         this.insertion = insertion;
     }
 
@@ -37,8 +37,8 @@ public class Values {
      *                If the count of column values does not match the count of
      *                names.
      */
-    public End values(String... values) {
+    public Addendum values(String... values) {
         insertion.values(values);
-        return new End(schema);
+        return addendum;
     }
 }
