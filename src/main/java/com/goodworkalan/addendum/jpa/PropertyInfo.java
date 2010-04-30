@@ -22,8 +22,7 @@ import javax.persistence.Transient;
  * 
  * @author Alan Gutierrez
  */
-class PropertyInfo
-{
+class PropertyInfo {
     /** The property name. */
     private final String name;
     
@@ -73,8 +72,7 @@ class PropertyInfo
      * @param generationType
      *            The property generation type.
      */
-    public PropertyInfo(String name, String columnName, Class<?> type, boolean id, Integer length, Integer precision, Integer scale, boolean nullable, GenerationType generationType)
-    {
+    public PropertyInfo(String name, String columnName, Class<?> type, boolean id, Integer length, Integer precision, Integer scale, boolean nullable, GenerationType generationType) {
         this.name = name;
         this.columnName = columnName;
         this.type = type;
@@ -91,8 +89,7 @@ class PropertyInfo
      * 
      * @return The property name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -101,8 +98,7 @@ class PropertyInfo
      * 
      * @return The column name.
      */
-    public String getColumnName()
-    {
+    public String getColumnName() {
         return columnName;
     }
 
@@ -111,8 +107,7 @@ class PropertyInfo
      * 
      * @return The Java type.
      */
-    public Class<?> getType()
-    {
+    public Class<?> getType() {
         return type;
     }
 
@@ -130,8 +125,7 @@ class PropertyInfo
      * 
      * @return True if the column is nullable.
      */
-    public boolean isNullable()
-    {
+    public boolean isNullable() {
         return nullable;
     }
 
@@ -143,14 +137,13 @@ class PropertyInfo
     public Integer getLength() {
         return length;
     }
-    
+
     /**
      * Get the column precision.
      * 
      * @return The column precision.
      */
-    public int getPrecision()
-    {
+    public Integer getPrecision() {
         return precision;
     }
 
@@ -159,8 +152,7 @@ class PropertyInfo
      * 
      * @return The column scale.
      */
-    public int getScale()
-    {
+    public Integer getScale() {
         return scale;
     }
 
@@ -169,8 +161,7 @@ class PropertyInfo
      * 
      * @return The column generation type.
      */
-    public GenerationType getGenerationType()
-    {
+    public GenerationType getGenerationType() {
         return generationType;
     }
 
@@ -240,25 +231,20 @@ class PropertyInfo
      *            descriptor with the property name.
      * @return The property information.
      */
-    private static PropertyInfo introspect(String name, Field field, PropertyDescriptor desc)
-    {
+    private static PropertyInfo introspect(String name, Field field, PropertyDescriptor desc) {
         Class<?> type = null;
         Annotation[][] annotations = new Annotation[3][];
         int index = 0;
-        if (field != null)
-        {
+        if (field != null) {
             type = field.getType();
             annotations[index++] = field.getAnnotations();
         }
-        if (desc != null)
-        {
+        if (desc != null) {
             type = desc.getPropertyType();
-            if (desc.getReadMethod() != null)
-            {
+            if (desc.getReadMethod() != null) {
                 annotations[index++] = desc.getReadMethod().getAnnotations();
             }
-            if (desc.getWriteMethod() != null)
-            {
+            if (desc.getWriteMethod() != null) {
                 annotations[index++] = desc.getWriteMethod().getAnnotations();
             }
         }
@@ -287,22 +273,14 @@ class PropertyInfo
                 } else if (annotation.annotationType().equals(GeneratedValue.class)) {
                     GeneratedValue generatedValue = (GeneratedValue) annotation;
                     generationType = generatedValue.strategy();
-                }
-                else if (annotation.annotationType().equals(Id.class))
-                {
+                } else if (annotation.annotationType().equals(Id.class)) {
                     id = true;
                     nullable = false;
-                }
-                else if (annotation.annotationType().equals(Transient.class))
-                {
+                } else if (annotation.annotationType().equals(Transient.class)) {
                     return null;
-                }
-                else if (annotation.annotationType().equals(OneToMany.class))
-                {
+                } else if (annotation.annotationType().equals(OneToMany.class)) {
                     return null;
-                }
-                else if (annotation.annotationType().equals(OneToOne.class))
-                {
+                } else if (annotation.annotationType().equals(OneToOne.class)) {
                     OneToOne oneToOne = (OneToOne) annotation;
                     if (!oneToOne.mappedBy().equals(""))
                     {
@@ -322,9 +300,7 @@ class PropertyInfo
                     {
                         nullable = false;
                     }
-                }
-                else if (annotation.annotationType().equals(ManyToOne.class))
-                {
+                } else if (annotation.annotationType().equals(ManyToOne.class)) {
                     ManyToOne manyToOne = (ManyToOne) annotation;
                     if (!joinColumnSeen)
                     {
@@ -340,9 +316,7 @@ class PropertyInfo
                     {
                         nullable = false;
                     }
-                }
-                else if (annotation.annotationType().equals(JoinColumn.class))
-                {
+                } else if (annotation.annotationType().equals(JoinColumn.class)) {
                     JoinColumn joinColumn = (JoinColumn) annotation;
                     if (!joinColumn.name().equals(""))
                     {

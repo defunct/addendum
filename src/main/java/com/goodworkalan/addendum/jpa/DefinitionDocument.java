@@ -70,6 +70,12 @@ class DefinitionDocument {
         if (property.getLength() != null) {
             print(5, ".length(" + property.getLength() + ")");
         }
+        if (property.getPrecision() != null) {
+            print(5, ".precision(" + property.getPrecision() + ")");
+        }
+        if (property.getScale() != null) {
+            print(5, ".scale(" + property.getScale() + ")");
+        }
         if (!property.isNullable()) {
             print(5, ".notNull()");
         }

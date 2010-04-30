@@ -1,5 +1,6 @@
 package com.goodworkalan.addendum.jpa.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,6 +12,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 public class Comment {
+    /** The id. Test ignoring a pointless lob. */
+    @Lob
     public long id;
     
     private Post post;
