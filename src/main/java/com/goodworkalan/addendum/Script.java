@@ -7,20 +7,49 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A set of updates for a single migration. Updates are added to the s script by
+ * (FIXME Rename migration) using the {@link #add(UpdateSchema) add} method.
+ * There are public members that represent the tracking schema and the entity
+ * mappings defined in the current migration.
+ * 
+ * @author Alan Gutierrez
+ */
 class Script {
+    /** The tracking schema. */
     public final Schema schema;
-    
+
+    /** The map of entity names to entity table names. */
     public final Map<String, String> aliases = new HashMap<String, String>();
 
+    /** The map of entity table names to entity definitions. */
     public final Map<String, Entity> entities = new HashMap<String, Entity>();
     
+    /** The list of database updates. */
     private final List<UpdateDatabase> databaseUpdates;
-    
+
+    /**
+     * Create a new migration with the given schema and record updates in the
+     * given list of database updates.
+     * 
+     * @param schema
+     *            The tracking schema.
+     * @param databaseUpdates
+     *            The list of database updates.
+     */
     public Script(Schema schema, List<UpdateDatabase> databaseUpdates) {
         this.schema = schema;
         this.databaseUpdates = databaseUpdates;
     }
-    
+
+    /**
+     * Add a schema update to the migration. The tracking schema update is
+     * applied immediately. The database update is applied to the database if it
+     * has not already been applied.
+     * 
+     * @param update
+     *            The schema update.
+     */
     public void add(UpdateSchema update) {
         databaseUpdates.add(update.execute(schema));
     }
