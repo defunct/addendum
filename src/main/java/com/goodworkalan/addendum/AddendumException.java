@@ -91,7 +91,15 @@ extends CodedDanger {
     
     /** Unable to determine an SQL type for a Java class. */
     public final static int UNMAPPABLE_TYPE = 412;
+    
+    /** The entity cannot be found in the addendum. */
+    public final static int ADDENDUM_ENTITY_MISSING = 413;
 
+    /** The table cannot be found in the addendum. */
+    public final static int ADDENDUM_TABLE_MISSING = 414;
+    
+    /** Unable to create the table for an entity due to an SQL exception. */
+    public final static int CANNOT_CREATE_TABLE = 501;
 
     /**
      * Create a Sheaf exception with the given error code.

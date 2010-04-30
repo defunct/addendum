@@ -119,18 +119,20 @@ public class Addendum {
         }
         return this;
     }
-    
+
+    /**
+     * Create entities in the schema using the entities defined in this addendum
+     * given as a list of addendum entity names. If the entity does not exist in
+     * the addendum an exception is raised. If the entity or the table already
+     * exists in the schema an exception is raised.
+     * 
+     * @param names
+     *            The list of addendum defined entities to create.
+     * @return This addendum builder to continue construction.
+     */
     public Addendum createDefinitions(String...names) {
         for (String name : names) {
-            String alias = script.schema.aliases.get(name);
-            if (alias == null) {
-                throw new AddendumException(0, name);
-            }
-            Entity table = script.schema.entities.get(alias);
-            if (table == null) {
-                throw new AddendumException(0, name, alias);
-            }
-            script.add(new TableCreate(alias, table));
+            script.add(new TableCreate(name, script.getEntity(name)));
         }
         return this;
     }

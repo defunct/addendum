@@ -1,5 +1,6 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -9,19 +10,23 @@ import java.sql.SQLException;
  * @author Alan Gutierrez
  */
 class TableCreate implements UpdateSchema {
-    private final String alias;
+    /** The entity name. */
+    private final String entityName;
 
-    /** The table definition. */
+    /** The entity definition. */
     private final Entity entity;
-    
+
     /**
-     * Create a new create table update action.
+     * Create a new create table update that creates the given entity with the
+     * given entity name.
      * 
+     * @param entityName
+     *            The entity name.
      * @param entity
-     *            The table definition.
+     *            The entity definition.
      */
-    public TableCreate(String alias, Entity entity) {
-        this.alias = alias;
+    public TableCreate(String entityName, Entity entity) {
+        this.entityName = entityName;
         this.entity = entity;
     }
 
@@ -31,15 +36,15 @@ class TableCreate implements UpdateSchema {
      * 
      */
     public UpdateDatabase execute(Schema schema) {
-        if (schema.aliases.containsKey(alias)) {
-            throw new AddendumException(0, alias, entity.tableName);
+        if (schema.aliases.containsKey(entityName)) {
+            throw new AddendumException(ENTITY_EXISTS, entityName);
         }
-        schema.aliases.put(alias, entity.tableName);
+        schema.aliases.put(entityName, entity.tableName);
         if (schema.entities.containsKey(entity.tableName)) {
-            throw new AddendumException(0, alias, entity.tableName);
+            throw new AddendumException(TABLE_EXISTS, entity.tableName);
         }
         schema.entities.put(entity.tableName, entity);
-        return new UpdateDatabase(0) {
+        return new UpdateDatabase(CANNOT_CREATE_TABLE, entityName, entity.tableName) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.createTable(connection, entity.tableName, entity.columns.values(), entity.primaryKey);

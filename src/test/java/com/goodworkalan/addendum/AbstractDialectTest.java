@@ -1,6 +1,7 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR;
+import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
