@@ -1,4 +1,4 @@
-package com.goodworkalan.addendum.api;
+package com.goodworkalan.addendum;
 
 import java.util.Collection;
 import java.util.List;

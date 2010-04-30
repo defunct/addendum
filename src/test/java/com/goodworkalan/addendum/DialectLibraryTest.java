@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.api.MockDialect;
 
 /**
  * Unit tests for the {@link DialectLibrary} class.

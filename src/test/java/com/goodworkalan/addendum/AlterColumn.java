@@ -1,4 +1,4 @@
-package com.goodworkalan.addendum.api;
+package com.goodworkalan.addendum;
 
 import com.goodworkalan.addendum.Column;
 

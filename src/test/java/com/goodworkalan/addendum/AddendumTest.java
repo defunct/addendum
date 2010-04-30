@@ -19,8 +19,6 @@ import java.sql.Types;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.api.MockConnector;
-import com.goodworkalan.addendum.api.MockDialect;
 import com.goodworkalan.reflective.ReflectiveException;
 import com.goodworkalan.reflective.ReflectiveFactory;
 

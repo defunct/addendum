@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.api.MockConnector;
 
 /**
  * Unit tests for the {@link ApplyAddendum} class.

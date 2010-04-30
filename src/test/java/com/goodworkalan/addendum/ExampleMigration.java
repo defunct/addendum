@@ -1,7 +1,6 @@
-package com.goodworkalan.addendum.api;
+package com.goodworkalan.addendum;
 
 import com.goodworkalan.addendum.Addenda;
-import com.goodworkalan.addendum.BlogDefinition;
 import com.goodworkalan.addendum.Migration;
 
 public class ExampleMigration extends Migration {

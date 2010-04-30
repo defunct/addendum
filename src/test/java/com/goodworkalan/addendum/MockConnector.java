@@ -1,4 +1,4 @@
-package com.goodworkalan.addendum.api;
+package com.goodworkalan.addendum;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
