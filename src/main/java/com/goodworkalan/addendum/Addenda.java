@@ -124,6 +124,8 @@ public class Addenda {
      * @return An addendum builder used to specify updates to the database.
      */
     // FIXME You could mix or match with a descriminator. They would still run in order.
+    // FIXME Would much prefer to register these somewhere else, maybe even name
+    // them, then look them up.
     public Addendum addendum() {
         return addendum(connector, dialectProvider);
     }

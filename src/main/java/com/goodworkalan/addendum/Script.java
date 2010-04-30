@@ -12,6 +12,8 @@ import java.util.Map;
  * (FIXME Rename migration) using the {@link #add(SchemaUpdate) add} method.
  * There are public members that represent the tracking schema and the entity
  * mappings defined in the current migration.
+ * <p>
+ * FIXME Maybe rename patch? Migration is too nice for the language sugar.
  * 
  * @author Alan Gutierrez
  */
@@ -47,11 +49,11 @@ class Script {
      * applied immediately. The database update is applied to the database if it
      * has not already been applied.
      * 
-     * @param update
+     * @param schemaUpdate
      *            The schema update.
      */
-    public void add(SchemaUpdate update) {
-        databaseUpdates.add(update.execute(schema));
+    public void add(SchemaUpdate schemaUpdate) {
+        databaseUpdates.add(schemaUpdate.execute(schema));
     }
     
     /**
