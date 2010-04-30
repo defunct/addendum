@@ -21,6 +21,7 @@ public class AddendumProject extends ProjectModule {
                     .end()
                 .test()
                     .depends()
+                        .artifact(new Artifact("com.h2database/h2/1.1.115"))
                         .artifact(new Artifact("org.slf4j/slf4j-log4j12/1.4.2"))
                         .artifact(new Artifact("log4j/log4j/1.2.14"))
                         .artifact(new Artifact("org.testng/testng/5.10/jdk15"))

@@ -160,40 +160,8 @@ public abstract class AbstractDialect implements Dialect {
 
             String separator = "";
             for (Column column : columns) {
-                sql.append(separator).append(column.getName()).append(" ");
-
-                int length = column.getLength();
-                if (!typeNames.containsKey(column.getColumnType())) {
-                    throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE);
-                }
-    
-                String pattern = null;
-                for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet()) {
-                    if (length > name.getKey()) {
-                        continue;
-                    } else if (pattern != null) {
-                        break;
-                    }
-                    pattern = name.getValue();
-                }
-                
-                sql.append(String.format(pattern, length, column.getPrecision(), column.getScale()));
-                
-                if (column.getNotNull()) {
-                    sql.append(" NOT NULL");
-                }
-
-                if (column.getGeneratorType() != null) {
-                    switch (column.getGeneratorType()) {
-                    case IDENTITY:
-                    case AUTO:
-                        sql.append(" AUTO_INCREMENT");
-                        break;
-                    case SEQUENCE:
-                        throw new AddendumException(AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR, "SEQUENCE");
-                    }
-                }
-                
+                sql.append(separator);
+                columnDefinition(sql, column, true);
                 separator = ",\n";
             }
             
@@ -296,8 +264,10 @@ public abstract class AbstractDialect implements Dialect {
      * @return The table name with the correct case for use as a metadata
      *         selection criteria.
      */
-    protected abstract String tableCase(String tableName);
-
+    protected String columnCase(String columnName) {
+        return columnName;
+    }
+    
     /**
      * Perform a case transform on the given column name for use as a metadata
      * selection criteria.
@@ -307,7 +277,9 @@ public abstract class AbstractDialect implements Dialect {
      * @return The column name with the correct case for use as a metadata
      *         selection criteria.
      */
-    protected abstract String columnCase(String columnName);
+    protected String tableCase(String tableName) {
+        return tableName;
+    }
 
     /**
      * Create a column containing the column metadata for the given column in

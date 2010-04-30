@@ -1,0 +1,52 @@
+package com.goodworkalan.addendum;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
+
+import com.goodworkalan.notice.event.Logger;
+import com.goodworkalan.notice.event.LoggerFactory;
+
+public class ConcreteDialect extends AbstractDialect {
+    private final static Logger logger = LoggerFactory.getLogger(ConcreteDialect.class);
+
+    public ConcreteDialect() {
+        super();
+        setType(Types.INTEGER, "INTEGER");
+        setType(Types.DECIMAL, "DECIMAL");
+        setType(Types.VARCHAR, "VARCHAR(%1$d)", 65535);
+        setType(Types.VARCHAR, "TEXT");
+        setDefaultPrecisionScale(Types.DECIMAL, 10, 2);
+    }
+
+    @Override
+    public int addendaCount(Connection connection) throws SQLException {
+        return 0;
+    }
+
+    public Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException {
+        return super.getMetaColumn(connection, tableName, columnName);
+    }   
+
+    @Override
+    public void addendum(Connection connection) throws SQLException {
+    }
+
+    @Override
+    public boolean canTranslate(Connection connection) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public void createAddendaTable(Connection connection) throws SQLException {
+    }
+
+    @Override
+    protected Logger getLogger() {
+        return logger;
+    }
+
+    public void alterColumn(Connection connection, String tableName, String oldName, Column column)
+    throws SQLException {
+    }
+}
