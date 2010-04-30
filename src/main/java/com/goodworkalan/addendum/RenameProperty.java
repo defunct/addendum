@@ -15,8 +15,8 @@ public class RenameProperty {
     /** The entity table name. */
     private final String tableName;
     
-    /** The database migration script. */
-    private final Patch script;
+    /** The database migration patch. */
+    private final Patch patch;
 
     /** The column definition. */
     private final Column column;
@@ -24,13 +24,13 @@ public class RenameProperty {
     /**
      * Create a new property rename builder for the property in the entity
      * associated with the given table name with the given current name that
-     * adds an entity rename update to the given migration script. The given
+     * adds an entity rename update to the given migration patch. The given
      * alter entity builder is returned when this builder terminates.
      * 
      * @param alterEntity
      *            The parent alter entity builder.
-     * @param script
-     *            The database migration script.
+     * @param patch
+     *            The database migration patch.
      * @param tableName
      *            The entity table name.
      * @param column
@@ -38,11 +38,11 @@ public class RenameProperty {
      * @param from
      *            The current property name.
      */
-    public RenameProperty(AlterEntity alterTable, Patch script, String tableName, Column column, String from) {
+    public RenameProperty(AlterEntity alterTable, Patch patch, String tableName, Column column, String from) {
         this.alterEntity = alterTable;
         this.from = from;
         this.column = column;
-        this.script = script;
+        this.patch = patch;
         this.tableName = tableName;
     }
 
@@ -54,11 +54,11 @@ public class RenameProperty {
      * @return The parent alter entity builder to continue construction.
      */
     public AlterEntity to(String to) {
-        script.add(new PropertyRename(tableName, from, to));
-        Entity entity = script.schema.entities.get(tableName);
+        patch.add(new PropertyRename(tableName, from, to));
+        Entity entity = patch.schema.entities.get(tableName);
         if (entity.getColumn(from).getName().equals(from)) {
             column.setName(to);
-            script.add(new ColumnAlteration(tableName, from, column));
+            patch.add(new ColumnAlteration(tableName, from, column));
         }
         return alterEntity;
     }

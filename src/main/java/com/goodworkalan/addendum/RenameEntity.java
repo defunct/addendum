@@ -12,25 +12,25 @@ public class RenameEntity {
     /** The current entity name. */
     private final String from;
 
-    /** The database migration script. */
-    private final Patch script;
+    /** The database migration patch. */
+    private final Patch patch;
 
     /**
      * Create a new entity rename builder for the entity with the given current
-     * name that adds an entity rename update to the given migration script. The
+     * name that adds an entity rename update to the given migration patch. The
      * given addendum builder is returned when this builder terminates.
      * 
      * @param addendum
      *            The addendum builder to return when this builder terminates.
-     * @param script
-     *            The database migration script.
+     * @param patch
+     *            The database migration patch.
      * @param from
      *            The current entity name.
      */
-    public RenameEntity(Addendum addendum, Patch script, String from) {
+    public RenameEntity(Addendum addendum, Patch patch, String from) {
         this.addendum = addendum;
         this.from = from;
-        this.script = script;
+        this.patch = patch;
     }
 
     /**
@@ -41,11 +41,11 @@ public class RenameEntity {
      * @return The parent addendum builder to continue construction.
      */
     public Addendum to(String to) {
-        script.add(new AliasRename(from, to));
-        Schema schema = script.schema;
+        patch.add(new AliasRename(from, to));
+        Schema schema = patch.schema;
         Entity entity = schema.entities.get(schema.aliases.get(to));
         if (entity.tableName.equals(from)) {
-            script.add(new TableRename(to, from, to));
+            patch.add(new TableRename(to, from, to));
         }
         return addendum;
     }

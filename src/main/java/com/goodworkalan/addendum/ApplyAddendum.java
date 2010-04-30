@@ -33,8 +33,7 @@ class ApplyAddendum
      * @param updates
      *            A list of updates to perform.
      */
-    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<DatabaseUpdate> updates)
-    {
+    public ApplyAddendum(Connector connector, DialectProvider dialectProvider, List<DatabaseUpdate> updates) {
         this.connector = connector;
         this.dialectProvider = dialectProvider;
         this.updates = updates;
