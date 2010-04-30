@@ -58,7 +58,7 @@ public class DefineEntity {
             throw new AddendumException(COLUMN_EXISTS, columnName);
         }
         entity.properties.put(name, columnName);
-        Column column = new Column(columnName);
+        Column column = new Column(columnName, columnType);
         entity.columns.put(columnName, column);
         return new CreateProperty(this, column);
     }
