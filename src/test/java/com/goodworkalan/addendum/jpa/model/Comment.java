@@ -11,13 +11,15 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 public class Comment {
-    private long id;
+    public long id;
     
     private Post post;
     
     private Date createdAt;
     
-    private String body;
+    public int body;
+    
+    private String whatWasSaid;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,11 +52,11 @@ public class Comment {
     
     
     public String getBody() {
-        return body;
+        return whatWasSaid;
     }
     
     @Lob @Column(nullable = false)
     public void setBody(String body) {
-        this.body = body;
+        this.whatWasSaid = body;
     }
 }

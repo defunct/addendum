@@ -188,10 +188,8 @@ class PropertyInfo
      *            descriptor with the property name.
      * @return An array of one or two property information instances.
      */
-    static PropertyInfo[] getInstances(String name, Field field, PropertyDescriptor desc)
-    {
-        if (field == null || desc == null || desc.getPropertyType().equals(field.getType()))
-        {
+    static PropertyInfo[] getInstances(String name, Field field, PropertyDescriptor desc) {
+        if (field == null || desc == null || desc.getPropertyType().equals(field.getType())) {
             return new PropertyInfo[] { introspect(name, field, desc) };
         }
         return new PropertyInfo[] { introspect(name, field, null), introspect(name, null, desc) };
