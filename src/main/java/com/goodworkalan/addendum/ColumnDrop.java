@@ -1,14 +1,16 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Drops a column from a table in the database.
+ * Drops a property from an entity in the database.
  *
  * @author Alan Gutierrez
  */
-public class ColumnDrop implements UpdateSchema {
+class ColumnDrop implements UpdateSchema {
     /** The table name. */
     private final String tableName;
 
@@ -27,16 +29,23 @@ public class ColumnDrop implements UpdateSchema {
         this.tableName = tableName;
         this.property = property;
     }
-    
+
+    /**
+     * Drop the property in the tracking schema and return a database update
+     * that will drop the column in the database.
+     * 
+     * @param schema
+     *            The tracking schema.
+     * @return A database update that will drop the column in the database.
+     * @exception AddendumException If the property does not exist.
+     */
     public UpdateDatabase execute(Schema schema) {
         Entity entity = schema.entities.get(tableName);
         final String columnName = entity.properties.remove(property);
         if (columnName == null) {
-            throw new AddendumException(0, tableName, columnName);
+            throw new AddendumException(PROPERTY_MISSING, property, schema.getEntityName(tableName));
         }
-        if (entity.columns.remove(columnName) == null) {
-            throw new AddendumException(0, tableName, columnName);
-        }
+        entity.columns.remove(columnName);
         return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {

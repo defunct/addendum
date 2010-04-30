@@ -48,4 +48,20 @@ class Schema {
         }
         return entity;
     }
+
+    /**
+     * Return the entity name mapped to the given table name.
+     * 
+     * @param tableName
+     *            The table name.
+     * @return The entity name.
+     */
+    public String getEntityName(String tableName) {
+        for (Map.Entry<String, String> entry : aliases.entrySet()) {
+            if (entry.getValue().equals(tableName)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 }

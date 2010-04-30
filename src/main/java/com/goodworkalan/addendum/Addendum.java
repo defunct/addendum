@@ -68,10 +68,9 @@ public class Addendum {
     }
 
     /**
-     * Define an entity with the given entity <code>name</code> and the given
-     * <code>tableName</code> in the database.
-     * <p>
-     * FIXME Next, 100% coverage of DefineEntity.
+     * Define an entity with the given entity name and the given table name in
+     * the database.
+     * 
      * @param name
      *            The entity name.
      * @param tableName
@@ -90,8 +89,8 @@ public class Addendum {
     }
 
     /**
-     * Define an entity with the given entity <code>name</code> which will also
-     * be used as the table name in the database.
+     * Define an entity with the given entity name which will also be used as
+     * the table name in the database.
      * 
      * @param name
      *            The entity name.

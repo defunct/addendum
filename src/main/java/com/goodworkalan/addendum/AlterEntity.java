@@ -127,13 +127,27 @@ public class AlterEntity {
         Column column = new Column(entity.getColumn(property));
         return new AlterColumn(this, script, entity.tableName, column);
     }
-    
-    
+
+    /**
+     * Drop the property with the given property name. If the property does not
+     * exist in the entity, an exception is raised.
+     * 
+     * @param property
+     *            The property to drop.
+     * @return This alter entity builder to continue construction.
+     * @exception AddendumException
+     *                If the property does not exist.
+     */
     public AlterEntity drop(String property) {
         script.add(new ColumnDrop(entity.tableName, property));
         return this;
     }
 
+    /**
+     * Terminate the builder and return the parent alter table builder.
+     * 
+     * @return The parent alter table builder to continue construction.
+     */
     public Addendum end () {
         return addendum;
     }

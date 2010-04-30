@@ -7,6 +7,7 @@ import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 import static com.goodworkalan.reflective.ReflectiveException.ILLEGAL_ACCESS;
@@ -411,5 +412,48 @@ public class AddendumTest {
                     .end()
                 .commit();
         addenda.amend();
+    }
+    
+    /** Test drop property. */
+    @Test
+    public void dropProperty() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .add("b", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .drop("b")
+                    .end()
+                .commit();
+        addenda.amend();
+    }
+    
+    
+    /** Test drop property. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void dropMissingProperty() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+            addenda
+                .addendum()
+                    .create("a")
+                         .add("a", int.class).end()
+                         .end()
+                    .commit();
+            addenda
+                .addendum()
+                    .alter("a")
+                        .drop("b");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), PROPERTY_MISSING);
+            System.out.println(e.getMessage());
+            throw e;
+        }
     }
 }

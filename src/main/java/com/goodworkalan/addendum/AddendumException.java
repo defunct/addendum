@@ -98,6 +98,9 @@ extends CodedDanger {
     /** The table cannot be found in the addendum. */
     public final static int ADDENDUM_TABLE_MISSING = 414;
     
+    /** A property does not exist the entity. */
+    public final static int PROPERTY_MISSING = 415;
+
     /** Unable to create the table for an entity due to an SQL exception. */
     public final static int CANNOT_CREATE_TABLE = 501;
     
@@ -109,6 +112,9 @@ extends CodedDanger {
     
     /** Unable to add a column. */
     public final static int CANNOT_ADD_COLUMN = 504;
+    
+    /** Unable to drop a column. */
+    public final static int CANNOT_DROP_COLUMN = 505;
 
     /**
      * Create a Sheaf exception with the given error code.
