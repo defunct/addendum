@@ -198,8 +198,8 @@ public class Addendum {
      *            The name of the entity to alter.
      * @return An entity alteration builder.
      */
-    public AlterTable alter(String name) {
-        return new AlterTable(this, script.schema.getEntity(name), script);
+    public AlterEntity alter(String name) {
+        return new AlterEntity(this, script.schema.getEntity(name), script);
     }
     
     /**

@@ -6,7 +6,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AlterColumn extends ExistingColumn<AlterTable, AlterColumn>
+public class AlterColumn extends ExistingColumn<AlterEntity, AlterColumn>
 {
     private final Script script;
     
@@ -21,7 +21,7 @@ public class AlterColumn extends ExistingColumn<AlterTable, AlterColumn>
      * @param column
      *            The column name.
      */
-    public AlterColumn(AlterTable alterTable, Script script, String tableName, Column column) {
+    public AlterColumn(AlterEntity alterTable, Script script, String tableName, Column column) {
         super(alterTable, column);
         this.tableName = tableName;
         this.script = script;

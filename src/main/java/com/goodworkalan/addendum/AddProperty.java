@@ -11,7 +11,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AddProperty extends FreshProperty<AlterTable, AddProperty> {
+public class AddProperty extends FreshProperty<AlterEntity, AddProperty> {
     /** The database migration script. */
     private final Script script;
 
@@ -38,7 +38,7 @@ public class AddProperty extends FreshProperty<AlterTable, AddProperty> {
      * @param column
      *            The column definition.
      */
-    AddProperty(AlterTable container, Script script, String tableName, String property, Column column) {
+    AddProperty(AlterEntity container, Script script, String tableName, String property, Column column) {
         super(container, column);
         this.script = script;
         this.property = property;

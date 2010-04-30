@@ -6,7 +6,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class AlterTable {
+public class AlterEntity {
     /** The addendum builder to return when this builder terminates. */
     private final Addendum addendum;
 
@@ -26,7 +26,7 @@ public class AlterTable {
      * @param script
      *            The database migration script.
      */
-    AlterTable(Addendum addendum, Entity entity, Script script) {
+    AlterEntity(Addendum addendum, Entity entity, Script script) {
         this.addendum = addendum;
         this.entity = entity;
         this.script = script;
@@ -85,7 +85,7 @@ public class AlterTable {
     }
     
     
-    public AlterTable drop(String property) {
+    public AlterEntity drop(String property) {
         script.add(new ColumnDrop(entity.tableName, property));
         return this;
     }
