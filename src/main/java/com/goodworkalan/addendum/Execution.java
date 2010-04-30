@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * 
  * @author Alan Gutierrez
  */
-class Execution implements UpdateSchema {
+class Execution implements SchemaUpdate {
     /** The executable to execute. */
     private final Executable executable;
 

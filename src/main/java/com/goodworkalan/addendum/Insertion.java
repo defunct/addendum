@@ -10,7 +10,7 @@ import java.util.List;
  * 
  * @author Alan Gutierrez
  */
-class Insertion implements UpdateSchema
+class Insertion implements SchemaUpdate
 {
     /** The table name. */
     private final String table;

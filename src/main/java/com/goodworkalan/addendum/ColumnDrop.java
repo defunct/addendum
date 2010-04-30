@@ -10,7 +10,7 @@ import java.sql.SQLException;
  *
  * @author Alan Gutierrez
  */
-class ColumnDrop implements UpdateSchema {
+class ColumnDrop implements SchemaUpdate {
     /** The table name. */
     private final String tableName;
 

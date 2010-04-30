@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 /**
  * An update performed against the underlying database. Instances of this class
- * are returned by {@link UpdateSchema#execute(Schema)} to be stored in the
+ * are returned by {@link SchemaUpdate#execute(Schema)} to be stored in the
  * {@link Addenda}. Database updates are only run if the addendum accounting in
  * the database indicates that the addendum that contains the database update
  * has not been run.

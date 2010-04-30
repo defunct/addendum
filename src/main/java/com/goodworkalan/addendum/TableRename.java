@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Alan Gutierrez
  */
-class TableRename implements UpdateSchema {
+class TableRename implements SchemaUpdate {
     private final String alias;
     /** The existing table name. */
     private final String from;

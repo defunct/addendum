@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * A set of updates for a single migration. Updates are added to the s script by
- * (FIXME Rename migration) using the {@link #add(UpdateSchema) add} method.
+ * (FIXME Rename migration) using the {@link #add(SchemaUpdate) add} method.
  * There are public members that represent the tracking schema and the entity
  * mappings defined in the current migration.
  * 
@@ -50,7 +50,7 @@ class Script {
      * @param update
      *            The schema update.
      */
-    public void add(UpdateSchema update) {
+    public void add(SchemaUpdate update) {
         databaseUpdates.add(update.execute(schema));
     }
     

@@ -7,7 +7,7 @@ import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
  * 
  * @author Alan Gutierrez
  */
-class PropertyRename implements UpdateSchema {
+class PropertyRename implements SchemaUpdate {
     /** The name of the entity table. */
     private final String tableName;
 

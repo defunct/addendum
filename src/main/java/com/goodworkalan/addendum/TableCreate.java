@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * 
  * @author Alan Gutierrez
  */
-class TableCreate implements UpdateSchema {
+class TableCreate implements SchemaUpdate {
     /** The entity name. */
     private final String entityName;
 

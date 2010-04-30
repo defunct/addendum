@@ -7,7 +7,7 @@ import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
  *
  * @author Alan Gutierrez
  */
-class AliasRename implements UpdateSchema {
+class AliasRename implements SchemaUpdate {
     /** The existing alias name. */
     private final String from;
     

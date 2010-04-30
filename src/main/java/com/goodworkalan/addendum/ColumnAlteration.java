@@ -10,7 +10,7 @@ import java.sql.SQLException;
  *
  * @author Alan Gutierrez
  */
-class ColumnAlteration implements UpdateSchema
+class ColumnAlteration implements SchemaUpdate
 {
     /** The entity table name. */
     private final String tableName;
