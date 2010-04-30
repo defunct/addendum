@@ -11,32 +11,31 @@ import java.util.Date;
  * 
  * @author Alan Gutierrez
  */
-public class Column
-{
+public class Column {
     /** The name column name. */
     private String name;
-    
+
     /** The <code>java.sql.Types</code> column type. */
     private Integer columnType;
-    
+
     /** True if there is a default value. */
     private boolean hasDefaultValue;
 
     /** The default value. */
     private Object defaultValue;
-    
+
     /** The not null flag. */
     private Boolean notNull;
-    
+
     /** The column length. */
     private Integer length;
-    
+
     /** The column precision. */
     private Integer precision;
-    
+
     /** The column scale. */
     private Integer scale;
-    
+
     /** The unique id generator type. */
     private GeneratorType generatorType;
 
@@ -54,16 +53,15 @@ public class Column
 
     /**
      * Create a column with the given name and the given
-     * <code>java.sql.Types</code> type with the column properties set to their default
-     * values.
+     * <code>java.sql.Types</code> type with the column properties set to their
+     * default values.
      * 
      * @param name
      *            The column name.
      * @param columnType
      *            The <code>java.sql.Types</code> column type.
      */
-    public Column(String name, int columnType)
-    {
+    public Column(String name, int columnType) {
         setName(name);
         setColumnType(columnType);
     }
@@ -78,8 +76,7 @@ public class Column
      * @param nativeType
      *            The native Java type.
      */
-    public Column(String name, Class<?> nativeType)
-    {
+    public Column(String name, Class<?> nativeType) {
         this(name, getColumnType(nativeType));
     }
 
@@ -90,8 +87,7 @@ public class Column
      * @param name
      *            The column name.
      */
-    public Column(String name)
-    {
+    public Column(String name) {
         setName(name);
     }
 
@@ -102,8 +98,7 @@ public class Column
      * @param columnType
      *            The <code>java.sql.Types</code> column type.
      */
-    public void setDefaults(int columnType)
-    {
+    public void setDefaults(int columnType) {
         setColumnType(columnType);
         setNotNull(false);
         setLength(0);
@@ -121,8 +116,7 @@ public class Column
      * @param nativeType
      *            The native column type.
      */
-    public void setDefaults(Class<?> nativeType)
-    {    
+    public void setDefaults(Class<?> nativeType) {
         setDefaults(Column.getColumnType(nativeType));
     }
 
@@ -134,54 +128,37 @@ public class Column
      *            The Java native type.
      * @return An SQL type that can store the given native type.
      */
-    public static int getColumnType(Class<?> nativeType)
-    {
-        if (nativeType.equals(boolean.class) || nativeType.equals(Boolean.class))
-        {
+    public static int getColumnType(Class<?> nativeType) {
+        if (nativeType.equals(boolean.class)
+                || nativeType.equals(Boolean.class)) {
             return Types.BIT;
-        }
-        else if (nativeType.equals(short.class) || nativeType.equals(Short.class))
-        {
+        } else if (nativeType.equals(short.class)
+                || nativeType.equals(Short.class)) {
             return Types.TINYINT;
-        }
-        else if (nativeType.equals(char.class) || nativeType.equals(Character.class))
-        {
+        } else if (nativeType.equals(char.class)
+                || nativeType.equals(Character.class)) {
             return Types.SMALLINT;
-        }
-        else if (nativeType.equals(int.class) || nativeType.equals(Integer.class))
-        {
+        } else if (nativeType.equals(int.class)
+                || nativeType.equals(Integer.class)) {
             return Types.INTEGER;
-        }
-        else if (nativeType.equals(long.class) || nativeType.equals(Long.class))
-        {
+        } else if (nativeType.equals(long.class)
+                || nativeType.equals(Long.class)) {
             return Types.BIGINT;
-        }
-        else if (nativeType.equals(float.class) || nativeType.equals(Float.class))
-        {
+        } else if (nativeType.equals(float.class)
+                || nativeType.equals(Float.class)) {
             return Types.FLOAT;
-        }
-        else if (nativeType.equals(double.class) || nativeType.equals(Double.class))
-        {
+        } else if (nativeType.equals(double.class)
+                || nativeType.equals(Double.class)) {
             return Types.DOUBLE;
-        }
-        else if (BigDecimal.class.isAssignableFrom(nativeType))
-        {
+        } else if (BigDecimal.class.isAssignableFrom(nativeType)) {
             return Types.NUMERIC;
-        }
-        else if (BigInteger.class.isAssignableFrom(nativeType))
-        {
+        } else if (BigInteger.class.isAssignableFrom(nativeType)) {
             return Types.NUMERIC;
-        }
-        else if (Date.class.isAssignableFrom(nativeType))
-        {
+        } else if (Date.class.isAssignableFrom(nativeType)) {
             return Types.TIMESTAMP;
-        }
-        else if (Calendar.class.isAssignableFrom(nativeType))
-        {
+        } else if (Calendar.class.isAssignableFrom(nativeType)) {
             return Types.TIMESTAMP;
-        }
-        else if (String.class.isAssignableFrom(nativeType))
-        {
+        } else if (String.class.isAssignableFrom(nativeType)) {
             return Types.VARCHAR;
         }
         throw new IllegalArgumentException();
@@ -192,8 +169,7 @@ public class Column
      * 
      * @return The column name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -203,8 +179,7 @@ public class Column
      * @param name
      *            The column name.
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -213,8 +188,7 @@ public class Column
      * 
      * @return The <code>java.sql.Types</code> column type.
      */
-    public Integer getColumnType()
-    {
+    public Integer getColumnType() {
         return columnType;
     }
 
@@ -224,8 +198,7 @@ public class Column
      * @param columnType
      *            The <code>java.sql.Types</code> column type.
      */
-    public void setColumnType(Integer columnType)
-    {
+    public void setColumnType(Integer columnType) {
         this.columnType = columnType;
     }
 
@@ -236,18 +209,16 @@ public class Column
      * @param nativeType
      *            The native Java type.
      */
-    public void setColumnType(Class<?> nativeType)
-    {
+    public void setColumnType(Class<?> nativeType) {
         setColumnType(getColumnType(nativeType));
     }
-    
+
     /**
      * Get the not null flag.
      * 
      * @return The not null flag.
      */
-    public Boolean getNotNull()
-    {
+    public Boolean getNotNull() {
         return notNull;
     }
 
@@ -257,8 +228,7 @@ public class Column
      * @param notNull
      *            The not null flag.
      */
-    public void setNotNull(Boolean notNull)
-    {
+    public void setNotNull(Boolean notNull) {
         this.notNull = notNull;
     }
 
@@ -267,8 +237,7 @@ public class Column
      * 
      * @return The column length.
      */
-    public Integer getLength()
-    {
+    public Integer getLength() {
         return length;
     }
 
@@ -278,8 +247,7 @@ public class Column
      * @param length
      *            The column length.
      */
-    public void setLength(Integer length)
-    {
+    public void setLength(Integer length) {
         this.length = length;
     }
 
@@ -288,8 +256,7 @@ public class Column
      * 
      * @return The column precision.
      */
-    public Integer getPrecision()
-    {
+    public Integer getPrecision() {
         return precision;
     }
 
@@ -299,18 +266,16 @@ public class Column
      * @param precision
      *            The column precision.
      */
-    public void setPrecision(Integer precision)
-    {
+    public void setPrecision(Integer precision) {
         this.precision = precision;
     }
-     
+
     /**
      * Get the column scale.
      * 
      * @return The column scale.
      */
-    public Integer getScale()
-    {
+    public Integer getScale() {
         return scale;
     }
 
@@ -320,8 +285,7 @@ public class Column
      * @param scale
      *            The column scale.
      */
-    public void setScale(Integer scale)
-    {
+    public void setScale(Integer scale) {
         this.scale = scale;
     }
 
@@ -332,8 +296,7 @@ public class Column
      * 
      * @return The has default value flag.
      */
-    public boolean getHasDefaultValue()
-    {
+    public boolean getHasDefaultValue() {
         return hasDefaultValue;
     }
 
@@ -345,8 +308,7 @@ public class Column
      * @param hasDefaultValue
      *            Has default value flag.
      */
-    public void setHasDefaultValue(Boolean hasDefaultValue)
-    {
+    public void setHasDefaultValue(Boolean hasDefaultValue) {
         this.hasDefaultValue = hasDefaultValue;
     }
 
@@ -355,8 +317,7 @@ public class Column
      * 
      * @return The default value.
      */
-    public Object getDefaultValue()
-    {
+    public Object getDefaultValue() {
         return defaultValue;
     }
 
@@ -366,8 +327,7 @@ public class Column
      * @param defaultValue
      *            The default value.
      */
-    public void setDefaultValue(Object defaultValue)
-    {
+    public void setDefaultValue(Object defaultValue) {
         setHasDefaultValue(defaultValue != null);
         this.defaultValue = defaultValue;
     }
@@ -377,8 +337,7 @@ public class Column
      * 
      * @return The generator type.
      */
-    public GeneratorType getGeneratorType()
-    {
+    public GeneratorType getGeneratorType() {
         return generatorType;
     }
 
@@ -388,8 +347,7 @@ public class Column
      * @param generatorType
      *            The generator type.
      */
-    public void setGeneratorType(GeneratorType generatorType)
-    {
+    public void setGeneratorType(GeneratorType generatorType) {
         this.generatorType = generatorType;
     }
 }
