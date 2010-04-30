@@ -5,15 +5,13 @@ import static org.testng.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.sql.Types;
 import java.util.Calendar;
 
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.AddendumException;
-import com.goodworkalan.addendum.dialect.Column;
-
-import sun.nio.ByteBuffered;
 
 /**
  * Unit tests for the {@link Column} class.
@@ -42,7 +40,7 @@ public class ColumnTest {
     @Test(expectedExceptions = AddendumException.class)
     public void noSuchColumnType() {
         try {
-            Column.getColumnType(ByteBuffered.class);
+            Column.getColumnType(ByteBuffer.class);
         } catch (AddendumException e) {
             assertEquals(e.getCode(), UNMAPPABLE_TYPE);
             System.out.println(e.getMessage());
