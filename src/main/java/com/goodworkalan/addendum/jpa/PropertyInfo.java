@@ -17,11 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import com.goodworkalan.addendum.AddColumn;
-import com.goodworkalan.addendum.DefineColumn;
-import com.goodworkalan.addendum.ExistingColumn;
-import com.goodworkalan.addendum.FreshColumn;
+import com.goodworkalan.addendum.AddProperty;
+import com.goodworkalan.addendum.ExistingProperty;
+import com.goodworkalan.addendum.FreshProperty;
 import com.goodworkalan.addendum.GeneratorType;
+import com.goodworkalan.addendum.SpecifyProperty;
 
 /**
  * The database column information for a property in a JPA entity. 
@@ -191,9 +191,9 @@ class PropertyInfo
      * @param defaultValue
      *            The default value reference.
      */
-    public void define(FreshColumn<?, ?> column, DefaultValue defaultValue)
+    public void define(FreshProperty<?, ?> column, DefaultValue defaultValue)
     {
-        define((DefineColumn<?, ?>) column, defaultValue);
+        define((SpecifyProperty<?, ?>) column, defaultValue);
         if (getGenerationType() != null)
         {
             switch (getGenerationType())
@@ -215,12 +215,12 @@ class PropertyInfo
         }
     }
     
-    public void define(AddColumn column, DefaultValue defaultValue)
+    public void define(AddProperty column, DefaultValue defaultValue)
     {
-        define((DefineColumn<?, ?>) column, defaultValue);
+        define((SpecifyProperty<?, ?>) column, defaultValue);
         if (!isNullable() && defaultValue.isSpecified())
         {
-            column.notNull(defaultValue.getValue());
+//            column.notNull(defaultValue.getValue());
         }
     }
 
@@ -233,7 +233,7 @@ class PropertyInfo
      * @param defaultValue
      *            The default value reference.
      */
-    public void define(DefineColumn<?, ?> column, DefaultValue defaultValue)
+    public void define(SpecifyProperty<?, ?> column, DefaultValue defaultValue)
     {
         column.length(getLength());
         column.precision(getPrecision());
@@ -253,9 +253,9 @@ class PropertyInfo
      * @param defaultValue
      *            The default value reference.
      */
-    public void define(ExistingColumn<?, ?> column, DefaultValue defaultValue)
+    public void define(ExistingProperty<?, ?> column, DefaultValue defaultValue)
     {
-        define((DefineColumn<?, ?>) column, defaultValue);
+        define((SpecifyProperty<?, ?>) column, defaultValue);
         column.type(type);
     }
 

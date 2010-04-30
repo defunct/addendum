@@ -14,7 +14,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.goodworkalan.addendum.Column;
+import com.goodworkalan.addendum.dialect.Column;
 
 /**
  * Reflects upon a Java class to determine the entity information as defined by
@@ -209,18 +209,17 @@ class EntityInfo
         if (discriminatorColumn != null)
         {
             discriminator = new Column(discriminatorColumn.name());
-            switch (discriminatorColumn.discriminatorType())
-            {
+            switch (discriminatorColumn.discriminatorType()) {
             case STRING:
-                discriminator.setDefaults(Types.VARCHAR);
+                discriminator.setColumnType(Types.VARCHAR);
                 discriminator.setLength(discriminatorColumn.length());
                 break;
             case CHAR:
-                discriminator.setDefaults(Types.CHAR);
+                discriminator.setColumnType(Types.CHAR);
                 discriminator.setLength(discriminatorColumn.length());
                 break;
             default: // INTEGER
-                discriminator.setDefaults(Types.INTEGER);
+                discriminator.setColumnType(Types.INTEGER);
                 break;
             }
             
