@@ -36,6 +36,18 @@ public class AlterEntity {
     }
 
     /**
+     * Rename the underlying table.
+     * 
+     * @param tableName
+     *            The new table name.
+     * @return This alter entity builder to continue construction.
+     */
+    public AlterEntity table(String tableName) {
+        patch.add(new TableRename(patch.schema.getEntityName(entity.tableName), entity.tableName, tableName));
+        return this;
+    }
+
+    /**
      * Rename the given property. Returns a property rename builder to specify
      * the new name.
      * 
@@ -125,7 +137,7 @@ public class AlterEntity {
      */
     public AlterProperty alter(String property) {
         Column column = new Column(entity.getColumn(property));
-        return new AlterProperty(this, patch, entity.tableName, column);
+        return new AlterProperty(this, patch, entity.tableName, property, column);
     }
 
     /**

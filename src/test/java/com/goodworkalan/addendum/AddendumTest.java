@@ -5,12 +5,12 @@ import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.INSERT_VALUES;
 import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 import static com.goodworkalan.reflective.ReflectiveException.ILLEGAL_ACCESS;
 import static org.testng.Assert.assertEquals;
 
@@ -249,14 +249,14 @@ public class AddendumTest {
     
     /** Test renaming an entity that does not exist. */
     @Test(expectedExceptions = AddendumException.class)
-    public void renameTableMissiong() {
+    public void renameTableMissing() {
         try {
             Addenda addenda = new Addenda(new MockConnector());
             addenda
                 .addendum()
                     .rename("a");
         } catch (AddendumException e) {
-            assertEquals(e.getCode(), TABLE_MISSING);
+            assertEquals(e.getCode(), ENTITY_MISSING);
             System.out.println(e.getMessage());
             throw e;
         }
@@ -532,7 +532,7 @@ public class AddendumTest {
             Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
             addenda
                 .addendum()
-                    .create("a", "c")
+                    .create("a")
                         .add("a", int.class).end()
                         .add("b", int.class).end()
                         .end()
@@ -541,6 +541,68 @@ public class AddendumTest {
             addenda.amend();
         } catch (AddendumException e) {
             assertEquals(e.getCode(), INSERT_VALUES);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    /** Test rename property to existing name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void propertyRenameExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .add("b", int.class).end()
+                        .end()
+                    .commit();
+            addenda
+                .addendum()
+                    .alter("a")
+                        .rename("a").to("b");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), PROPERTY_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    /** Test set table name.. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void table() {
+        Addenda addenda = new Addenda(new MockConnector());
+        try {
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .alter("a").table("b").end()
+                    .create("b");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), TABLE_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    /** Test set table name.. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void columnRenameColumnExists() {
+        Addenda addenda = new Addenda(new MockConnector());
+        try {
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .add("b", int.class).end()
+                        .end()
+                    .alter("a")
+                        .alter("a").column("b").end();
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), COLUMN_EXISTS);
             System.out.println(e.getMessage());
             throw e;
         }

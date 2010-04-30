@@ -32,8 +32,7 @@ class ColumnAlteration implements SchemaUpdate
      * @param column
      *            The column definition.
      */
-    public ColumnAlteration(String tableName, String propertyName, Column column)
-    {
+    public ColumnAlteration(String tableName, String propertyName, Column column) {
         this.tableName = tableName;
         this.propertyName = propertyName;
         this.column = column;
@@ -52,8 +51,11 @@ class ColumnAlteration implements SchemaUpdate
         Entity entity = schema.entities.get(tableName);
         final String oldColumnName = entity.properties.get(propertyName);
         if (!column.getName().equals(oldColumnName)) {
-            entity.columns.remove(entity.properties.remove(propertyName));
+            entity.columns.remove(oldColumnName);
             entity.properties.put(propertyName, column.getName());
+            if (entity.columns.containsKey(column.getName())) {
+                throw new AddendumException(COLUMN_EXISTS, column.getName());
+            }
         }
         entity.columns.put(column.getName(), column);
         final String tableName = entity.tableName;

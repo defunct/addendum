@@ -4,8 +4,8 @@ import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 
 import java.util.Map;
 
@@ -183,7 +183,7 @@ public class Addendum {
      */
     public RenameEntity rename(String from) {
         if (!patch.schema.aliases.containsKey(from)) {
-            throw new AddendumException(TABLE_MISSING, from);
+            throw new AddendumException(ENTITY_MISSING, from);
         }
         return new RenameEntity(this, patch, from);
     }
