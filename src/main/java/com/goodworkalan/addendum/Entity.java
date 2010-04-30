@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -37,15 +39,25 @@ public class Entity {
     public Entity(String tableName) {
         this.tableName = tableName;
     }
-    
+
+    /**
+     * Get the column definition for the given property name.
+     * 
+     * @param property
+     *            The property name.
+     * @return The column definition.
+     * @exception AddendumException
+     *                If the property cannot be found or if the column cannot be
+     *                found.
+     */
     public Column getColumn(String property) {
         String columnName = properties.get(property);
         if (columnName == null) {
-            throw new AddendumException(0, property);
+            throw new AddendumException(PROPERTY_MISSING, property);
         }
         Column column = columns.get(columnName);
         if (column == null) {
-            throw new AddendumException(0, property, columnName);
+            throw new AddendumException(COLUMN_MISSING, columnName);
         }
         return column;
     }

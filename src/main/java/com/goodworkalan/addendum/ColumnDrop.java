@@ -43,7 +43,7 @@ class ColumnDrop implements SchemaUpdate {
         Entity entity = schema.entities.get(tableName);
         final String columnName = entity.properties.remove(property);
         if (columnName == null) {
-            throw new AddendumException(PROPERTY_MISSING, property, schema.getEntityName(tableName));
+            throw new AddendumException(PROPERTY_MISSING, property);
         }
         entity.columns.remove(columnName);
         return new DatabaseUpdate(0) {

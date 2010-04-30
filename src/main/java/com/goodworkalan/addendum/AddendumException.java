@@ -100,6 +100,9 @@ extends CodedDanger {
     
     /** A property does not exist the entity. */
     public final static int PROPERTY_MISSING = 415;
+    
+    /** A column does not exist the entity. */
+    public final static int COLUMN_MISSING = 416;
 
     /** Unable to create the table for an entity due to an SQL exception. */
     public final static int CANNOT_CREATE_TABLE = 501;
