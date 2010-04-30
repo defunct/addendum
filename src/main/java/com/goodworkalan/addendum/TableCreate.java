@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * An update action that creates a table in a database.
+ * Creates a new entity in the schema.
  * 
  * @author Alan Gutierrez
  */
@@ -31,18 +31,15 @@ class TableCreate implements SchemaUpdate {
     }
 
     /**
-     * Create a new table on the given JDBC connection using the given SQL
-     * dialect.
+     * Update the schema with a new entity and table and return a database
+     * update to create the table in the database.
      * 
+     * @param schema
+     *            The tracking schema.
+     * @return A database update to create the table in the database.
      */
     public DatabaseUpdate execute(Schema schema) {
-        if (schema.aliases.containsKey(entityName)) {
-            throw new AddendumException(ENTITY_EXISTS, entityName);
-        }
         schema.aliases.put(entityName, entity.tableName);
-        if (schema.entities.containsKey(entity.tableName)) {
-            throw new AddendumException(TABLE_EXISTS, entity.tableName);
-        }
         schema.entities.put(entity.tableName, entity);
         return new DatabaseUpdate(CANNOT_CREATE_TABLE, entityName, entity.tableName) {
             public void execute(Connection connection, Dialect dialect)
