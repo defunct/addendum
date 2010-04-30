@@ -9,6 +9,10 @@
         <non-jta-data-source>java:comp/env/addendum/datasource</non-jta-data-source>
         <class>com.goodworkalan.addendum.jpa.model.Post</class>
         <class>com.goodworkalan.addendum.jpa.model.Comment</class>
+        <class>com.goodworkalan.addendum.jpa.model.UnIdentified</class>
+        <class>com.goodworkalan.addendum.jpa.model.CharDiscriminated</class>
+        <class>com.goodworkalan.addendum.jpa.model.IntegerDiscriminated</class>
+        <class>com.goodworkalan.addendum.jpa.model.StringDiscriminated</class>
         <properties>
             <property name="hibernate.archive.autodetection" value="class, hbm"/>
             <property name="hibernate.show_sql" value="true"/>

@@ -52,9 +52,7 @@ class DefinitionDocument {
             for (int i = 0, stop = e.size() - 1; i < stop; i++) {
                 print(e.get(i), "");
             }
-            if (!e.isEmpty()) {
-                print(e.get(e.size() - 1), ";");
-            }
+            print(e.get(e.size() - 1), ";");
         }
         print(1, "}");
         print(0, "}");
@@ -105,6 +103,22 @@ class DefinitionDocument {
         }
         for (PropertyInfo property : entity.getProperties().values()) {
             print(property);
+        }
+        List<String> primaryKey = new ArrayList<String>();
+        for (PropertyInfo property : entity.getProperties().values()) {
+            if (property.isId()) {
+                primaryKey.add(property.getName());
+            }
+        }
+        if (!primaryKey.isEmpty()) {
+            StringBuilder pk = new StringBuilder();
+            String separator = "";
+            for (String name : primaryKey) {
+                pk.append(separator);
+                pk.append("\"" + name + "\"");
+                separator = ", ";
+            }
+            print(4, ".primaryKey(" + pk + ")");
         }
         print(4, ".end()" + terminate);
     }

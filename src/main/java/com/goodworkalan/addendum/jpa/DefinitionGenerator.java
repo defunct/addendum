@@ -30,6 +30,9 @@ public class DefinitionGenerator {
                 System.out.println(classNames.item(i).getNodeName());
                 Class<?> type = classLoader.loadClass(classNames.item(i).getTextContent().trim());
                 EntityInfo entity = EntityInfo.getInstance(type);
+                if (entity.getDiscriminator() != null) {
+                    definitionDocument.needsTypes = true;
+                }
                 for (PropertyInfo property : entity.getProperties().values()) {
                     if (property.getGenerationType() != null) {
                         definitionDocument.needsGeneratorType = true;
