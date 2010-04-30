@@ -70,6 +70,5 @@ public class NamingConnectorTest {
             System.out.println(e.getMessage());
             throw e;
         }
-        
     }
 }
