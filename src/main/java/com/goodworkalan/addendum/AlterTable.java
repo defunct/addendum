@@ -1,38 +1,30 @@
 package com.goodworkalan.addendum;
 
-
 /**
- * Begins an alter table statement in the domain-specific language for defining
- * database migrations.
+ * Builds an entity alteration that can change the underlying table name, alter
+ * properties, add new properties or drop properties.
  * 
  * @author Alan Gutierrez
  */
 public class AlterTable {
-    /**
-     * The domain-specific language element that defines a single database
-     * migration.
-     */
+    /** The addendum builder to return when this builder terminates. */
     private final Addendum addendum;
 
+    /** The database migration script. */
     private final Script script;
     
+    /** A copy of the entity to alter. */
     private final Entity entity;
-    
+
     /**
-     * Create an alter table statement for the domain-specific language.
+     * Create an alter table builder that alters the given entity.
      * 
      * @param addendum
-     *            The domain-specific language element that defines a single
-     *            database migration.
-     * @param tableName
-     *            The name of the table to alter.
-     * @param updates
-     *            The list of updates for the addendum that defines this alter
-     *            table statement.
-     * @param tables
-     *            A list of maps of table definitions by table name, one map for
-     *            each addendum, used to amend table and column names for the
-     *            rename form methods.
+     *            The addendum builder to return when this builder terminates.
+     * @param entity
+     *            A copy of the entity to alter.
+     * @param script
+     *            The database migration script.
      */
     AlterTable(Addendum addendum, Entity entity, Script script) {
         this.addendum = addendum;

@@ -188,17 +188,18 @@ public class Addendum {
         }
         return new RenameEntity(this, script, from);
     }
-    
+
+    /**
+     * Alter the entity with the given name. This method returns an entity
+     * alteration builder that can be used to change the underlying table, alter
+     * existing properties, add new properties, or drop properties.
+     * 
+     * @param name
+     *            The name of the entity to alter.
+     * @return An entity alteration builder.
+     */
     public AlterTable alter(String name) {
-        String alias = script.schema.aliases.get(name);
-        if (alias == null) {
-            throw new AddendumException(0, name);
-        }
-        Entity table = script.schema.entities.get(alias);
-        if (table == null) {
-            throw new AddendumException(0, name, alias);
-        }
-        return new AlterTable(this, table, script);
+        return new AlterTable(this, script.schema.getEntity(name), script);
     }
     
     /**
