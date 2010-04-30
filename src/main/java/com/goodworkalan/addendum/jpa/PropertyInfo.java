@@ -209,7 +209,7 @@ class PropertyInfo
      * @return The type of the entity class id, or null if the entity class has
      *         no id.
      */
-    private static Class<?> getId(Class<?> entityClass)
+    static Class<?> getId(Class<?> entityClass)
     {
         Class<?> current = entityClass;
         while (!current.equals(Object.class))
@@ -223,15 +223,7 @@ class PropertyInfo
             }
             current = current.getSuperclass();
         }
-        BeanInfo beanInfo;
-        try
-        {
-            beanInfo = Introspector.getBeanInfo(entityClass, Object.class);
-        }
-        catch (IntrospectionException e)
-        {
-            throw new RuntimeException(e);
-        }
+        BeanInfo beanInfo = EntityInfo.introspect(entityClass, Object.class);
         for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors())
         {
             if (desc.getWriteMethod() != null && desc.getWriteMethod().getAnnotation(Id.class) != null)
@@ -245,6 +237,7 @@ class PropertyInfo
         }
         return null;
     }
+
 
     /**
      * Create property information based on the annotations attached to given

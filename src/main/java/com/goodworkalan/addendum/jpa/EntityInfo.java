@@ -152,6 +152,24 @@ class EntityInfo
     }
 
     /**
+     * Get bean information for the given and including all super
+     * classes up to the given last super class.
+     * 
+     * @param bean
+     *            The bean to introspect.
+     * @param last
+     *            The last super class to include in the introspection.
+     * @return Bean information for the given bean.
+     */
+    static BeanInfo introspect(Class<?> bean, Class<?> last) {
+        try {
+            return Introspector.getBeanInfo(bean, last);
+        } catch (IntrospectionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Create an instance of entity information for the given entity class.
      * 
      * @param entityClass
