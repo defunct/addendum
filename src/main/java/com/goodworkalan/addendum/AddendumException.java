@@ -83,6 +83,12 @@ extends CodedDanger {
     /** The primary key has already been specified for the entity. */
     public final static int PRIMARY_KEY_EXISTS = 409;
     
+    /** The entity cannot be found in the schema. */
+    public final static int ENTITY_MISSING = 410;
+
+    /** The table cannot be found in the schema. */
+    public final static int TABLE_MISSING = 411;
+
     /**
      * Create a Sheaf exception with the given error code.
      * 

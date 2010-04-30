@@ -35,10 +35,10 @@ class TableCreate implements UpdateSchema {
             throw new AddendumException(0, alias, entity.tableName);
         }
         schema.aliases.put(alias, entity.tableName);
-        if (schema.tables.containsKey(entity.tableName)) {
+        if (schema.entities.containsKey(entity.tableName)) {
             throw new AddendumException(0, alias, entity.tableName);
         }
-        schema.tables.put(entity.tableName, entity);
+        schema.entities.put(entity.tableName, entity);
         return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {

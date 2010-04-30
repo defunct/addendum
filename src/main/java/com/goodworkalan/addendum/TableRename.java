@@ -34,9 +34,9 @@ class TableRename implements UpdateSchema {
      * Perform a single table rename update against the database.
      */
     public UpdateDatabase execute(Schema schema) {
-        Entity entity = schema.tables.remove(from);
+        Entity entity = schema.entities.remove(from);
         entity.tableName = to;
-        schema.tables.put(to, entity);
+        schema.entities.put(to, entity);
         schema.aliases.put(alias, to);
         return new UpdateDatabase(0) {
             public void execute(Connection connection, Dialect dialect)

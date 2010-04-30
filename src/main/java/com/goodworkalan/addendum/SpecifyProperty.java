@@ -3,9 +3,7 @@ package com.goodworkalan.addendum;
 /**
  * A generic column builder that specifies precision, scale length and default
  * value. This builder sets the attributes common to all properties. Derived
- * classes There are different subclasses for column definitions for a new
- * table, for adding columns to an existing table, and for altering existing
- * columns.
+ * classes differ based on whether the column is created or altered.
  * 
  * @param <Container>
  *            The type of the containing domain-specific language element.

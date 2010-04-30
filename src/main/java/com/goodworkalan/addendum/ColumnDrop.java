@@ -29,7 +29,7 @@ public class ColumnDrop implements UpdateSchema {
     }
     
     public UpdateDatabase execute(Schema schema) {
-        Entity entity = schema.tables.get(tableName);
+        Entity entity = schema.entities.get(tableName);
         final String columnName = entity.properties.remove(property);
         if (columnName == null) {
             throw new AddendumException(0, tableName, columnName);

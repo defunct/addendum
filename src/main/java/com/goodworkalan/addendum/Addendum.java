@@ -111,7 +111,7 @@ public class Addendum {
             String entityName = entry.getKey();
             if (!script.schema.aliases.containsKey(entityName)) {
                 String tableName = entry.getValue();
-                if (script.schema.tables.containsKey(tableName)) {
+                if (script.schema.entities.containsKey(tableName)) {
                     throw new AddendumException(TABLE_EXISTS, tableName);
                 }
                 script.add(new TableCreate(entityName, script.entities.get(tableName)));
@@ -126,7 +126,7 @@ public class Addendum {
             if (alias == null) {
                 throw new AddendumException(0, name);
             }
-            Entity table = script.schema.tables.get(alias);
+            Entity table = script.schema.entities.get(alias);
             if (table == null) {
                 throw new AddendumException(0, name, alias);
             }
@@ -149,7 +149,7 @@ public class Addendum {
         if (script.schema.aliases.containsKey(name)) {
             throw new AddendumException(ENTITY_EXISTS, name);
         }
-        if (script.schema.tables.containsKey(tableName)) {
+        if (script.schema.entities.containsKey(tableName)) {
             throw new AddendumException(TABLE_EXISTS, tableName);
         }
         return new CreateEntity(this, new Entity(tableName), name, script);
@@ -179,7 +179,7 @@ public class Addendum {
         if (alias == null) {
             throw new AddendumException(0, name);
         }
-        Entity table = script.schema.tables.get(alias);
+        Entity table = script.schema.entities.get(alias);
         if (table == null) {
             throw new AddendumException(0, name, alias);
         }
