@@ -31,7 +31,12 @@ class TableRename implements UpdateSchema {
     }
 
     /**
-     * Perform a single table rename update against the database.
+     * Perform a single table rename update in the tracking schema and
+     * return a table rename update to perform against the database.
+     * 
+     * @param schema
+     *            The tracking schema.
+     * @return The table rename to perform against the database.
      */
     public UpdateDatabase execute(Schema schema) {
         Entity entity = schema.entities.remove(from);

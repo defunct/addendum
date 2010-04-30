@@ -273,6 +273,28 @@ public class AddendumTest {
                     .commit();
     }
     
+    
+    /** Test entity rename to existing entity name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void renameExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .create("b")
+                        .add("a", int.class).end()
+                        .end()
+                    .rename("a").to("b");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), ENTITY_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
     /** Test execute. */
     @Test
     public void execute() {

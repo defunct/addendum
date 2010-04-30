@@ -8,6 +8,9 @@ import java.sql.Connection;
  * @author Alan Gutierrez
  */
 class NullUpdateDatabase extends UpdateDatabase {
+    /**
+     * Create a do nothing database update.
+     */
     public NullUpdateDatabase() {
         super(0);
     }
