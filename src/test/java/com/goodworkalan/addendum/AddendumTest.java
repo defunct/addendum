@@ -14,6 +14,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import org.testng.annotations.Test;
 
@@ -324,6 +325,89 @@ public class AddendumTest {
             .addendum()
                 .alter("a")
                     .rename("a").to("b")
+                    .end()
+                .commit();
+        addenda.amend();
+    }
+    
+    /** Test rename property without column rename. */
+    @Test
+    public void renamePropertyWithoutColumnRename() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", "c", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .rename("a").to("b")
+                    .end()
+                .commit();
+        addenda.amend();
+    }
+    
+    /** Test entity add property with existing property name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void addPropertyExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .commit();
+            addenda
+                .addendum()
+                    .alter("a")
+                        .add("a", Types.INTEGER);
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), PROPERTY_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    /** Test add property with existing column name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void addColumnExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("a")
+                        .add("a", int.class).end()
+                        .end()
+                    .commit();
+            addenda
+                .addendum()
+                    .alter("a")
+                        .add("b", "a", Types.INTEGER);
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), COLUMN_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    
+    /** Test rename property. */
+    @Test
+    public void addProperty() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .add("b", int.class).end()
                     .end()
                 .commit();
         addenda.amend();

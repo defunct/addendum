@@ -1,5 +1,8 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
+
 /**
  * Builds an entity alteration that can change the underlying table name, alter
  * properties, add new properties or drop properties.
@@ -46,38 +49,71 @@ public class AlterEntity {
     }
 
     /**
-     * Add a new column to the table with the given name and given column type.
+     * Add a new column to the table with the given name, the given column name,
+     * and given column type.
      * 
      * @param name
+     *            The property name.
+     * @param columnName
      *            The column name.
      * @param columnType
      *            The <code>java.sql.Type</code> column type.
      * @return An add column language element to define the column.
      */
-    public AddProperty add(String name, int columnType) {
+    public AddProperty add(String name, String columnName, int columnType) {
         if (entity.properties.containsKey(name)) {
-            throw new AddendumException(0, name);
+            throw new AddendumException(PROPERTY_EXISTS, name);
+        }
+        if (entity.columns.containsKey(columnName)) {
+            throw new AddendumException(COLUMN_EXISTS, name);
         }
         Column column = new Column(name, columnType);
         return new AddProperty(this, script, entity.tableName, name, column);
     }
     
     /**
-     * Add a new column to the table with the given name and a column type
-     * appropriate for the given Java primitive.
+     * Add a new column to the table with the given name
+     * and given column type. The property name is used for the column name. 
      * 
      * @param name
+     *            The property name.
+     * @param columnType
+     *            The <code>java.sql.Type</code> column type.
+     * @return An add column language element to define the column.
+     */
+    public AddProperty add(String name, int columnType) {
+        return add(name, name, columnType);
+    }
+
+    /**
+     * Add a new column to the table with the given name, the given column name,
+     * and a column type appropriate for the given Java primitive.
+     * 
+     * @param name
+     *            The property name.
+     * @param columnName
      *            The column name.
      * @param nativeType
      *            The native column type.
      * @return An add column language element to define the column.
      */
+    public AddProperty add(String name, String columnName, Class<?> nativeType) {
+        return add(name, columnName, Column.getColumnType(nativeType));
+    }
+
+    /**
+     * Add a new column to the table with the given name and a column type
+     * appropriate for the given Java primitive. The property name is used for
+     * the column name.
+     * 
+     * @param name
+     *            The property name.
+     * @param nativeType
+     *            The native column type.
+     * @return An add column language element to define the column.
+     */
     public AddProperty add(String name, Class<?> nativeType) {
-        if (entity.properties.containsKey(name)) {
-            throw new AddendumException(0, name);
-        }
-        Column column = new Column(name, nativeType);
-        return new AddProperty(this, script, entity.tableName, name, column);
+        return add(name, name, nativeType);
     }
 
     /**

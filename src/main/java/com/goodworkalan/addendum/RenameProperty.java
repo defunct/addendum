@@ -56,7 +56,7 @@ public class RenameProperty {
     public AlterEntity to(String to) {
         script.add(new PropertyRename(tableName, from, to));
         Entity entity = script.schema.entities.get(tableName);
-        if (entity.columns.get(from).getName().equals(from)) {
+        if (entity.getColumn(from).getName().equals(from)) {
             column.setName(to);
             script.add(new ColumnAlteration(tableName, from, column));
         }

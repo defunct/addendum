@@ -61,6 +61,6 @@ public class AddProperty extends FreshProperty<AlterEntity, AddProperty> {
      */
     @Override
     protected void ending() {
-        script.add(new TableAlteration(tableName, property, column));
+        script.add(new ColumnAdd(tableName, property, column));
     }
 }

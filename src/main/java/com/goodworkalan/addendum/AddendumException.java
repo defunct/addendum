@@ -106,6 +106,9 @@ extends CodedDanger {
     
     /** Unable to alter a column. */
     public final static int CANNOT_ALTER_COLUMN = 503;
+    
+    /** Unable to add a column. */
+    public final static int CANNOT_ADD_COLUMN = 504;
 
     /**
      * Create a Sheaf exception with the given error code.
