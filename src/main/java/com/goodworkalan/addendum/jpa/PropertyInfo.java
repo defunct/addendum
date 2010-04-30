@@ -374,13 +374,4 @@ class PropertyInfo
         }
         return new PropertyInfo(name, columnName, type, id, length, precision, scale, nullable, generationType);
     }
-
-    /**
-     * Return a string representation of this property.
-     * 
-     * @return The property as a string.
-     */
-    public String toString() {
-        return type.toString() + " " + getName();
-    }
 }
