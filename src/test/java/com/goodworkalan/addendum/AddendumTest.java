@@ -109,4 +109,46 @@ public class AddendumTest {
             throw e;
         }
     }
+    
+    @Test(expectedExceptions = AddendumException.class)
+    public void createIfAbsentTableExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("b", "b")
+                        .add("a", int.class).end()
+                        .end()
+                    .define("a", "b")
+                        .add("a", int.class).end()
+                        .end()
+                    .createIfAbsent()
+                    .commit();
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), TABLE_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    @Test
+    public void createIfAbsent() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("b", "b")
+                    .add("a", int.class).end()
+                    .end()
+                .commit();
+        addenda
+            .addendum()
+                .define("b", "b")
+                    .add("a", int.class).end()
+                    .end()
+                .define("a", "a")
+                    .add("a", int.class).end()
+                    .end()
+                .createIfAbsent()
+                .commit();
+    }
 }

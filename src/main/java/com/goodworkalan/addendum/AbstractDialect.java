@@ -284,6 +284,11 @@ public abstract class AbstractDialect implements Dialect {
     /**
      * Create a column containing the column metadata for the given column in
      * the given table.
+     * <p>
+     * FIXME Alter not based on meta column data, instead based on tracking
+     * schema.
+     * <p>
+     * FIXME Outgoing.
      * 
      * @param connection
      *            The JDBC connection.
@@ -396,6 +401,8 @@ public abstract class AbstractDialect implements Dialect {
     /**
      * Inherit the properties of the given full column by assigning them to
      * unspecified values in the partial column.
+     * <p>
+     * FIXME Outgoing.
      * 
      * @param partial
      *            The partial column that inherits.

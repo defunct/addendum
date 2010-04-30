@@ -9,6 +9,7 @@ import java.util.Map;
  * @author Alan Gutierrez
  */
 class Schema {
+    // FIXME Rename.
     public final Map<String, Entity> tables = new HashMap<String, Entity>();
     public final Map<String, String> aliases = new HashMap<String, String>();
     public Entity getEntity(String name) {

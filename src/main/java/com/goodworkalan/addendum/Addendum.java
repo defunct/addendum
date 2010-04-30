@@ -100,12 +100,21 @@ public class Addendum {
         return define(name, name);
     }
 
-    // FIXME Take a set of names to create, or empty means all.
+    /**
+     * Create entities defined in this addendum that do not already exist in the
+     * tracking schema.
+     * 
+     * @return This addendum builder to continue construction.
+     */
     public Addendum createIfAbsent() {
-        // FIXME Broken, need to use aliases.
-        for (Map.Entry<String, Entity> entry : script.entities.entrySet()) {
-            if (!script.schema.aliases.containsKey(entry.getKey())) {
-                script.add(new TableCreate(entry.getKey(), entry.getValue()));
+        for (Map.Entry<String, String> entry : script.aliases.entrySet()) {
+            String entityName = entry.getKey();
+            if (!script.schema.aliases.containsKey(entityName)) {
+                String tableName = entry.getValue();
+                if (script.schema.tables.containsKey(tableName)) {
+                    throw new AddendumException(TABLE_EXISTS, tableName);
+                }
+                script.add(new TableCreate(entityName, script.entities.get(tableName)));
             }
         }
         return this;
