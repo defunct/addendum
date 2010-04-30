@@ -6,7 +6,7 @@ import static org.testng.Assert.assertSame;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for {@link SpecifyColumn}.
+ * Unit tests for {@link SpecifyProperty}.
  * 
  * @author Alan Gutierrez
  */
@@ -19,7 +19,7 @@ public class SpecifyPropertyTest {
         assertSame(add, add.scale(1));
         assertEquals(column.getScale(), new Integer(1));
     }
-
+    
     /** Test precision. */
     @Test
     public void precision() {

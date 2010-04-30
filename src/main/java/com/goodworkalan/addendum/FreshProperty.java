@@ -12,7 +12,7 @@ package com.goodworkalan.addendum;
  *            The type of the sub-classed property builder.
  */
 public abstract class FreshProperty<Container, Element>
-extends SpecifyColumn<Container, Element> {
+extends SpecifyProperty<Container, Element> {
     /**
      * Create a property builder with the given container builder that builds
      * the given column definition.

@@ -1,10 +1,11 @@
 package com.goodworkalan.addendum;
 
 /**
- * A generic column specification language element in the domain-specific
- * language used to define database update actions. There are separate
- * subclasses for column definitions for a new table, for adding columns to
- * an existing table, and for altering existing columns.
+ * A generic column builder that specifies precision, scale length and default
+ * value. This builder sets the attributes common to all properties. Derived
+ * classes There are different subclasses for column definitions for a new
+ * table, for adding columns to an existing table, and for altering existing
+ * columns.
  * 
  * @param <Container>
  *            The type of the containing domain-specific language element.
@@ -13,7 +14,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public abstract class SpecifyColumn<Container, Element> {
+public abstract class SpecifyProperty<Container, Element> {
     /** The containing domain-specific language element. */
     private Container container;
     
@@ -28,7 +29,7 @@ public abstract class SpecifyColumn<Container, Element> {
      * @param column
      *            The column definition bean.
      */
-    SpecifyColumn(Container container, Column column)
+    SpecifyProperty(Container container, Column column)
     {
         this.container = container;
         this.column = column;
