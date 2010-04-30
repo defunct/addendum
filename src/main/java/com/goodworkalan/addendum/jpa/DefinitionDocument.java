@@ -16,6 +16,8 @@ class DefinitionDocument {
 
     public boolean needsGeneratorType;
     
+    public boolean needsTypes;
+    
     public Map<String, EntityInfo> entities = new TreeMap<String, EntityInfo>();
 
     private void println() { 
@@ -37,17 +39,22 @@ class DefinitionDocument {
         if (needsGeneratorType) {
             print(0, "import com.goodworkalan.addendum.GeneratorType;");
         }
+        if (needsTypes) {
+            print(0, "import java.sql.Types;");
+        }
         println();
         print(0, "public class " + className.substring(className.lastIndexOf('.') + 1));
         print(0, "implements Definition {");
         print(1, "public void define(Addendum addendum) {");
-        print(2, "addendum");
-        List<EntityInfo> e = new ArrayList<EntityInfo>(entities.values());
-        for (int i = 0, stop = e.size() - 1; i < stop; i++) {
-            print(e.get(i), "");
-        }
-        if (!e.isEmpty()) {
-            print(e.get(e.size() - 1), ";");
+        if (!entities.isEmpty()) {
+            print(2, "addendum");
+            List<EntityInfo> e = new ArrayList<EntityInfo>(entities.values());
+            for (int i = 0, stop = e.size() - 1; i < stop; i++) {
+                print(e.get(i), "");
+            }
+            if (!e.isEmpty()) {
+                print(e.get(e.size() - 1), ";");
+            }
         }
         print(1, "}");
         print(0, "}");
@@ -76,6 +83,25 @@ class DefinitionDocument {
             print(3, ".define(\"" + entity.getName() + "\", \"" + entity.getTableName()  + "\")");
         } else {
             print(3, ".define(\"" + entity.getName() + "\")");
+        }
+        if (entity.getDiscriminator() != null) {
+            switch (entity.getDiscriminator().discriminatorType()) {
+            case STRING:
+                print(4, ".add(\"" + entity.getDiscriminator().name() + "\", Types.VARCHAR)");
+                print(5, ".length(" + entity.getDiscriminator().length() + ")");
+                print(5, ".end");
+                break;
+            case CHAR:
+                print(4, ".add(\"" + entity.getDiscriminator().name() + "\", Types.CHAR)");
+                print(5, ".length(" + entity.getDiscriminator().length() + ")");
+                print(5, ".end");
+                break;
+            default: // INTEGER
+                print(4, ".add(\"" + entity.getDiscriminator().name() + "\", Types.INTEGER)");
+                print(5, ".end()");
+                break;
+            }
+            
         }
         for (PropertyInfo property : entity.getProperties().values()) {
             print(property);
