@@ -88,6 +88,10 @@ extends CodedDanger {
 
     /** The table cannot be found in the schema. */
     public final static int TABLE_MISSING = 411;
+    
+    /** Unable to determine an SQL type for a Java class. */
+    public final static int UNMAPPABLE_TYPE = 412;
+
 
     /**
      * Create a Sheaf exception with the given error code.

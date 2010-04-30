@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.UNMAPPABLE_TYPE;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Types;
@@ -128,7 +130,7 @@ public class Column {
         } else if (String.class.isAssignableFrom(nativeType)) {
             return Types.VARCHAR;
         }
-        throw new IllegalArgumentException();
+        throw new AddendumException(UNMAPPABLE_TYPE, nativeType.getCanonicalName());
     }
 
     /**
