@@ -259,29 +259,6 @@ public class Column {
     }
 
     /**
-     * Get the has default value flag. This flag is necessary since a null
-     * default value can mean either that there is no default value, or that the
-     * default value has not been specified in an alter or verify statement.
-     * 
-     * @return The has default value flag.
-     */
-    public boolean getHasDefaultValue() {
-        return hasDefaultValue;
-    }
-
-    /**
-     * Set the has default value flag. This flag is necessary since a null
-     * default value can mean either that there is no default value, or that the
-     * default value has not been specified in an alter or verify statement.
-     * 
-     * @param hasDefaultValue
-     *            Has default value flag.
-     */
-    public void setHasDefaultValue(Boolean hasDefaultValue) {
-        this.hasDefaultValue = hasDefaultValue;
-    }
-
-    /**
      * Get the default value.
      * 
      * @return The default value.
@@ -297,7 +274,6 @@ public class Column {
      *            The default value.
      */
     public void setDefaultValue(Object defaultValue) {
-        setHasDefaultValue(defaultValue != null);
         this.defaultValue = defaultValue;
     }
 

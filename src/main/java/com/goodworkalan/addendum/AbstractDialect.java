@@ -237,7 +237,7 @@ public abstract class AbstractDialect implements Dialect {
             }
         }
         
-        if (column.getHasDefaultValue()) {
+        if (column.getDefaultValue() != null) {
             switch (column.getColumnType()) {
             case Types.CHAR:
                 coberturaFallThrough();

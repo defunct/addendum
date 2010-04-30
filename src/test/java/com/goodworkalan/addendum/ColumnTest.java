@@ -39,11 +39,19 @@ public class ColumnTest {
     @Test(expectedExceptions = AddendumException.class)
     public void noSuchColumnType() {
         try {
-        Column.getColumnType(ByteBuffered.class);
+            Column.getColumnType(ByteBuffered.class);
         } catch (AddendumException e) {
             assertEquals(e.getCode(), UNMAPPABLE_TYPE);
             System.out.println(e.getMessage());
             throw e;
         }
+    }
+    
+    /** Test setting the column type from a Java type. */
+    @Test
+    public void setColumnTypeJava() {
+        Column column = new Column("a", long.class);
+        column.setColumnType(int.class);
+        assertEquals(column.getColumnType(), Types.INTEGER);
     }
 }
