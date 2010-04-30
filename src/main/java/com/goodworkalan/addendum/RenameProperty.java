@@ -1,6 +1,6 @@
 package com.goodworkalan.addendum;
 
-public class RenameColumn {
+public class RenameProperty {
     private final AlterEntity alterTable;
 
     private final String from;
@@ -9,7 +9,7 @@ public class RenameColumn {
 
     private final Column column;
 
-    public RenameColumn(AlterEntity alterTable, Script script, String tableName, Column column, String from) {
+    public RenameProperty(AlterEntity alterTable, Script script, String tableName, Column column, String from) {
         this.alterTable = alterTable;
         this.from = from;
         this.column = column;

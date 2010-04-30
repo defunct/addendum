@@ -32,9 +32,9 @@ public class AlterEntity {
         this.script = script;
     }
 
-    public RenameColumn rename(String from) {
+    public RenameProperty rename(String from) {
         Column column = new Column(entity.getColumn(from));
-        return new RenameColumn(this, script, entity.tableName, column, from);
+        return new RenameProperty(this, script, entity.tableName, column, from);
     }
 
     /**
