@@ -16,7 +16,7 @@ public class RenameProperty {
     private final String tableName;
     
     /** The database migration script. */
-    private final Script script;
+    private final Patch script;
 
     /** The column definition. */
     private final Column column;
@@ -38,7 +38,7 @@ public class RenameProperty {
      * @param from
      *            The current property name.
      */
-    public RenameProperty(AlterEntity alterTable, Script script, String tableName, Column column, String from) {
+    public RenameProperty(AlterEntity alterTable, Patch script, String tableName, Column column, String from) {
         this.alterEntity = alterTable;
         this.from = from;
         this.column = column;

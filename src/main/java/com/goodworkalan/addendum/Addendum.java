@@ -19,17 +19,17 @@ import com.goodworkalan.reflective.ReflectiveFactory;
  */
 public class Addendum {
     /** A list of updates to perform. */
-    private final Script script;
+    private final Patch patch;
 
     /**
-     * Create a new addendum using the given <code>script</code> to record the
-     * addendum properties.
+     * Create a new addendum using the given patch to record the addendum
+     * properties.
      * 
-     * @param script
-     *            The database migration script.
+     * @param patch
+     *            The database migration patch.
      */
-    Addendum(Script script) {
-        this.script = script;
+    Addendum(Patch patch) {
+        this.patch = patch;
     }
 
     /**
@@ -78,11 +78,11 @@ public class Addendum {
      * @return An entity definition builder.
      */
     public DefineEntity define(String name, String tableName) {
-        if (script.aliases.put(name, tableName) != null) {
+        if (patch.aliases.put(name, tableName) != null) {
             throw new AddendumException(ADDENDUM_ENTITY_EXISTS, name);
         }
         Entity entity = new Entity(name);
-        if (script.entities.put(tableName, entity) != null) {
+        if (patch.entities.put(tableName, entity) != null) {
             throw new AddendumException(ADDENDUM_TABLE_EXISTS, tableName);
         }
         return new DefineEntity(this, entity);
@@ -107,14 +107,14 @@ public class Addendum {
      * @return This addendum builder to continue construction.
      */
     public Addendum createIfAbsent() {
-        for (Map.Entry<String, String> entry : script.aliases.entrySet()) {
+        for (Map.Entry<String, String> entry : patch.aliases.entrySet()) {
             String entityName = entry.getKey();
-            if (!script.schema.aliases.containsKey(entityName)) {
+            if (!patch.schema.aliases.containsKey(entityName)) {
                 String tableName = entry.getValue();
-                if (script.schema.entities.containsKey(tableName)) {
+                if (patch.schema.entities.containsKey(tableName)) {
                     throw new AddendumException(TABLE_EXISTS, tableName);
                 }
-                script.add(new TableCreate(entityName, script.entities.get(tableName)));
+                patch.add(new TableCreate(entityName, patch.entities.get(tableName)));
             }
         }
         return this;
@@ -132,7 +132,7 @@ public class Addendum {
      */
     public Addendum createDefinitions(String...names) {
         for (String name : names) {
-            script.add(new TableCreate(name, script.getEntity(name)));
+            patch.add(new TableCreate(name, patch.getEntity(name)));
         }
         return this;
     }
@@ -148,13 +148,13 @@ public class Addendum {
      * @return A create entity builder.
      */
     public CreateEntity create(String name, String tableName) {
-        if (script.schema.aliases.containsKey(name)) {
+        if (patch.schema.aliases.containsKey(name)) {
             throw new AddendumException(ENTITY_EXISTS, name);
         }
-        if (script.schema.entities.containsKey(tableName)) {
+        if (patch.schema.entities.containsKey(tableName)) {
             throw new AddendumException(TABLE_EXISTS, tableName);
         }
-        return new CreateEntity(this, new Entity(tableName), name, script);
+        return new CreateEntity(this, new Entity(tableName), name, patch);
     }
 
     /**
@@ -182,10 +182,10 @@ public class Addendum {
      * @return The entity rename builder.
      */
     public RenameEntity rename(String from) {
-        if (!script.schema.aliases.containsKey(from)) {
+        if (!patch.schema.aliases.containsKey(from)) {
             throw new AddendumException(TABLE_MISSING, from);
         }
-        return new RenameEntity(this, script, from);
+        return new RenameEntity(this, patch, from);
     }
 
     /**
@@ -198,7 +198,7 @@ public class Addendum {
      * @return An entity alteration builder.
      */
     public AlterEntity alter(String name) {
-        return new AlterEntity(this, script.schema.getEntity(name), script);
+        return new AlterEntity(this, patch.schema.getEntity(name), patch);
     }
 
     /**
@@ -211,7 +211,7 @@ public class Addendum {
      */
     public Addendum execute(Executable executable) {
         Execution execution = new Execution(executable);
-        script.add(execution);
+        patch.add(execution);
         return this;
     }
 
@@ -224,7 +224,7 @@ public class Addendum {
      */
     public Insert insert(String table) {
         Insertion insertion = new Insertion(table);
-        script.add(insertion);
+        patch.add(insertion);
         return new Insert(this, insertion);
     }
 

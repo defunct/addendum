@@ -171,7 +171,7 @@ public class Addenda {
     private Addendum addendum(Connector connector, DialectProvider dialectProvider) {
         List<DatabaseUpdate> updates = new ArrayList<DatabaseUpdate>();
         addenda.add(new ApplyAddendum(connector, dialectProvider, updates));
-        return new Addendum(new Script(schema, updates));
+        return new Addendum(new Patch(schema, updates));
     }
 }
 

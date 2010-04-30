@@ -11,15 +11,15 @@ package com.goodworkalan.addendum;
  * @author Alan Gutierrez
  */
 public final class CreateEntity extends DefineEntity {
-    /** The database migration script. */
-    private final Script script;
+    /** The database migration patch. */
+    private final Patch patch;
     
     /** The entity name. */
     private final String entityName;
 
     /**
      * Create a create entity builder that will record to the given entity
-     * definition and add a create entity update to the given migration script.
+     * definition and add a create entity update to the given migration patch.
      * The given addendum is returned when the create entity builder terminates.
      * 
      * @param addendum
@@ -27,20 +27,20 @@ public final class CreateEntity extends DefineEntity {
      *            terminates.
      * @param entity
      *            The entity to build.
-     * @param script
-     *            The migration script.
+     * @param patch
+     *            The migration patch.
      */
-    public CreateEntity(Addendum addendum, Entity entity, String entityName, Script script) {
+    public CreateEntity(Addendum addendum, Entity entity, String entityName, Patch patch) {
         super(addendum, entity);
         this.entityName = entityName;
-        this.script = script;
+        this.patch = patch;
     }
     
     /**
-     * Override ending to add a create entity update to the migration script.
+     * Override ending to add a create entity update to the migration patch.
      */
     @Override
     protected void ending() {
-        script.add(new TableCreate(entityName, entity));
+        patch.add(new TableCreate(entityName, entity));
     }
 }

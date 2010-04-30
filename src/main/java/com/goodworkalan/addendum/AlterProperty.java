@@ -9,30 +9,30 @@ package com.goodworkalan.addendum;
 public class AlterProperty
 extends ExistingColumn<AlterEntity, AlterProperty> {
     /** The database migration. */
-    private final Script script;
+    private final Patch patch;
     
     /** The entity table name. */
     private final String tableName;
 
     /**
      * Create an alter column element that alters the given column in the entity
-     * with the given table name and adds an alter update to the given script.
+     * with the given table name and adds an alter update to the given patch.
      * The given parent alter table builder is returned with this builder
      * terminates.
      * 
      * @param alterTable
      *            The parent alter table builder.
-     * @param script
+     * @param patch
      *            The database migration.
      * @param table
      *            The entity table name.
      * @param column
      *            The column definition.
      */
-    public AlterProperty(AlterEntity alterTable, Script script, String tableName, Column column) {
+    public AlterProperty(AlterEntity alterTable, Patch patch, String tableName, Column column) {
         super(alterTable, column);
         this.tableName = tableName;
-        this.script = script;
+        this.patch = patch;
     }
 
     /**
@@ -58,11 +58,11 @@ extends ExistingColumn<AlterEntity, AlterProperty> {
     }
     
     /**
-     * Overridden to add a column alteration update to the addendum script when
+     * Overridden to add a column alteration update to the addendum patch when
      * the builder terimates.
      */
     @Override
     protected void ending() {
-        script.add(new ColumnAlteration(tableName, column.getName(), column));
+        patch.add(new ColumnAlteration(tableName, column.getName(), column));
     }
 }

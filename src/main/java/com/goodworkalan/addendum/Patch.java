@@ -8,16 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A set of updates for a single migration. Updates are added to the s script by
- * (FIXME Rename migration) using the {@link #add(SchemaUpdate) add} method.
- * There are public members that represent the tracking schema and the entity
- * mappings defined in the current migration.
- * <p>
- * FIXME Maybe rename patch? Migration is too nice for the language sugar.
+ * A set of updates for a single migration. Updates are added to the patch by
+ * using the {@link #add(SchemaUpdate) add} method. There are public members
+ * that represent the tracking schema and the entity mappings defined in the
+ * current migration.
  * 
  * @author Alan Gutierrez
  */
-class Script {
+class Patch {
     /** The tracking schema. */
     public final Schema schema;
 
@@ -39,7 +37,7 @@ class Script {
      * @param databaseUpdates
      *            The list of database updates.
      */
-    public Script(Schema schema, List<DatabaseUpdate> databaseUpdates) {
+    public Patch(Schema schema, List<DatabaseUpdate> databaseUpdates) {
         this.schema = schema;
         this.databaseUpdates = databaseUpdates;
     }

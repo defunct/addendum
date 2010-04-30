@@ -13,8 +13,8 @@ public class AlterEntity {
     /** The addendum builder to return when this builder terminates. */
     private final Addendum addendum;
 
-    /** The database migration script. */
-    private final Script script;
+    /** The database migration patch. */
+    private final Patch patch;
     
     /** The entity to alter. */
     private final Entity entity;
@@ -26,13 +26,13 @@ public class AlterEntity {
      *            The addendum builder to return when this builder terminates.
      * @param entity
      *            The entity to alter.
-     * @param script
-     *            The database migration script.
+     * @param patch
+     *            The database migration patch.
      */
-    AlterEntity(Addendum addendum, Entity entity, Script script) {
+    AlterEntity(Addendum addendum, Entity entity, Patch patch) {
         this.addendum = addendum;
         this.entity = entity;
-        this.script = script;
+        this.patch = patch;
     }
 
     /**
@@ -45,7 +45,7 @@ public class AlterEntity {
      */
     public RenameProperty rename(String from) {
         Column column = new Column(entity.getColumn(from));
-        return new RenameProperty(this, script, entity.tableName, column, from);
+        return new RenameProperty(this, patch, entity.tableName, column, from);
     }
 
     /**
@@ -68,7 +68,7 @@ public class AlterEntity {
             throw new AddendumException(COLUMN_EXISTS, name);
         }
         Column column = new Column(name, columnType);
-        return new AddProperty(this, script, entity.tableName, name, column);
+        return new AddProperty(this, patch, entity.tableName, name, column);
     }
     
     /**
@@ -125,7 +125,7 @@ public class AlterEntity {
      */
     public AlterProperty alter(String property) {
         Column column = new Column(entity.getColumn(property));
-        return new AlterProperty(this, script, entity.tableName, column);
+        return new AlterProperty(this, patch, entity.tableName, column);
     }
 
     /**
@@ -139,7 +139,7 @@ public class AlterEntity {
      *                If the property does not exist.
      */
     public AlterEntity drop(String property) {
-        script.add(new ColumnDrop(entity.tableName, property));
+        patch.add(new ColumnDrop(entity.tableName, property));
         return this;
     }
 

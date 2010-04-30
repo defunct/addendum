@@ -13,7 +13,7 @@ public class RenameEntity {
     private final String from;
 
     /** The database migration script. */
-    private final Script script;
+    private final Patch script;
 
     /**
      * Create a new entity rename builder for the entity with the given current
@@ -27,7 +27,7 @@ public class RenameEntity {
      * @param from
      *            The current entity name.
      */
-    public RenameEntity(Addendum addendum, Script script, String from) {
+    public RenameEntity(Addendum addendum, Patch script, String from) {
         this.addendum = addendum;
         this.from = from;
         this.script = script;

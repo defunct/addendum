@@ -9,17 +9,17 @@ import java.util.ArrayList;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for the {@link Script} class.
+ * Unit tests for the {@link Patch} class.
  *
  * @author Alan Gutierrez
  */
-public class ScriptTest {
+public class PatchTest {
     /** Test lookup of an entity that is missing. */
     @Test(expectedExceptions = AddendumException.class)
     public void entityMissing() {
         try {
-            Script migration = new Script(new Schema(), new ArrayList<DatabaseUpdate>());
-            migration.getEntity("a");
+            Patch patch = new Patch(new Schema(), new ArrayList<DatabaseUpdate>());
+            patch.getEntity("a");
         } catch (AddendumException e) {
             assertEquals(e.getCode(), ADDENDUM_ENTITY_MISSING);
             System.out.println(e.getMessage());
@@ -31,9 +31,9 @@ public class ScriptTest {
     @Test(expectedExceptions = AddendumException.class)
     public void tableMissing() {
         try {
-            Script migration = new Script(new Schema(), new ArrayList<DatabaseUpdate>());
-            migration.aliases.put("a", "a");
-            migration.getEntity("a");
+            Patch patch = new Patch(new Schema(), new ArrayList<DatabaseUpdate>());
+            patch.aliases.put("a", "a");
+            patch.getEntity("a");
         } catch (AddendumException e) {
             assertEquals(e.getCode(), ADDENDUM_TABLE_MISSING);
             System.out.println(e.getMessage());

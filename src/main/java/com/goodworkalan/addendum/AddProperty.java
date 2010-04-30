@@ -12,8 +12,8 @@ package com.goodworkalan.addendum;
  * @author Alan Gutierrez
  */
 public class AddProperty extends FreshProperty<AlterEntity, AddProperty> {
-    /** The database migration script. */
-    private final Script script;
+    /** The database migration patch. */
+    private final Patch patch;
 
     /** The name of the table in which to add the column. */
     private final String tableName;
@@ -23,14 +23,14 @@ public class AddProperty extends FreshProperty<AlterEntity, AddProperty> {
 
     /**
      * Create a new add property builder that will add an alter column update
-     * based on the given column to the given migration script. The update
-     * statement will add a column to the given script. that will return the
+     * based on the given column to the given migration patch. The update
+     * statement will add a column to the given patch. that will return the
      * given alter table builder when it terminates.
      * 
      * @param container
      *            The parent alter table builder.
-     * @param script
-     *            The database migration script.
+     * @param patch
+     *            The database migration patch.
      * @param tableName
      *            The name of the table in which to add the column.
      * @param property
@@ -38,9 +38,9 @@ public class AddProperty extends FreshProperty<AlterEntity, AddProperty> {
      * @param column
      *            The column definition.
      */
-    AddProperty(AlterEntity container, Script script, String tableName, String property, Column column) {
+    AddProperty(AlterEntity container, Patch patch, String tableName, String property, Column column) {
         super(container, column);
-        this.script = script;
+        this.patch = patch;
         this.property = property;
         this.tableName = tableName;
     }
@@ -56,11 +56,11 @@ public class AddProperty extends FreshProperty<AlterEntity, AddProperty> {
     }
 
     /**
-     * Overridden to add an add column update to the migration script when
+     * Overridden to add an add column update to the migration patch when
      * the builder terminates. 
      */
     @Override
     protected void ending() {
-        script.add(new ColumnAdd(tableName, property, column));
+        patch.add(new ColumnAdd(tableName, property, column));
     }
 }
