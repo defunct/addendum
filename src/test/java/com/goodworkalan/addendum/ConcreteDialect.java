@@ -15,6 +15,7 @@ public class ConcreteDialect extends AbstractDialect {
         setType(Types.INTEGER, "INTEGER");
         setType(Types.DECIMAL, "DECIMAL");
         setType(Types.VARCHAR, "VARCHAR(%1$d)", 65535);
+        setType(Types.VARCHAR, "BLURDY(%1$d)", 70000);
         setType(Types.VARCHAR, "TEXT");
         setDefaultPrecisionScale(Types.DECIMAL, 10, 2);
     }
@@ -24,6 +25,10 @@ public class ConcreteDialect extends AbstractDialect {
         return 0;
     }
 
+    public void columnDefinition(StringBuilder sql, Column column, boolean canNull) {
+        super.columnDefinition(sql, column, canNull);
+    }
+    
     public Column getMetaColumn(Connection connection, String tableName, String columnName) throws SQLException {
         return super.getMetaColumn(connection, tableName, columnName);
     }   
@@ -48,5 +53,12 @@ public class ConcreteDialect extends AbstractDialect {
 
     public void alterColumn(Connection connection, String tableName, String oldName, Column column)
     throws SQLException {
+    }
+
+    @Override
+    public void renameTable(Connection connection, String oldName,
+            String newName) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 }

@@ -349,6 +349,7 @@ public abstract class AbstractDialect implements Dialect {
         
         Statement statement = connection.createStatement();
         statement.execute(addSql.toString());
+        statement.close();
         
         if (column.getNotNull()) {
             StringBuilder updateSql = new StringBuilder();
@@ -365,17 +366,9 @@ public abstract class AbstractDialect implements Dialect {
             prepared.setObject(1, column.getDefaultValue());
             prepared.execute();
             
-            StringBuilder alterSql = new StringBuilder();
-            alterSql.append("ALTER TABLE ").append(tableName)
-                    .append(" CHANGE ").append(column.getName()).append(" ");
-            columnDefinition(alterSql, column, true);
-            
-            info.put("alter", alterSql);
-            
-            statement.execute(alterSql.toString());
+            alterColumn(connection, tableName, column.getName(), column);
         }
         
-        statement.close();
         
         info.send();
     }
@@ -458,22 +451,7 @@ public abstract class AbstractDialect implements Dialect {
      * @throws SQLException
      *             For any reason, any reason at all.
      */
-    public void renameTable(Connection connection, String oldName, String newName) throws SQLException {
-        Entry info = getLogger().info("rename");
-
-        info.put("oldName", oldName).put("newName", newName);
-
-        StringBuilder sql = new StringBuilder();
-        sql.append("RENAME TABLE ").append(oldName).append(" TO ").append(newName);
-        
-        info.put("sql", sql);
-        
-        info.send();
-
-        Statement statement = connection.createStatement();
-        statement.execute(sql.toString());
-        statement.close();
-    }
+    public abstract void renameTable(Connection connection, String oldName, String newName) throws SQLException;
 
     /**
      * Insert a row into the given table. The column names are specified by the
