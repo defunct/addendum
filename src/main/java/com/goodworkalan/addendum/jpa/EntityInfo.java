@@ -7,7 +7,8 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.sql.Types;
 import java.util.Collections;
-import java.util.HashMap;
+//import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.persistence.DiscriminatorColumn;
@@ -176,13 +177,13 @@ class EntityInfo
         {
             throw new RuntimeException(e);
         }
-        Map<String, PropertyInfo> properties = new HashMap<String, PropertyInfo>();
-        Map<String, PropertyDescriptor> descriptors = new HashMap<String, PropertyDescriptor>();
+        Map<String, PropertyInfo> properties = new LinkedHashMap<String, PropertyInfo>();
+        Map<String, PropertyDescriptor> descriptors = new LinkedHashMap<String, PropertyDescriptor>();
         for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors())
         {
             descriptors.put(desc.getName(), desc);
         }
-        Map<String, Field> fields = new HashMap<String, Field>();
+        Map<String, Field> fields = new LinkedHashMap<String, Field>();
         addFields(entityClass, fields);
         for (String name : fields.keySet())
         {

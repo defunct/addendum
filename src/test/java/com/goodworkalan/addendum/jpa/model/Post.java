@@ -20,6 +20,8 @@ public class Post {
     @OneToMany(mappedBy = "comment")
     public List<Comment> comments;
 
+    @Column(length = 128)
+    public String summary;
     
     @Column(nullable = false, name = "created_at")
     public Date createdAt;

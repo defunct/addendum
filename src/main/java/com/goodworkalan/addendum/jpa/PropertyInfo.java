@@ -6,12 +6,14 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -37,13 +39,13 @@ class PropertyInfo
     private final boolean id;
 
     /** The property length. */
-    private final int length;
+    private final Integer length;
     
     /** The property precision. */
-    private final int precision;
+    private final Integer precision;
     
     /** The property scale. */
-    private final int scale;
+    private final Integer scale;
     
     /** If true, the property is nullable. */
     private final boolean nullable;
@@ -73,7 +75,7 @@ class PropertyInfo
      * @param generationType
      *            The property generation type.
      */
-    public PropertyInfo(String name, String columnName, Class<?> type, boolean id, int length, int precision, int scale, boolean nullable, GenerationType generationType)
+    public PropertyInfo(String name, String columnName, Class<?> type, boolean id, Integer length, Integer precision, Integer scale, boolean nullable, GenerationType generationType)
     {
         this.name = name;
         this.columnName = columnName;
@@ -141,8 +143,7 @@ class PropertyInfo
      * 
      * @return The column length.
      */
-    public int getLength()
-    {
+    public Integer getLength() {
         return length;
     }
     
@@ -281,27 +282,28 @@ class PropertyInfo
             }
         }
         String columnName = name;
-        int length = 255, precision = 0, scale = 0;
-        boolean nullable = true, joinColumnSeen = false, id = false;
+        Integer length = null, precision = null, scale = null;
+        boolean nullable = true, joinColumnSeen = false, id = false, lob = false;
         GenerationType generationType = null;
         for (int i = 0; i < annotations.length && annotations[i] != null; i++)
         {
             for (Annotation annotation : annotations[i])
             {
-                if (annotation.annotationType().equals(Column.class))
-                {
+                if (annotation.annotationType().equals(Column.class)) {
                     Column column = (Column) annotation;
-                    if (!column.name().equals(""))
-                    {
+                    if (!column.name().equals("")) {
                         columnName = column.name();
                     }
-                    length = column.length();
-                    precision = column.precision();
-                    scale = column.scale();
+                    if (String.class.isAssignableFrom(type)) {
+                        length = column.length();
+                    } else if (BigDecimal.class.isAssignableFrom(type)) {
+                        precision = column.precision();
+                        scale = column.scale();
+                    }
                     nullable = column.nullable();
-                }
-                else if (annotation.annotationType().equals(GeneratedValue.class))
-                {
+                } else if (annotation.annotationType().equals(Lob.class)) {
+                    lob = true;
+                } else if (annotation.annotationType().equals(GeneratedValue.class)) {
                     GeneratedValue generatedValue = (GeneratedValue) annotation;
                     generationType = generatedValue.strategy();
                 }
@@ -370,6 +372,11 @@ class PropertyInfo
                         nullable = false;
                     }
                 }
+            }
+        }
+        if (lob) {
+            if (String.class.isAssignableFrom(type)) {
+                length = Integer.MAX_VALUE;
             }
         }
         return new PropertyInfo(name, columnName, type, id, length, precision, scale, nullable, generationType);
