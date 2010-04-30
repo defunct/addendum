@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Allows users to specify application specific SQL updates against
- * the database.
- *  
+ * Allows users to specify application specific SQL updates against the
+ * database.
+ * 
  * @author Alan Gutierrez
  */
-public interface Executable
-{
+public interface Executable {
     /**
      * Perform an update using application specific SQL statements.
      * 
@@ -18,6 +17,9 @@ public interface Executable
      *            An open JDBC connection.
      * @param dialect
      *            The SQL dialect.
+     * @throws SQLException
+     *             For any SQL error.
      */
-    public void execute(Connection connection, Dialect dialect) throws SQLException;
+    public void execute(Connection connection, Dialect dialect)
+    throws SQLException;
 }

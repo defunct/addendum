@@ -12,6 +12,9 @@ import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 import static com.goodworkalan.reflective.ReflectiveException.ILLEGAL_ACCESS;
 import static org.testng.Assert.assertEquals;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.api.MockConnector;
@@ -268,5 +271,19 @@ public class AddendumTest {
                     .end()
                 .rename("a").to("b")
                     .commit();
+    }
+    
+    /** Test execute. */
+    @Test
+    public void execute() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .execute(new Executable() {
+                    public void execute(Connection connection, Dialect dialect)
+                    throws SQLException {
+                    }
+                })
+                .commit();
     }
 }

@@ -100,6 +100,9 @@ extends CodedDanger {
     
     /** Unable to create the table for an entity due to an SQL exception. */
     public final static int CANNOT_CREATE_TABLE = 501;
+    
+    /** Unable to execute arbitrary SQL statements. */
+    public final static int CANNOT_EXECUTE_SQL = 502;
 
     /**
      * Create a Sheaf exception with the given error code.

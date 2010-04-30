@@ -201,7 +201,7 @@ public class Addendum {
     public AlterEntity alter(String name) {
         return new AlterEntity(this, script.schema.getEntity(name), script);
     }
-    
+
     /**
      * Performs updates using application specific SQL statements.
      * 
@@ -210,8 +210,7 @@ public class Addendum {
      * @return This schema element to continue the domain-specific language
      *         statement.
      */
-    public Addendum execute(Executable executable)
-    {
+    public Addendum execute(Executable executable) {
         Execution execution = new Execution(executable);
         script.add(execution);
         return this;
@@ -224,18 +223,16 @@ public class Addendum {
      *            The name of the table to update.
      * @return An insert element to define the insert statement.
      */
-    public Insert insert(String table)
-    {
+    public Insert insert(String table) {
         Insertion insertion = new Insertion(table);
         script.add(insertion);
         return new Insert(this, insertion);
     }
-    
+
     /**
      * Terminates the addendum specification statement in the domain specific
      * language.
      */
-    public void commit()
-    {
+    public void commit() {
     }
 }
