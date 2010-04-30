@@ -5,6 +5,7 @@ import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 
 import java.util.Map;
 
@@ -169,11 +170,23 @@ public class Addendum {
         return create(name, name);
     }
 
-    public RenameTable rename(String from) {
+    /**
+     * Rename the entity with the given name. This method returns a rename
+     * builder that will be used to specify the new entity name.
+     * <p>
+     * If the table for the renamed entity has the same name as the entity, the
+     * table is renamed to the new entity name. If the table has a different
+     * name than the entity name, only the entity is renamed.
+     * 
+     * @param from
+     *            The name of the entity to rename.
+     * @return The entity rename builder.
+     */
+    public RenameEntity rename(String from) {
         if (!script.schema.aliases.containsKey(from)) {
-            throw new AddendumException(0, from);
+            throw new AddendumException(TABLE_MISSING, from);
         }
-        return new RenameTable(this, script, from);
+        return new RenameEntity(this, script, from);
     }
     
     public AlterTable alter(String name) {

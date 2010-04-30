@@ -8,6 +8,7 @@ import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 import static com.goodworkalan.reflective.ReflectiveException.ILLEGAL_ACCESS;
 import static org.testng.Assert.assertEquals;
 
@@ -18,7 +19,7 @@ import com.goodworkalan.reflective.ReflectiveException;
 import com.goodworkalan.reflective.ReflectiveFactory;
 
 /**
- * Unit tests for {@link Addendum}.
+ * Unit tests for the {@link Addendum} class.
  *
  * @author Alan Gutierrez
  */
@@ -117,6 +118,10 @@ public class AddendumTest {
         }
     }
     
+    /**
+     * Test attempting to create a table that already exists when creating
+     * absent entities.
+     */
     @Test(expectedExceptions = AddendumException.class)
     public void createIfAbsentTableExists() {
         try {
@@ -138,6 +143,10 @@ public class AddendumTest {
         }
     }
     
+    /**
+     * Test creating all of the entities defined in the addendum if they don't
+     * already exist in the schema.
+     */
     @Test
     public void createIfAbsent() {
         Addenda addenda = new Addenda(new MockConnector());
@@ -159,6 +168,7 @@ public class AddendumTest {
                 .commit();
     }
     
+    /** Test specifying a property that already exists. */
     @Test(expectedExceptions = AddendumException.class)
     public void propertyExists() {
         try {
@@ -175,6 +185,7 @@ public class AddendumTest {
         }
     }
     
+    /** Test specifying a column that already exists. */
     @Test(expectedExceptions = AddendumException.class)
     public void columnExists() {
         try {
@@ -191,6 +202,7 @@ public class AddendumTest {
         }
     }
     
+    /** Test specifying the primary key twice. */
     @Test(expectedExceptions = AddendumException.class)
     public void primaryKeyExists() {
         try {
@@ -208,7 +220,7 @@ public class AddendumTest {
         }
     }
     
-    
+    /** Test creating new entities from addendum entity definitions. */
     @Test
     public void createDefinitions() {
         Addenda addenda = new Addenda(new MockConnector());
@@ -228,5 +240,33 @@ public class AddendumTest {
                     .end()
                 .createDefinitions("a")
                 .commit();
+    }
+    
+    /** Test renaming an entity that does not exist. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void renameTableMissiong() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .rename("a");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), TABLE_MISSING);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    /** Test entity rename without a table rename. */
+    @Test
+    public void renameWithoutTable() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("a", "c")
+                    .add("a", int.class).end()
+                    .end()
+                .rename("a").to("b")
+                    .commit();
     }
 }
