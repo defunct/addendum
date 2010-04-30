@@ -1,6 +1,6 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
+import static com.goodworkalan.addendum.AddendumException.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -46,7 +46,7 @@ class ColumnDrop implements SchemaUpdate {
             throw new AddendumException(PROPERTY_MISSING, property);
         }
         entity.columns.remove(columnName);
-        return new DatabaseUpdate(0) {
+        return new DatabaseUpdate(CANNOT_DROP_COLUMN, columnName, tableName) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.dropColumn(connection, tableName, columnName);

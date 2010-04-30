@@ -8,8 +8,7 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class End
-{
+public class End {
     /** The root language element for schema definition. */
     private final Addendum addendum;
 
@@ -19,18 +18,16 @@ public class End
      * @param schema
      *            The root language element for schema definition.
      */
-    End(Addendum schema)
-    {
+    End(Addendum schema) {
         this.addendum = schema;
     }
-    
+
     /**
      * Terminate the statement and return the schema.
      * 
      * @return The schema.
      */
-    public Addendum end()
-    {
+    public Addendum end() {
         return addendum;
     }
 }

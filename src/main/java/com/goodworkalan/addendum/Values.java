@@ -5,11 +5,10 @@ package com.goodworkalan.addendum;
  * 
  * @author Alan Gutierrez
  */
-public class Values
-{
+public class Values {
     /** The root language element for schema definitions. */
     private final Addendum schema;
-    
+
     /** The update action that will insert the record. */
     private final Insertion insertion;
 
@@ -23,8 +22,7 @@ public class Values
      * @param insertion
      *            The update action that will insert the record.
      */
-    Values(Addendum schema, Insertion insertion)
-    {
+    Values(Addendum schema, Insertion insertion) {
         this.schema = schema;
         this.insertion = insertion;
     }
@@ -39,8 +37,7 @@ public class Values
      *                If the count of column values does not match the count of
      *                names.
      */
-    public End values(String... values)
-    {
+    public End values(String... values) {
         insertion.values(values);
         return new End(schema);
     }

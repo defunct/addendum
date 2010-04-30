@@ -1,5 +1,7 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.INSERT_VALUES;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,14 +12,13 @@ import java.util.List;
  * 
  * @author Alan Gutierrez
  */
-class Insertion implements SchemaUpdate
-{
+class Insertion implements SchemaUpdate {
     /** The table name. */
     private final String table;
-    
+
     /** The column names in the insert statement. */
     private final List<String> columns;
-    
+
     /** The column values in the insert statement. */
     private final List<String> values;
 
@@ -28,22 +29,20 @@ class Insertion implements SchemaUpdate
      * @param table
      *            The table name.
      */
-    public Insertion(String table)
-    {
+    public Insertion(String table) {
         this.table = table;
         this.columns = new ArrayList<String>();
         this.values = new ArrayList<String>();
     }
-    
+
     /**
      * Set the insert statement columns.
      * 
-     * @param cols The column names in the insert statement.
+     * @param cols
+     *            The column names in the insert statement.
      */
-    public void columns(String[] cols)
-    {
-        for (String column : cols)
-        {
+    public void columns(String[] cols) {
+        for (String column : cols) {
             columns.add(column);
         }
     }
@@ -57,14 +56,11 @@ class Insertion implements SchemaUpdate
      *                If the count of column values does not match the count of
      *                names.
      */
-    public void values(String[] vals)
-    {
-        if (vals.length != columns.size())
-        {
-            throw new AddendumException(AddendumException.INSERT_VALUES);
+    public void values(String[] vals) {
+        if (vals.length != columns.size()) {
+            throw new AddendumException(INSERT_VALUES);
         }
-        for (String value : vals)
-        {
+        for (String value : vals) {
             values.add(value);
         }
     }
@@ -73,11 +69,11 @@ class Insertion implements SchemaUpdate
      * Insert the record described by this insertion statement into the database
      * at the given connection with the given database dialect.
      * 
-     * @param database
-     *            The psuedo-database.
+     * @param schema
+     *            The tracking schema.
      */
     public DatabaseUpdate execute(Schema database) {
-        return new DatabaseUpdate(0) {
+        return new DatabaseUpdate(INSERT_VALUES, table) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
                 dialect.insert(connection, table, columns, values);

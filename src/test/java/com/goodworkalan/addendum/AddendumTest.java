@@ -5,6 +5,7 @@ import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.INSERT_VALUES;
 import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
@@ -522,5 +523,26 @@ public class AddendumTest {
                 .end()
             .commit();
         addenda.amend();
+    }
+    
+    /** Test insert mismatch. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void insertMismatch() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+            addenda
+                .addendum()
+                    .create("a", "c")
+                        .add("a", int.class).end()
+                        .add("b", int.class).end()
+                        .end()
+                    .insert("a").columns("a", "b").values("1").end()
+                    .commit();
+            addenda.amend();
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), INSERT_VALUES);
+            System.out.println(e.getMessage());
+            throw e;
+        }
     }
 }

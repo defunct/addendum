@@ -118,6 +118,9 @@ extends CodedDanger {
     
     /** Unable to drop a column. */
     public final static int CANNOT_DROP_COLUMN = 505;
+    
+    /** Unable to insert values. */
+    public final static int CANNOT_INSERT = 506;
 
     /**
      * Create a Sheaf exception with the given error code.
