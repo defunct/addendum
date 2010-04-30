@@ -473,4 +473,54 @@ public class AddendumTest {
                 .commit();
         addenda.amend();
     }
+    
+    /** Test alter type. */
+    @Test
+    public void alterType() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", short.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .alter("a").type(Types.INTEGER).end()
+                    .end()
+                .commit();
+        addenda
+        .addendum()
+            .alter("a")
+                .alter("a").type(long.class).end()
+                .end()
+            .commit();
+        addenda.amend();
+    }
+
+    /** Test alter not null. */
+    @Test
+    public void alterNull() {
+        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .alter("a").notNull(1).end()
+                    .end()
+                .commit();
+        addenda
+        .addendum()
+            .alter("a")
+                .alter("a").nullable().end()
+                .end()
+            .commit();
+        addenda.amend();
+    }
 }

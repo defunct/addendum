@@ -27,8 +27,7 @@ public abstract class SpecifyProperty<Container, Element> {
      * @param column
      *            The column definition bean.
      */
-    SpecifyProperty(Container container, Column column)
-    {
+    SpecifyProperty(Container container, Column column) {
         this.container = container;
         this.column = column;
     }
@@ -89,8 +88,7 @@ public abstract class SpecifyProperty<Container, Element> {
      *            The default column value.
      * @return This property builder to continue construction.
      */
-    public Element defaultValue(Object defaultValue)
-    {
+    public Element defaultValue(Object defaultValue) {
         column.setDefaultValue(defaultValue);
         return getElement();
     }
