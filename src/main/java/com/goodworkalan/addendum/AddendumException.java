@@ -74,6 +74,15 @@ extends CodedDanger {
     /** A table name already exists in the schema. */
     public final static int TABLE_EXISTS = 406;
     
+    /** A property already exists in the entity. */
+    public final static int PROPERTY_EXISTS = 407;
+    
+    /** A column already exists in the table in the schema. */
+    public final static int COLUMN_EXISTS = 408;
+    
+    /** The primary key has already been specified for the entity. */
+    public final static int PRIMARY_KEY_EXISTS = 409;
+    
     /**
      * Create a Sheaf exception with the given error code.
      * 

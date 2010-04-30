@@ -14,8 +14,12 @@ import java.util.Map;
 public class Entity {
    /** The table name. */
     public String tableName;
-    
-    /** The primary key. */
+
+    /**
+     * The primary key.
+     * <p>
+     * FIXME The primary key is properties or columns?
+     */
     public final List<String> primaryKey = new ArrayList<String>();
     
     /** The map of property mappings. */

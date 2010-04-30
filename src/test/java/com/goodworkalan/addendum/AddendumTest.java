@@ -1,6 +1,13 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
+import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
 import static com.goodworkalan.reflective.ReflectiveException.ILLEGAL_ACCESS;
 import static org.testng.Assert.assertEquals;
 
@@ -150,5 +157,54 @@ public class AddendumTest {
                     .end()
                 .createIfAbsent()
                 .commit();
+    }
+    
+    @Test(expectedExceptions = AddendumException.class)
+    public void propertyExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("b", "b")
+                        .add("a", int.class).end()
+                        .add("a", int.class).end();
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), PROPERTY_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    @Test(expectedExceptions = AddendumException.class)
+    public void columnExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("b", "b")
+                        .add("b", java.sql.Types.INTEGER).end()
+                        .add("a", "b", int.class).end();
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), COLUMN_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    
+    @Test(expectedExceptions = AddendumException.class)
+    public void primaryKeyExists() {
+        try {
+            Addenda addenda = new Addenda(new MockConnector());
+            addenda
+                .addendum()
+                    .create("b", "b")
+                        .add("b", int.class).end()
+                        .primaryKey("b")
+                        .primaryKey("b");
+        } catch (AddendumException e) {
+            assertEquals(e.getCode(), PRIMARY_KEY_EXISTS);
+            System.out.println(e.getMessage());
+            throw e;
+        }
     }
 }

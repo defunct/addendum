@@ -1,5 +1,9 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
+
 import java.util.Arrays;
 
 /**
@@ -46,10 +50,10 @@ public class DefineEntity {
      */
     public AddProperty add(String name, String columnName, int columnType) {
         if (entity.properties.containsKey(name)) {
-            throw new AddendumException(0);
+            throw new AddendumException(PROPERTY_EXISTS, name);
         }
         if (entity.columns.containsKey(columnName)) {
-            throw new AddendumException(0);
+            throw new AddendumException(COLUMN_EXISTS, columnName);
         }
         entity.properties.put(name, columnName);
         Column column = new Column(columnName);
@@ -113,8 +117,9 @@ public class DefineEntity {
      */
     public DefineEntity primaryKey(String... columns) {
         if (!entity.primaryKey.isEmpty()) {
-            throw new AddendumException(0);
+            throw new AddendumException(PRIMARY_KEY_EXISTS);
         }
+        // FIXME Assert that properties exist?
         entity.primaryKey.addAll(Arrays.asList(columns));
         return this;
     }
