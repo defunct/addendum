@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import org.testng.annotations.Factory;
+import org.testng.annotations.Test;
 
 public class Comment {
     /** The id. Test ignoring a pointless lob. */
@@ -22,9 +26,13 @@ public class Comment {
     
     public int body;
     
+    @OneToOne(mappedBy = "post")
+    public Archive archive;
+    
     private String whatWasSaid;
     
     @Id
+    @Factory
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;

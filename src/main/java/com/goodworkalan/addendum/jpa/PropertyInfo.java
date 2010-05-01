@@ -250,7 +250,7 @@ class PropertyInfo {
         }
         String columnName = name;
         Integer length = null, precision = null, scale = null;
-        boolean nullable = true, joinColumnSeen = false, id = false, lob = false;
+        boolean nullable = true, id = false, lob = false;
         GenerationType generationType = null;
         for (int i = 0; i < annotations.length && annotations[i] != null; i++)
         {
@@ -282,48 +282,26 @@ class PropertyInfo {
                     return null;
                 } else if (annotation.annotationType().equals(OneToOne.class)) {
                     OneToOne oneToOne = (OneToOne) annotation;
-                    if (!oneToOne.mappedBy().equals(""))
-                    {
+                    if (!oneToOne.mappedBy().equals("")) {
                         return null;
                     }
-                    if (!joinColumnSeen)
-                    {
-                        Class<?> referrantType = type;
-                        if (oneToOne.targetEntity() != void.class)
-                        {
-                            referrantType = oneToOne.targetEntity();
-                        }
-                        columnName = name + "_id";
-                        type = getId(referrantType);
-                    }
-                    if (!oneToOne.optional())
-                    {
-                        nullable = false;
-                    }
+                    Class<?> referrantType = getReferrantType(type, oneToOne.targetEntity());
+                    columnName = name + "_id";
+                    type = getId(referrantType);
+                    nullable = isOptional(oneToOne.optional(), nullable);
+                    
                 } else if (annotation.annotationType().equals(ManyToOne.class)) {
                     ManyToOne manyToOne = (ManyToOne) annotation;
-                    if (!joinColumnSeen)
-                    {
-                        Class<?> referrantType = type;
-                        if (manyToOne.targetEntity() != void.class)
-                        {
-                            referrantType = manyToOne.targetEntity();
-                        }
-                        columnName = name + "_id";
-                        type = getId(referrantType);
-                    }
-                    if (!manyToOne.optional())
-                    {
-                        nullable = false;
-                    }
+                    Class<?> referrantType = getReferrantType(type, manyToOne.targetEntity());
+                    columnName = name + "_id";
+                    type = getId(referrantType);
+                    nullable = isOptional(manyToOne.optional(), nullable);
                 } else if (annotation.annotationType().equals(JoinColumn.class)) {
                     JoinColumn joinColumn = (JoinColumn) annotation;
-                    if (!joinColumn.name().equals(""))
-                    {
+                    if (!joinColumn.name().equals("")) {
                         columnName = joinColumn.name();
                     }
-                    if (!joinColumn.nullable())
-                    {
+                    if (!joinColumn.nullable()) {
                         nullable = false;
                     }
                 }
@@ -335,5 +313,20 @@ class PropertyInfo {
             }
         }
         return new PropertyInfo(name, columnName, type, id, length, precision, scale, nullable, generationType);
+    }
+
+    private static Class<?> getReferrantType(Class<?> type, Class<?> targetEntity) {
+        Class<?> referrantType = type;
+        if (targetEntity != void.class) {
+            referrantType = targetEntity;
+        }
+        return referrantType;
+    }
+    
+    private static boolean isOptional(boolean optional, boolean nullable) {
+        if (!optional) {
+            nullable = false;
+        }
+        return nullable;
     }
 }
