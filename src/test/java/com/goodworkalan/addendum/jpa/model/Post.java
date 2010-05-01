@@ -15,6 +15,9 @@ import javax.persistence.Transient;
 
 @Entity
 public class Post {
+    /** Test ignoring static fields. */
+    public static int STATIC = 1;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;

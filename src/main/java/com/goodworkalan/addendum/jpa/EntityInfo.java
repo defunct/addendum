@@ -5,6 +5,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -104,7 +105,9 @@ class EntityInfo {
     private static void addFields(Class<?> entityClass, Map<String, Field> fields) {
         if (!entityClass.equals(Object.class)) {
             for (Field field : entityClass.getFields()) {
-                fields.put(field.getName(), field);
+                if (!Modifier.isStatic(field.getModifiers())) {
+                    fields.put(field.getName(), field);
+                }
             }
             addFields(entityClass.getSuperclass(), fields);
         }
@@ -159,8 +162,7 @@ class EntityInfo {
         BeanInfo beanInfo = introspect(entityClass, Object.class);
         Map<String, PropertyInfo> properties = new LinkedHashMap<String, PropertyInfo>();
         Map<String, PropertyDescriptor> descriptors = new LinkedHashMap<String, PropertyDescriptor>();
-        for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors())
-        {
+        for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors()) {
             descriptors.put(desc.getName(), desc);
         }
         Map<String, Field> fields = new LinkedHashMap<String, Field>();
