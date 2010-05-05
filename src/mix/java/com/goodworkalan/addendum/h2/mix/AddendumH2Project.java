@@ -9,11 +9,11 @@ public class AddendumH2Project extends ProjectModule {
     public void build(Builder builder) {
         builder
             .cookbook(JavaProject.class)
-                .produces("com.goodworkalan/addendum-h2/0.1")
+                .produces("com.github.bigeasy.addendum/addendum-h2/0.1")
                 .main()
                     .depends()
                         .include("org.slf4j/slf4j-api/1.4.2")
-                        .include("com.goodworkalan/addendum/0.7")
+                        .include("com.github.bigeasy.addendum/addendum/0.7")
                         .end()
                     .end()
                 .test()
