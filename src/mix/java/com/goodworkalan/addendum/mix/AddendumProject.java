@@ -9,7 +9,7 @@ public class AddendumProject extends ProjectModule {
     public void build(Builder builder) {
         builder
             .cookbook(JavaProject.class)
-                .produces("com.goodworkalan/addendum/0.7")
+                .produces("com.github.bigeasy.addendum/addendum/0.7")
                 .main()
                     .depends()
                         .include("com.github.bigeasy.danger/danger/0.+1")
