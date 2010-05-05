@@ -8,7 +8,7 @@ import com.goodworkalan.danger.CodedDanger;
 
 /**
  * A general purpose exception that indicates that an error occurred in one 
- * of the classes in the sheaf package.
+ * of the classes in the addendum package.
  *   
  * @author Alan Gutierrez
  */

@@ -1,6 +1,5 @@
 package com.goodworkalan.addendum.mix;
 
-import com.goodworkalan.go.go.Artifact;
 import com.goodworkalan.mix.ProjectModule;
 import com.goodworkalan.mix.builder.Builder;
 import com.goodworkalan.mix.builder.JavaProject;
@@ -10,23 +9,23 @@ public class AddendumProject extends ProjectModule {
     public void build(Builder builder) {
         builder
             .cookbook(JavaProject.class)
-                .produces(new Artifact("com.goodworkalan/addendum/0.7"))
+                .produces("com.goodworkalan/addendum/0.7")
                 .main()
                     .depends()
-                        .artifact(new Artifact("com.github.bigeasy.danger/danger/0.1"))
-                        .artifact(new Artifact("com.goodworkalan/furnish/0.1"))
-                        .artifact(new Artifact("com.github.bigeasy.class-boxer/class-boxer/0.1"))
-                        .artifact(new Artifact("com.goodworkalan/notice-event/0.1.2"))
-                        .artifact(new Artifact("org.slf4j/slf4j-api/1.4.2"))
+                        .include("com.github.bigeasy.danger/danger/0.+1")
+                        .include("com.github.bigeasy.furnish/furnish/0.+1")
+                        .include("com.github.bigeasy.class-boxer/class-boxer/0.+1")
+                        .include("com.github.bigeasy.notice/notice-event/0.+1")
+                        .include("org.slf4j/slf4j-api/1.4.2")
                         .end()
                     .end()
                 .test()
                     .depends()
-                        .artifact(new Artifact("com.h2database/h2/1.1.115"))
-                        .artifact(new Artifact("org.slf4j/slf4j-log4j12/1.4.2"))
-                        .artifact(new Artifact("log4j/log4j/1.2.14"))
-                        .artifact(new Artifact("org.testng/testng/5.10/jdk15"))
-                        .artifact(new Artifact("org.mockito/mockito-core/1.6"))
+                        .include("com.h2database/h2/1.1.115")
+                        .include("org.slf4j/slf4j-log4j12/1.4.2")
+                        .include("log4j/log4j/1.2.14")
+                        .include("org.testng/testng-jdk15/5.10")
+                        .include("org.mockito/mockito-core/1.6")
                         .end()
                     .end()
                 .end()
