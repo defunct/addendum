@@ -9,9 +9,9 @@ import java.sql.Types;
 
 import com.goodworkalan.addendum.dialect.AbstractDialect;
 import com.goodworkalan.addendum.dialect.Column;
-import com.goodworkalan.notice.event.Entry;
-import com.goodworkalan.notice.event.Logger;
-import com.goodworkalan.notice.event.LoggerFactory;
+import com.goodworkalan.notice.Entry;
+import com.goodworkalan.notice.NoticeFactory;
+import com.goodworkalan.notice.NoticeFactory;
 
 /**
  * Perform the updates defined by the domain-specific language used by
@@ -20,7 +20,7 @@ import com.goodworkalan.notice.event.LoggerFactory;
  * @author Alan Gutierrez
  */
 public class MySQLDialect extends AbstractDialect {
-    private final Logger logger = LoggerFactory.getLogger(MySQLDialect.class);
+    private final NoticeFactory logger = LoggerFactory.getLogger(MySQLDialect.class);
 
     /**
      * Create a new MySQL dialect.
@@ -43,7 +43,7 @@ public class MySQLDialect extends AbstractDialect {
 
     
     @Override
-    protected Logger getLogger() {
+    protected NoticeFactory getLogger() {
         return logger;
     }
 
