@@ -16,8 +16,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.goodworkalan.addendum.AddendumException;
-import com.goodworkalan.notice.event.Entry;
-import com.goodworkalan.notice.event.Logger;
+import com.goodworkalan.notice.Notice;
+import com.goodworkalan.notice.NoticeFactory;
 
 /**
  * An abstract dialect with default implementations of create table and insert
@@ -49,7 +49,7 @@ public abstract class AbstractDialect implements Dialect {
      * 
      * @return The logger.
      */
-    protected abstract Logger getLogger();
+    protected abstract NoticeFactory getNoticeFactory();
 
     /**
      * Maps the given SQL type to the given SQL type name in the dialect.
@@ -121,7 +121,7 @@ public abstract class AbstractDialect implements Dialect {
      *            The list of primary key fields.
      */
     public void createTable(Connection connection, String tableName, Collection<Column> columns, List<String> primaryKey) throws SQLException {
-        Entry info = getLogger().info("create");
+        Notice info = getNoticeFactory().info("create");
         try {
             info.put("columns", columns);
        
@@ -271,7 +271,7 @@ public abstract class AbstractDialect implements Dialect {
      *             For any reason, any reason at all.
      */
     public void addColumn(Connection connection, String tableName, Column column) throws SQLException {
-        Entry info = getLogger().info("add.column");
+        Notice info = getNoticeFactory().info("add.column");
         
         info.put("tableName", tableName).put("column", column);
         
@@ -357,7 +357,7 @@ public abstract class AbstractDialect implements Dialect {
      *             For any SQL error.
      */
     public void insert(Connection connection, String table, List<String> columns, List<String> values) throws SQLException {
-        Entry info = getLogger().info("insert");
+        Notice info = getNoticeFactory().info("insert");
         try {
             info.put("table", table).put("columns", columns).put("values", values);
             

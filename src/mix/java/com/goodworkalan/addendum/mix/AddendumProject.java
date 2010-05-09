@@ -15,7 +15,7 @@ public class AddendumProject extends ProjectModule {
                         .include("com.github.bigeasy.danger/danger/0.+1")
                         .include("com.github.bigeasy.furnish/furnish/0.+1")
                         .include("com.github.bigeasy.class-boxer/class-boxer/0.+1")
-                        .include("com.github.bigeasy.notice/notice-event/0.+1")
+                        .include("com.github.bigeasy.notice/notice/0.+1")
                         .include("org.slf4j/slf4j-api/1.4.2")
                         .end()
                     .end()

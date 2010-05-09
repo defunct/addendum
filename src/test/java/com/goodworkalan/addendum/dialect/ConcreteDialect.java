@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import com.goodworkalan.addendum.dialect.AbstractDialect;
-import com.goodworkalan.addendum.dialect.Column;
-import com.goodworkalan.notice.event.Logger;
-import com.goodworkalan.notice.event.LoggerFactory;
+import org.slf4j.LoggerFactory;
+
+import com.goodworkalan.notice.NoticeFactory;
 
 public class ConcreteDialect extends AbstractDialect {
-    private final static Logger logger = LoggerFactory.getLogger(ConcreteDialect.class);
+    private final static NoticeFactory logger = new NoticeFactory(LoggerFactory.getLogger(ConcreteDialect.class));
 
     public ConcreteDialect() {
         super();
@@ -43,7 +42,7 @@ public class ConcreteDialect extends AbstractDialect {
     }
 
     @Override
-    protected Logger getLogger() {
+    protected NoticeFactory getNoticeFactory() {
         return logger;
     }
 

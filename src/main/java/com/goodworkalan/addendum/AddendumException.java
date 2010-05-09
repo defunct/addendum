@@ -130,6 +130,8 @@ extends CodedDanger {
      * 
      * @param code
      *            The error code.
+     * @param arguments
+     *            The positioned format arguments.
      */
     public AddendumException(int code, Object...arguments) {
         super(BUNDLES, code, null, arguments);
@@ -143,6 +145,8 @@ extends CodedDanger {
      *            The error code.
      * @param cause
      *            The cause exception.
+     * @param arguments
+     *            The positioned format arguments.
      */
     public AddendumException(int code, Throwable cause, Object... arguments) {
         super(BUNDLES, code, cause, arguments);
