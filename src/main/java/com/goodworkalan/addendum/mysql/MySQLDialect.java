@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import org.slf4j.LoggerFactory;
+
 import com.goodworkalan.addendum.dialect.AbstractDialect;
 import com.goodworkalan.addendum.dialect.Column;
-import com.goodworkalan.notice.Entry;
-import com.goodworkalan.notice.NoticeFactory;
+import com.goodworkalan.notice.Notice;
 import com.goodworkalan.notice.NoticeFactory;
 
 /**
@@ -20,7 +21,7 @@ import com.goodworkalan.notice.NoticeFactory;
  * @author Alan Gutierrez
  */
 public class MySQLDialect extends AbstractDialect {
-    private final NoticeFactory logger = LoggerFactory.getLogger(MySQLDialect.class);
+    private final NoticeFactory notices = new NoticeFactory(LoggerFactory.getLogger(MySQLDialect.class));
 
     /**
      * Create a new MySQL dialect.
@@ -43,8 +44,8 @@ public class MySQLDialect extends AbstractDialect {
 
     
     @Override
-    protected NoticeFactory getLogger() {
-        return logger;
+    protected NoticeFactory getNoticeFactory() {
+        return notices;
     }
 
     /**
@@ -94,7 +95,7 @@ public class MySQLDialect extends AbstractDialect {
     }
     
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException {
-        Entry info = logger.info("alter.column");
+        Notice info = getNoticeFactory().info("alter.column");
         
         info.put("tableName", tableName).put("oldName", oldName).put("column", column);
         
@@ -127,7 +128,7 @@ public class MySQLDialect extends AbstractDialect {
      *             For any reason, any reason at all.
      */
     public void renameTable(Connection connection, String oldName, String newName) throws SQLException {
-        Entry info = getLogger().info("rename");
+        Notice info = getNoticeFactory().info("rename");
 
         info.put("oldName", oldName).put("newName", newName);
 
