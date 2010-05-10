@@ -13,6 +13,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/addendum"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/furnish"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/notice"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/notice-event"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
