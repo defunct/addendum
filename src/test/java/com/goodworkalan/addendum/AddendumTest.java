@@ -4,7 +4,6 @@ import static com.goodworkalan.addendum.AddendaTest.exceptional;
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.INSERT_VALUES;
@@ -12,6 +11,7 @@ import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
+import static org.testng.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,8 +21,6 @@ import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.connector.MockConnector;
 import com.goodworkalan.addendum.dialect.Dialect;
-import com.goodworkalan.reflective.ReflectiveException;
-import com.goodworkalan.reflective.ReflectiveFactory;
 /**
  * Unit tests for the {@link Addendum} class.
  *
@@ -44,27 +42,6 @@ public class AddendumTest {
             }
         }, ADDENDUM_ENTITY_EXISTS, "An entity definition by the name of [a] already exists in this addendum.");
     }
-
-    /** Test duplicate definition of an entity name. */
-    @Test(expectedExceptions = AddendumException.class)
-    public void badNewDefinitionInstance() {
-        exceptional(new Runnable() {
-            public void run() {
-                Addendum.newInstance(new ReflectiveFactory() {
-                    @Override
-                    public <T> T newInstance(Class<T> type)
-                    throws ReflectiveException {
-                        try {
-                            throw new IllegalAccessException();
-                        } catch (IllegalAccessException e) {
-                            throw new ReflectiveException(ReflectiveException.ILLEGAL_ACCESS, e);
-                        }
-                    }
-                }, BlogDefinition.class);
-            }
-        }, CREATE_DEFINITION, "Unable to create an instance of type [com.goodworkalan.addendum.BlogDefinition].");
-    }
-
 
     /** Test duplicate definition of an entity name. */
     @Test(expectedExceptions = AddendumException.class)
@@ -254,6 +231,25 @@ public class AddendumTest {
                     .end()
                 .rename("a").to("b")
                 .commit();
+        addenda.amend();
+        assertEquals(addenda.schema.aliases.get("b"), "c");
+    }
+    
+    /** Test entity rename in alter. */
+    @Test
+    public void renameInAlter() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("a")
+                    .add("a", int.class).end()
+                    .end()
+                .alter("a")
+                    .name("b")
+                    .end()
+                .commit();
+        addenda.amend();
+        assertEquals(addenda.schema.aliases.get("b"), "a");
     }
     
     /** Test rename. */
@@ -268,6 +264,7 @@ public class AddendumTest {
                 .rename("a").to("b")
                 .commit();
         addenda.amend();
+        assertEquals(addenda.schema.aliases.get("b"), "b");
     }
     
     /** Test entity rename to existing entity name. */
@@ -322,6 +319,26 @@ public class AddendumTest {
         addenda.amend();
     }
     
+    /** Test rename property in alter. */
+    @Test
+    public void renamePropertyInAlter() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .alter("a").name("b").end()
+                    .end()
+                .commit();
+        addenda.amend();
+        assertEquals(addenda.schema.entities.get("a").properties.get("b"), "a");
+    }
+    
     /** Test rename property without column rename. */
     @Test
     public void renamePropertyWithoutColumnRename() {
@@ -339,6 +356,7 @@ public class AddendumTest {
                     .end()
                 .commit();
         addenda.amend();
+        assertEquals(addenda.schema.entities.get("a").properties.get("b"), "c");
     }
     
     /** Test entity add property with existing property name. */

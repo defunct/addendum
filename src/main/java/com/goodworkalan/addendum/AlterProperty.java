@@ -13,11 +13,11 @@ extends ExistingProperty<AlterEntity, AlterProperty> {
     /** The database migration. */
     private final Patch patch;
    
-    /** The property name. */
-    private final String propertyName;
+    /** The entity table. */
+    private final Entity entity;
     
-    /** The entity table name. */
-    private final String tableName;
+    /** The new column name, if it is renamed. */
+    private String newColumnName;
 
     /**
      * Create an alter column element that alters the given property and the
@@ -29,18 +29,18 @@ extends ExistingProperty<AlterEntity, AlterProperty> {
      *            The parent alter table builder.
      * @param patch
      *            The database migration.
-     * @param table
+     * @param tableName
      *            The entity table name.
      * @param propertyName
      *            The property name.
      * @param column
      *            The column definition.
      */
-    public AlterProperty(AlterEntity alterTable, Patch patch, String tableName, String propertyName, Column column) {
+    public AlterProperty(AlterEntity alterTable, Patch patch, Entity entity, Column column) {
         super(alterTable, column);
-        this.tableName = tableName;
-        this.propertyName = propertyName;
         this.patch = patch;
+        this.entity = entity;
+        this.newColumnName = column.getName();
     }
 
     /**
@@ -51,7 +51,19 @@ extends ExistingProperty<AlterEntity, AlterProperty> {
      * @return This alter column builder to continue construction.
      */
     public AlterProperty column(String name) {
-        column.setName(name);
+        newColumnName = name;
+        return this;
+    }
+
+    /**
+     * Rename the property independently of the underlying column name.
+     * 
+     * @param name
+     *            The new property name.
+     * @return This alter column builder to continue construction.
+     */
+    public AlterProperty name(String name) {
+        patch.add(new PropertyRename(entity.tableName, entity.getPropertyName(column.getName()), name));
         return this;
     }
 
@@ -71,6 +83,6 @@ extends ExistingProperty<AlterEntity, AlterProperty> {
      */
     @Override
     protected void ending() {
-        patch.add(new ColumnAlteration(tableName, propertyName, column));
+        patch.add(new ColumnAlteration(entity.tableName, column, newColumnName));
     }
 }

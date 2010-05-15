@@ -50,6 +50,21 @@ public class AlterEntity {
     }
 
     /**
+     * Rename the entity independently of the table. This differs from the
+     * {@link Addendum#rename(String) Addendum.rename} method in that it
+     * <em>will not</em> also rename the underlying table if the underlying
+     * table has the name name.
+     * 
+     * @param name
+     *            The new entity name.
+     * @return This alter entity builder to continue construction.
+     */
+    public AlterEntity name(String name) {
+        patch.add(new EntityRename(patch.schema.getEntityName(entity.tableName), name));
+        return this;
+    }
+
+    /**
      * Rename the given property. Returns a property rename builder to specify
      * the new name.
      * 
@@ -58,8 +73,7 @@ public class AlterEntity {
      * @return A property rename builder.
      */
     public RenameProperty rename(String from) {
-        Column column = new Column(entity.getColumn(from));
-        return new RenameProperty(this, patch, entity.tableName, column, from);
+        return new RenameProperty(this, patch, entity.tableName, entity.getColumn(from), from);
     }
 
     /**
@@ -138,8 +152,7 @@ public class AlterEntity {
      * @return An alter column language element to define the column changes.
      */
     public AlterProperty alter(String property) {
-        Column column = new Column(entity.getColumn(property));
-        return new AlterProperty(this, patch, entity.tableName, property, column);
+        return new AlterProperty(this, patch, entity, entity.getColumn(property));
     }
 
     /**

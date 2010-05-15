@@ -1,11 +1,16 @@
 package com.goodworkalan.addendum;
 
-public class ExampleMigration extends Migration {
+public class ExampleMigration  {
+    private final Addenda addenda;
+
     public ExampleMigration(Addenda addenda) {
-        super(addenda);
+        this.addenda = addenda;
+    }
+    
+    public Addendum addendum() {
+        return addenda.addendum();
     }
 
-    @Override
     public void create() {
         addendum()
             .create("Employee")
@@ -19,7 +24,7 @@ public class ExampleMigration extends Migration {
                 .end()
             .commit();
         addendum()
-            .apply(BlogDefinition.class)
+            .apply(new BlogDefinition())
             .createIfAbsent()
             .commit();
         addendum()

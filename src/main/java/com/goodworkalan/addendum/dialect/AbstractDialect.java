@@ -332,8 +332,8 @@ public abstract class AbstractDialect implements Dialect {
      * 
      * @param connection
      *            The JDBC connection.
-     * @param table
-     *            The table definition.
+     * @param tableName
+     *            The table name.
      * @throws SQLException
      *             For any reason, any reason at all.
      */

@@ -37,4 +37,12 @@ public class EntityTest {
             throw e;
         }
     }
+    
+    /** Test missing column name. */
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void missingColumnName() {
+        Entity entity = new Entity("a");
+        entity.properties.put("a", "a");
+        entity.getPropertyName("b");
+    }
 }

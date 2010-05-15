@@ -53,9 +53,6 @@ extends CodedDanger {
     /** Insert statement DSL values count does not match column count. */
     public final static int INSERT_VALUES = 401;
     
-    /** Unable to create an instance of a {@link Definition}. */
-    public final static int CREATE_DEFINITION = 402;
-    
     /** An entity name already exists in the addendum. */
     public final static int ADDENDUM_ENTITY_EXISTS = 403;
     

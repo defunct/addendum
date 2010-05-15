@@ -51,7 +51,7 @@ class PropertyRename implements SchemaUpdate {
         if (entity.properties.containsKey(to)) {
             throw new AddendumException(PROPERTY_EXISTS, to);
         }
-        schema.aliases.put(to, schema.aliases.remove(from));
+        entity.properties.put(to, entity.properties.remove(from));
         return new NullDatabaseUpdate();
     }
 }

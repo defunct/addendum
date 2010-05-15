@@ -63,4 +63,23 @@ class Entity {
         }
         return column;
     }
+
+    /**
+     * Get the property name associated with the given column name or throw an
+     * illegal argument exception of the column name cannot be found.
+     * 
+     * @param columnName
+     *            The column name.
+     * @return The property name.
+     * @exception IllegalArgumentException
+     *                If the argument cannot be found.
+     */
+    public String getPropertyName(String columnName) {
+        for (Map.Entry<String, String> entry : properties.entrySet()) {
+            if (entry.getValue().equals(columnName)) {
+                return entry.getKey();
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }

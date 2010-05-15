@@ -2,15 +2,11 @@ package com.goodworkalan.addendum;
 
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.CREATE_DEFINITION;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
 
 import java.util.Map;
-
-import com.goodworkalan.reflective.ReflectiveException;
-import com.goodworkalan.reflective.ReflectiveFactory;
 
 /**
  * The root builder for an individual migration definition.
@@ -33,37 +29,16 @@ public class Addendum {
     }
 
     /**
-     * Create a new instance of a definition of the given type using the given
-     * reflective factory.
-     * <p>
-     * This method wraps a reflective exception in an addendum exception and is
-     * package visible for testing.
-     * 
-     * @param reflective
-     *            The reflective factory.
-     * @param definition
-     *            The definition type.
-     * @return A new instance of the definition type.
-     */
-    static Definition newInstance(ReflectiveFactory reflective, Class<? extends Definition> definition) {
-        try {
-            return reflective.newInstance(definition);
-        } catch (ReflectiveException e) {
-            throw new AddendumException(CREATE_DEFINITION, e, definition.getCanonicalName());
-        }
-    }
-
-    /**
-     * Apply the an instance of the given definition class against this
-     * addendum. Definition classes are used to capture entity definitions
-     * generated from reflecting on an object-relational mapping.
+     * Apply the given definition class against this addendum. Definition
+     * classes are used to capture entity definitions generated from reflecting
+     * on an object-relational mapping.
      * 
      * @param definition
-     *            A definition class.
+     *            A definition.
      * @return This addendum builder to continue construction.
      */
-    public Addendum apply(Class<? extends Definition> definition) {
-        newInstance(new ReflectiveFactory(), definition).define(this);
+    public Addendum apply(Definition definition) {
+        definition.define(this);
         return this;
     }
 
@@ -187,7 +162,7 @@ public class Addendum {
         }
         return new RenameEntity(this, patch, from);
     }
-
+    
     /**
      * Alter the entity with the given name. This method returns an entity
      * alteration builder that can be used to change the underlying table, alter

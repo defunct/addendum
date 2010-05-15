@@ -13,13 +13,12 @@ import com.goodworkalan.addendum.dialect.Dialect;
  *
  * @author Alan Gutierrez
  */
-class ColumnAlteration implements SchemaUpdate
-{
+class ColumnAlteration implements SchemaUpdate {
     /** The entity table name. */
     private final String tableName;
     
-    /** The existing column name. */
-    private final String propertyName;
+    /** The new column name. */
+    private final String newColumnName;
     
     /** The column definition. */
     private final Column column;
@@ -30,15 +29,15 @@ class ColumnAlteration implements SchemaUpdate
      * 
      * @param tableName
      *            The entity table name.
-     * @param oldProperty
-     *            The existing column name.
      * @param column
      *            The column definition.
+     * @param newColumnName
+     *            The new column name.
      */
-    public ColumnAlteration(String tableName, String propertyName, Column column) {
+    public ColumnAlteration(String tableName, Column column, String newColumnName) {
         this.tableName = tableName;
-        this.propertyName = propertyName;
         this.column = column;
+        this.newColumnName = newColumnName;
     }
 
     /**
@@ -52,20 +51,23 @@ class ColumnAlteration implements SchemaUpdate
      */
     public DatabaseUpdate execute(Schema schema) {
         Entity entity = schema.entities.get(tableName);
-        final String oldColumnName = entity.properties.get(propertyName);
-        if (!column.getName().equals(oldColumnName)) {
+        final String oldColumnName = column.getName(); 
+        if (!oldColumnName.equals(newColumnName)) {
+            String propertyName = entity.getPropertyName(oldColumnName);
             entity.columns.remove(oldColumnName);
-            entity.properties.put(propertyName, column.getName());
-            if (entity.columns.containsKey(column.getName())) {
+            column.setName(newColumnName);
+            entity.properties.put(propertyName, newColumnName);
+            if (entity.columns.containsKey(newColumnName)) {
                 throw new AddendumException(COLUMN_EXISTS, column.getName());
             }
+            entity.columns.put(newColumnName, column);
         }
-        entity.columns.put(column.getName(), column);
         final String tableName = entity.tableName;
+        final Column frozenColumn = new Column(column);
         return new DatabaseUpdate(CANNOT_ALTER_COLUMN, tableName, oldColumnName) {
             public void execute(Connection connection, Dialect dialect)
             throws SQLException {
-                dialect.alterColumn(connection, tableName, oldColumnName, column);
+                dialect.alterColumn(connection, tableName, oldColumnName, frozenColumn);
             }
         };
     }

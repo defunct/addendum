@@ -40,8 +40,8 @@ public class RenameProperty {
      * @param from
      *            The current property name.
      */
-    public RenameProperty(AlterEntity alterTable, Patch patch, String tableName, Column column, String from) {
-        this.alterEntity = alterTable;
+    public RenameProperty(AlterEntity alterEntity, Patch patch, String tableName, Column column, String from) {
+        this.alterEntity = alterEntity;
         this.from = from;
         this.column = column;
         this.patch = patch;
@@ -58,9 +58,8 @@ public class RenameProperty {
     public AlterEntity to(String to) {
         patch.add(new PropertyRename(tableName, from, to));
         Entity entity = patch.schema.entities.get(tableName);
-        if (entity.getColumn(from).getName().equals(from)) {
-            column.setName(to);
-            patch.add(new ColumnAlteration(tableName, from, column));
+        if (entity.getColumn(to).getName().equals(from)) {
+            patch.add(new ColumnAlteration(tableName, column, to));
         }
         return alterEntity;
     }

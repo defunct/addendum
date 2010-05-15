@@ -41,7 +41,7 @@ public class RenameEntity {
      * @return The parent addendum builder to continue construction.
      */
     public Addendum to(String to) {
-        patch.add(new AliasRename(from, to));
+        patch.add(new EntityRename(from, to));
         Schema schema = patch.schema;
         Entity entity = schema.entities.get(schema.aliases.get(to));
         if (entity.tableName.equals(from)) {

@@ -7,7 +7,7 @@ import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
  *
  * @author Alan Gutierrez
  */
-class AliasRename implements SchemaUpdate {
+class EntityRename implements SchemaUpdate {
     /** The existing alias name. */
     private final String from;
     
@@ -23,7 +23,7 @@ class AliasRename implements SchemaUpdate {
      * @param to
      *            The new alias name.
      */
-    public AliasRename(String from, String to) {
+    public EntityRename(String from, String to) {
         this.from = from;
         this.to = to;
     }

@@ -25,7 +25,7 @@ public class Addenda {
     private final int skip;
 
     /** The tracking schema. */
-    private final Schema schema = new Schema();
+    final Schema schema = new Schema();
 
     /** A list of changes to apply to the database. */
     private final List<List<DatabaseUpdate>> scripts = new ArrayList<List<DatabaseUpdate>>();
