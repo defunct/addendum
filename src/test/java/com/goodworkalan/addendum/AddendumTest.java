@@ -1,5 +1,6 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendaTest.exceptional;
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
@@ -11,8 +12,6 @@ import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
-import static com.goodworkalan.reflective.ReflectiveException.ILLEGAL_ACCESS;
-import static org.testng.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,110 +19,105 @@ import java.sql.Types;
 
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.connector.ConnectorKey;
+import com.goodworkalan.addendum.connector.ConnectorServer;
 import com.goodworkalan.addendum.connector.MockConnector;
 import com.goodworkalan.addendum.dialect.Dialect;
-import com.goodworkalan.addendum.dialect.MockDialect;
 import com.goodworkalan.reflective.ReflectiveException;
 import com.goodworkalan.reflective.ReflectiveFactory;
-
 /**
  * Unit tests for the {@link Addendum} class.
  *
  * @author Alan Gutierrez
  */
 public class AddendumTest {
-    /** Test the failure of the creation of a {@link Definition}. */
-    @Test(expectedExceptions = AddendumException.class)
-    public void newDefinitionInstnace() {
-        ReflectiveFactory reflective = new ReflectiveFactory() {
-            @Override
-            public <T> T newInstance(Class<T> type) throws ReflectiveException {
-                try {
-                    throw new IllegalAccessException();
-                } catch (IllegalAccessException e) {
-                    throw new ReflectiveException(ILLEGAL_ACCESS, e);
-                }
-            }
-        };
-        try {
-            Addendum.newInstance(reflective, BlogDefinition.class);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), CREATE_DEFINITION);
-            System.out.println(e.getMessage());
-            throw e;
-        }
-    }
-    
     /** Test duplicate definition of an entity name. */
     @Test(expectedExceptions = AddendumException.class)
     public void addendumEntityExists() {
-        Addenda addenda = new Addenda(new MockConnector());
-        try {
-            addenda
-                .addendum()
-                    .define("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .define("a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), ADDENDUM_ENTITY_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .define("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .define("a");
+            }
+        }, ADDENDUM_ENTITY_EXISTS, "An entity definition by the name of [a] already exists in this addendum.");
     }
 
     /** Test duplicate definition of an entity name. */
     @Test(expectedExceptions = AddendumException.class)
+    public void badNewDefinitionInstance() {
+        exceptional(new Runnable() {
+            public void run() {
+                Addendum.newInstance(new ReflectiveFactory() {
+                    @Override
+                    public <T> T newInstance(Class<T> type)
+                    throws ReflectiveException {
+                        try {
+                            throw new IllegalAccessException();
+                        } catch (IllegalAccessException e) {
+                            throw new ReflectiveException(ReflectiveException.ILLEGAL_ACCESS, e);
+                        }
+                    }
+                }, BlogDefinition.class);
+            }
+        }, CREATE_DEFINITION, "Unable to create an instance of type [com.goodworkalan.addendum.BlogDefinition].");
+    }
+
+
+    /** Test duplicate definition of an entity name. */
+    @Test(expectedExceptions = AddendumException.class)
     public void addendumTableExists() {
-        Addenda addenda = new Addenda(new MockConnector());
-        try {
-            addenda
-                .addendum()
-                    .define("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .define("b", "a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), ADDENDUM_TABLE_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .define("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .define("b", "a");
+            }
+        }, ADDENDUM_TABLE_EXISTS, "An entity definition with a table by the name of [a] already exists in this addendum.");
     }
 
     /** Test duplicate definition of an entity name. */
     @Test(expectedExceptions = AddendumException.class)
     public void entityExists() {
-        Addenda addenda = new Addenda(new MockConnector());
-        try {
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .create("a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), ENTITY_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .create("a");
+            }
+        }, ENTITY_EXISTS, "An entity definition by the name of [a] already exists in the schema.");
     }
 
     /** Test duplicate definition of an entity name. */
     @Test(expectedExceptions = AddendumException.class)
     public void tableExists() {
-        Addenda addenda = new Addenda(new MockConnector());
-        try {
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .create("b", "a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), TABLE_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .create("b", "a");
+            }
+        },  TABLE_EXISTS, "An entity definition with a table by the name of [a] already exists in the schema.");
     }
     
     /**
@@ -132,23 +126,22 @@ public class AddendumTest {
      */
     @Test(expectedExceptions = AddendumException.class)
     public void createIfAbsentTableExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("b", "b")
-                        .add("a", int.class).end()
-                        .end()
-                    .define("a", "b")
-                        .add("a", int.class).end()
-                        .end()
-                    .createIfAbsent()
-                    .commit();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), TABLE_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("b", "b")
+                            .add("a", int.class).end()
+                            .end()
+                        .define("a", "b")
+                            .add("a", int.class).end()
+                            .end()
+                        .createIfAbsent()
+                        .commit();
+            }
+        },  TABLE_EXISTS, "An entity definition with a table by the name of [b] already exists in the schema.");
     }
     
     /**
@@ -157,7 +150,8 @@ public class AddendumTest {
      */
     @Test
     public void createIfAbsent() {
-        Addenda addenda = new Addenda(new MockConnector());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("b", "b")
@@ -179,59 +173,57 @@ public class AddendumTest {
     /** Test specifying a property that already exists. */
     @Test(expectedExceptions = AddendumException.class)
     public void propertyExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("b", "b")
-                        .add("a", int.class).end()
-                        .add("a", int.class).end();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), PROPERTY_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("b", "b")
+                            .add("a", int.class).end()
+                            .add("a", int.class).end();
+            }
+        },  PROPERTY_EXISTS, "A property by the name of [a] already exists in the entity.");
     }
     
     /** Test specifying a column that already exists. */
     @Test(expectedExceptions = AddendumException.class)
     public void columnExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("b", "b")
-                        .add("b", java.sql.Types.INTEGER).end()
-                        .add("a", "b", int.class).end();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), COLUMN_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("b", "b")
+                            .add("b", java.sql.Types.INTEGER).end()
+                            .add("a", "b", int.class).end();
+            }
+        }, COLUMN_EXISTS, "A column by the name of [b] already exists in the table in the schema.");
     }
     
     /** Test specifying the primary key twice. */
     @Test(expectedExceptions = AddendumException.class)
     public void primaryKeyExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("b", "b")
-                        .add("b", int.class).end()
-                        .primaryKey("b")
-                        .primaryKey("b");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), PRIMARY_KEY_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("b", "b")
+                            .add("b", int.class).end()
+                            .primaryKey("b")
+                            .primaryKey("b");
+            }
+        }, PRIMARY_KEY_EXISTS, "The primary key has already been defined.");
     }
     
     /** Test creating new entities from addendum entity definitions. */
     @Test
     public void createDefinitions() {
-        Addenda addenda = new Addenda(new MockConnector());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("b", "b")
@@ -253,22 +245,22 @@ public class AddendumTest {
     /** Test renaming an entity that does not exist. */
     @Test(expectedExceptions = AddendumException.class)
     public void renameTableMissing() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .rename("a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), ENTITY_MISSING);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .rename("a");
+            }
+        }, ENTITY_MISSING, "The entity [a] cannot be found in the schema.");
     }
     
     /** Test entity rename without a table rename. */
     @Test
     public void renameWithoutTable() {
-        Addenda addenda = new Addenda(new MockConnector());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a", "c")
@@ -281,7 +273,8 @@ public class AddendumTest {
     /** Test rename. */
     @Test
     public void rename() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -295,28 +288,28 @@ public class AddendumTest {
     /** Test entity rename to existing entity name. */
     @Test(expectedExceptions = AddendumException.class)
     public void renameExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .create("b")
-                        .add("a", int.class).end()
-                        .end()
-                    .rename("a").to("b");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), ENTITY_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .create("b")
+                            .add("a", int.class).end()
+                            .end()
+                        .rename("a").to("b");
+            }
+        }, ENTITY_EXISTS, "An entity definition by the name of [b] already exists in the schema.");
     }
     
     /** Test execute. */
     @Test
     public void execute() {
-        Addenda addenda = new Addenda(new MockConnector());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .execute(new Executable() {
@@ -330,7 +323,8 @@ public class AddendumTest {
     /** Test rename property. */
     @Test
     public void renameProperty() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -349,7 +343,8 @@ public class AddendumTest {
     /** Test rename property without column rename. */
     @Test
     public void renamePropertyWithoutColumnRename() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -368,52 +363,51 @@ public class AddendumTest {
     /** Test entity add property with existing property name. */
     @Test(expectedExceptions = AddendumException.class)
     public void addPropertyExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .commit();
-            addenda
-                .addendum()
-                    .alter("a")
-                        .add("a", Types.INTEGER);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), PROPERTY_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .commit();
+                addenda
+                    .addendum()
+                        .alter("a")
+                            .add("a", Types.INTEGER);
+            }
+        }, PROPERTY_EXISTS, "A property by the name of [a] already exists in the entity.");
     }
     
     /** Test add property with existing column name. */
     @Test(expectedExceptions = AddendumException.class)
     public void addColumnExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .commit();
-            addenda
-                .addendum()
-                    .alter("a")
-                        .add("b", "a", Types.INTEGER);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), COLUMN_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .commit();
+                addenda
+                    .addendum()
+                        .alter("a")
+                            .add("b", "a", Types.INTEGER);
+            }
+        }, COLUMN_EXISTS, "A column by the name of [b] already exists in the table in the schema.");
     }
     
     
     /** Test rename property. */
     @Test
     public void addProperty() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -432,7 +426,8 @@ public class AddendumTest {
     /** Test drop property. */
     @Test
     public void dropProperty() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -453,29 +448,29 @@ public class AddendumTest {
     /** Test drop property. */
     @Test(expectedExceptions = AddendumException.class)
     public void dropMissingProperty() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
-            addenda
-                .addendum()
-                    .create("a")
-                         .add("a", int.class).end()
-                         .end()
-                    .commit();
-            addenda
-                .addendum()
-                    .alter("a")
-                        .drop("b");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), PROPERTY_MISSING);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                             .add("a", int.class).end()
+                             .end()
+                        .commit();
+                addenda
+                    .addendum()
+                        .alter("a")
+                            .drop("b");
+            }
+        }, PROPERTY_MISSING, "The property [b] does not exist.");
     }
     
     /** Test drop property. */
     @Test
     public void setColumn() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -494,7 +489,8 @@ public class AddendumTest {
     /** Test alter type. */
     @Test
     public void alterType() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -519,7 +515,8 @@ public class AddendumTest {
     /** Test alter not null. */
     @Test
     public void alterNull() {
-        Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
+        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+        Addenda addenda = new Addenda(connectors);
         addenda
             .addendum()
                 .create("a")
@@ -544,83 +541,79 @@ public class AddendumTest {
     /** Test insert mismatch. */
     @Test(expectedExceptions = AddendumException.class)
     public void insertMismatch() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector(), new MockDialect());
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .add("b", int.class).end()
-                        .end()
-                    .insert("a").columns("a", "b").values("1")
-                    .commit();
-            addenda.amend();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), INSERT_VALUES);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .add("b", int.class).end()
+                            .end()
+                        .insert("a").columns("a", "b").values("1")
+                        .commit();
+                addenda.amend();
+            }
+        }, INSERT_VALUES, "Insert statement values count does not match column count.");
     }
     
     /** Test rename property to existing name. */
     @Test(expectedExceptions = AddendumException.class)
     public void propertyRenameExists() {
-        try {
-            Addenda addenda = new Addenda(new MockConnector());
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .add("b", int.class).end()
-                        .end()
-                    .commit();
-            addenda
-                .addendum()
-                    .alter("a")
-                        .rename("a").to("b");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), PROPERTY_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .add("b", int.class).end()
+                            .end()
+                        .commit();
+                addenda
+                    .addendum()
+                        .alter("a")
+                            .rename("a").to("b");
+            }
+        }, PROPERTY_EXISTS, "A property by the name of [b] already exists in the entity.");
     }
     
     /** Test set table name.. */
     @Test(expectedExceptions = AddendumException.class)
     public void table() {
-        Addenda addenda = new Addenda(new MockConnector());
-        try {
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .end()
-                    .alter("a").table("b").end()
-                    .create("b");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), TABLE_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .alter("a").table("b").end()
+                        .create("b");
+            }
+        }, TABLE_EXISTS, "An entity definition with a table by the name of [b] already exists in the schema.");
     }
     
     /** Test set table name.. */
     @Test(expectedExceptions = AddendumException.class)
     public void columnRenameColumnExists() {
-        Addenda addenda = new Addenda(new MockConnector());
-        try {
-            addenda
-                .addendum()
-                    .create("a")
-                        .add("a", int.class).end()
-                        .add("b", int.class).end()
-                        .end()
-                    .alter("a")
-                        .alter("a").column("b").end();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), COLUMN_EXISTS);
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        exceptional(new Runnable() {
+            public void run() {
+                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
+                Addenda addenda = new Addenda(connectors);
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .add("b", int.class).end()
+                            .end()
+                        .alter("a")
+                            .alter("a").column("b").end();
+            }
+        }, COLUMN_EXISTS, "A column by the name of [b] already exists in the table in the schema.");
     }
 }

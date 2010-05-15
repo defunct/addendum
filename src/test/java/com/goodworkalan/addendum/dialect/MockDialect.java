@@ -54,6 +54,9 @@ public class MockDialect implements Dialect
     }
 
     public boolean canTranslate(Connection connection) throws SQLException {
+        if (connection.getMetaData().getDatabaseProductName().equals("ERROR")) {
+            throw new SQLException();
+        }
         return connection.getMetaData().getDatabaseProductName().equals("MOCK");
     }
 

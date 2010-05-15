@@ -1,12 +1,8 @@
 package com.goodworkalan.addendum;
-import static com.goodworkalan.addendum.AddendumException.*;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
-import com.goodworkalan.addendum.connector.Connector;
-import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.addendum.connector.ConnectorKey;
 
 /**
  * A collection of updates to performed on an SQL database or on related data
@@ -14,53 +10,26 @@ import com.goodworkalan.addendum.dialect.Dialect;
  * 
  * @author Alan Gutierrez
  */
-class Script
-{
-    /** A factory for JDBC connections. */
-    private final Connector connector;
+class Script {
+    /** The connector key to obtain a JDBC connection factory and SQL dialect. */
+    public final ConnectorKey connectorKey;
     
-    /** A provider for the dialect to use for this addendum. */
-    private final DialectProvider dialectProvider;
-    
-    /** A list of updates to perform. */
-    private final List<DatabaseUpdate> updates;
+    /** The list of updates to perform. */
+    public final List<DatabaseUpdate> updates;
 
     /**
      * Create a new addendum. The given list of updates is unique to this
      * addendum.
      * 
-     * @param connector
-     *            A factory for JDBC connections.
-     * @param dialectProvider
-     *            A provider for the dialect to use for this addendum.
+     * @param connectorKey
+     *            The key used to obtain a JDBC connection factory and SQL
+     *            dialect.
      * @param updates
      *            A list of updates to perform.
      */
-    public Script(Connector connector, DialectProvider dialectProvider, List<DatabaseUpdate> updates) {
-        this.connector = connector;
-        this.dialectProvider = dialectProvider;
+    public Script(ConnectorKey connectorKey, List<DatabaseUpdate> updates) {
+        this.connectorKey = connectorKey;
         this.updates = updates;
-    }
-
-    /**
-     * Perform a single update on the web applications configuration, database
-     * or data files possibly using the given configuration.
-     * 
-     * @throws AddendumException
-     *             For any error occurring during the update.
-     */
-    public void execute() {
-        Connection connection = connector.open();
-        Dialect dialect;
-        try {
-            dialect = dialectProvider.getDialect(connection);
-        } catch (SQLException e) {
-            throw new AddendumException(SQL_GET_DIALECT, e);
-        }
-        for (DatabaseUpdate update : updates) {
-            update.update(connection, dialect);
-        }
-        connector.close(connection);
     }
 }
 

@@ -30,8 +30,11 @@ extends CodedDanger {
      * A specific dialect instance was used, but that dialect does not support
      * the database at the other end of the JDBC connection.
      */
-    public final static int DIALECT_DOES_NOT_SUPPORT_CONNECTION = 103;
+    public final static int DIALECT_DOES_NOT_SUPPORT_CONNECTION_ = 103;
     
+    /** Unable to find a connector for a connector key. */
+    public final static int MISSING_CONNCETOR = 104;
+
     /** Unable to open an SQL connection due to a JNI naming error. */
     public final static int NAMING_EXCEPTION = 201;
     

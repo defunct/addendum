@@ -1,18 +1,17 @@
 package com.goodworkalan.addendum;
 
-import com.goodworkalan.addendum.Addenda;
-import com.goodworkalan.addendum.Migration;
-import com.goodworkalan.addendum.connector.MockConnector;
-import com.goodworkalan.addendum.dialect.MockDialect;
+import com.goodworkalan.addendum.connector.ConnectorKey;
+
 
 public class ExampleMigration extends Migration {
+    public final static ConnectorKey ALTERNATE = new ConnectorKey();
     public ExampleMigration(Addenda addenda) {
         super(addenda);
     }
 
     @Override
     public void create() {
-        addendum(new MockConnector())
+        addendum(ALTERNATE)
             .create("Employee")
                 .add("firstName", String.class).end()
                 .add("lastName", String.class).end()
@@ -23,7 +22,7 @@ public class ExampleMigration extends Migration {
                 .add("rate", float.class).end()
                 .end()
             .commit();
-        addendum(new MockConnector(), new MockDialect())
+        addendum()
             .apply(BlogDefinition.class)
             .createIfAbsent()
             .commit();

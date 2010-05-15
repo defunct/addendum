@@ -87,17 +87,6 @@ public class Column {
     }
 
     /**
-     * Create a column with the given name. All other column properties are set
-     * to an undefined state.
-     * 
-     * @param name
-     *            The column name.
-     */
-    public Column(String name) {
-        setName(name);
-    }
-
-    /**
      * Return a <code>java.sql.Types</code> type appropriate for the given
      * native type.
      * 
