@@ -34,8 +34,8 @@ public class ConcreteDialect extends AbstractDialect {
     public void addendum(Connection connection) throws SQLException {
     }
 
-    public boolean canTranslate(Connection connection) throws SQLException {
-        return false;
+    public Dialect canTranslate(Connection connection, Dialect dialect) throws SQLException {
+        return dialect;
     }
 
     public void createAddendaTable(Connection connection) throws SQLException {

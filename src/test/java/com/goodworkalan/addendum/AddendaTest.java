@@ -3,22 +3,14 @@ package com.goodworkalan.addendum;
 import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDA_COUNT;
 import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDUM;
 import static com.goodworkalan.addendum.AddendumException.SQL_CREATE_ADDENDA;
-import static com.goodworkalan.addendum.AddendumException.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static com.goodworkalan.addendum.AddendumException.SQL_GET_DIALECT;
 import static org.testng.Assert.assertEquals;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.connector.Connector;
-import com.goodworkalan.addendum.connector.ConnectorKey;
-import com.goodworkalan.addendum.connector.ConnectorServer;
 import com.goodworkalan.addendum.connector.MockConnector;
-import com.goodworkalan.addendum.dialect.MockDialect;
 
 
 public class AddendaTest {
@@ -35,21 +27,9 @@ public class AddendaTest {
     /** Test the failure of the creation of a {@link Definition}. */
     @Test(expectedExceptions = AddendumException.class)
     public void getDialectSQLException() throws SQLException {
-        final Connection connection = mock(Connection.class);
-        DatabaseMetaData meta = mock(DatabaseMetaData.class);
-        when(meta.getDatabaseProductName()).thenReturn("ERROR");
-        when(connection.getMetaData()).thenReturn(meta);
-        final ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new Connector() {
-            public Connection open() {
-                return connection;
-            }
-            
-            public void close(Connection connection) {
-            }
-        });
         exceptional(new Runnable() {
             public void run() {
-                new Addenda(connectors).amend();
+                new Addenda(new DatabaseMetaDataConnector("ERROR")).amend();
             }
         }, SQL_GET_DIALECT, "Unable to create the database dialect.");
     }
@@ -57,50 +37,19 @@ public class AddendaTest {
     /** Test the failure of the creation of a {@link Definition}. */
     @Test(expectedExceptions = AddendumException.class)
     public void getDialectMissing() throws SQLException {
-        final Connection connection = mock(Connection.class);
-        DatabaseMetaData meta = mock(DatabaseMetaData.class);
-        when(meta.getDatabaseProductName()).thenReturn("MISMATCH");
-        when(connection.getMetaData()).thenReturn(meta);
-        final ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new Connector() {
-            public Connection open() {
-                return connection;
-            }
-            
-            public void close(Connection connection) {
-            }
-        });
         exceptional(new Runnable() {
             public void run() {
-                new Addenda(connectors).amend();
+                new Addenda(new DatabaseMetaDataConnector("MISMATCH")).amend();
             }
         }, SQL_GET_DIALECT, "Unable to create the database dialect.");
     }
     
-    /** Test requesting a missing connector. */
-    @Test(expectedExceptions = AddendumException.class)
-    public void missingConnector() {
-        exceptional(new Runnable() {
-            public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector(), new MockDialect());
-                Addenda addenda = new Addenda(connectors);
-                addenda.addendum(new ConnectorKey());
-                addenda.amend();
-            }
-        }, MISSING_CONNCETOR, "Unable to find a connector for a connector key.");
-    }
-
     @Test(expectedExceptions = AddendumException.class)
     public void createAddenda() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector(), new MockDialect() {
-                    @Override
-                    public void createAddendaTable(Connection connection)
-                    throws SQLException {
-                        throw new SQLException();
-                    }
-                });
-                new Addenda(connectors).amend();
+                new Addenda(new DatabaseMetaDataConnector("FAIL_ON_CREATE_ADDENDA_TABLE")).amend();
+
             }
         }, SQL_CREATE_ADDENDA, "Unable to create the addenda table to track updates.");
     }
@@ -109,14 +58,7 @@ public class AddendaTest {
     public void addedaCount() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector(), new MockDialect() {
-                    @Override
-                    public int addendaCount(Connection connection)
-                    throws SQLException {
-                        throw new SQLException();
-                    }
-                });
-                new Addenda(connectors).amend();
+                new Addenda(new DatabaseMetaDataConnector("FAIL_ON_ADDENDA_COUNT")).amend();
             }
         }, SQL_ADDENDA_COUNT, "Unable to fetch the maximum value of the applied updates from the addenda table.");
     }
@@ -125,14 +67,7 @@ public class AddendaTest {
     public void addendum() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector(), new MockDialect() {
-                    @Override
-                    public void addendum(Connection connection)
-                    throws SQLException {
-                        throw new SQLException();
-                    }
-                });
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new DatabaseMetaDataConnector("FAIL_ON_ADDENDUM"));
                 addenda.addendum();
                 addenda.amend();
             }
@@ -158,8 +93,7 @@ public class AddendaTest {
 
     @Test
     public void tiny() throws ClassNotFoundException, SQLException {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector(), new MockDialect());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         createPersonAndAddress(addenda);
         addenda.amend();
     }
@@ -167,8 +101,7 @@ public class AddendaTest {
     @Test
     public void addendaTableExists()
     throws ClassNotFoundException, SQLException {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector(), new MockDialect());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         createPersonAndAddress(addenda);
         addenda.amend();
         addenda.amend();
@@ -176,16 +109,13 @@ public class AddendaTest {
     
     @Test
     public void basic() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        connectors.connection(ExampleMigration.ALTERNATE, new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         new ExampleMigration(addenda).create();
     }
     
     @Test
     public void skip() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector(), new MockDialect());
-        Addenda addenda = new Addenda(connectors, 1);
+        Addenda addenda = new Addenda(new MockConnector(), 1);
         createPersonAndAddress(addenda);
         addenda.amend();
     }

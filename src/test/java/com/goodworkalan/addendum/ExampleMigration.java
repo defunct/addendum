@@ -1,17 +1,13 @@
 package com.goodworkalan.addendum;
 
-import com.goodworkalan.addendum.connector.ConnectorKey;
-
-
 public class ExampleMigration extends Migration {
-    public final static ConnectorKey ALTERNATE = new ConnectorKey();
     public ExampleMigration(Addenda addenda) {
         super(addenda);
     }
 
     @Override
     public void create() {
-        addendum(ALTERNATE)
+        addendum()
             .create("Employee")
                 .add("firstName", String.class).end()
                 .add("lastName", String.class).end()

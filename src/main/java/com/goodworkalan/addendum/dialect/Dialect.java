@@ -1,4 +1,4 @@
-package com.goodworkalan.addendum.dialect;
+    package com.goodworkalan.addendum.dialect;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -46,17 +46,19 @@ public interface Dialect {
      *             For any SQL error.
      */
     public void addendum(Connection connection) throws SQLException;
-    
+
     /**
      * Determine if the dialect can translate for the given connection.
      * 
      * @param connection
      *            The database connection.
+     * @param dialect
+     *            The currently chosen database dialect.
      * @return True if this dialect can translate for the given connection.
      * @throws SQLException
      *             For any SQL error.
      */
-    public boolean canTranslate(Connection connection) throws SQLException;
+    public Dialect canTranslate(Connection connection, Dialect dialect) throws SQLException;
     
     /**
      * Create a table with the given table name, given columns and the given

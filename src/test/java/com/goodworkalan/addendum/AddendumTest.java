@@ -19,8 +19,6 @@ import java.sql.Types;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.connector.ConnectorKey;
-import com.goodworkalan.addendum.connector.ConnectorServer;
 import com.goodworkalan.addendum.connector.MockConnector;
 import com.goodworkalan.addendum.dialect.Dialect;
 import com.goodworkalan.reflective.ReflectiveException;
@@ -36,8 +34,7 @@ public class AddendumTest {
     public void addendumEntityExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .define("a")
@@ -74,8 +71,7 @@ public class AddendumTest {
     public void addendumTableExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .define("a")
@@ -91,8 +87,7 @@ public class AddendumTest {
     public void entityExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -108,8 +103,7 @@ public class AddendumTest {
     public void tableExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -128,8 +122,7 @@ public class AddendumTest {
     public void createIfAbsentTableExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("b", "b")
@@ -150,8 +143,7 @@ public class AddendumTest {
      */
     @Test
     public void createIfAbsent() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("b", "b")
@@ -175,8 +167,7 @@ public class AddendumTest {
     public void propertyExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("b", "b")
@@ -191,8 +182,7 @@ public class AddendumTest {
     public void columnExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("b", "b")
@@ -207,8 +197,7 @@ public class AddendumTest {
     public void primaryKeyExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("b", "b")
@@ -222,8 +211,7 @@ public class AddendumTest {
     /** Test creating new entities from addendum entity definitions. */
     @Test
     public void createDefinitions() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("b", "b")
@@ -247,8 +235,7 @@ public class AddendumTest {
     public void renameTableMissing() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .rename("a");
@@ -259,8 +246,7 @@ public class AddendumTest {
     /** Test entity rename without a table rename. */
     @Test
     public void renameWithoutTable() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a", "c")
@@ -273,8 +259,7 @@ public class AddendumTest {
     /** Test rename. */
     @Test
     public void rename() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -290,8 +275,7 @@ public class AddendumTest {
     public void renameExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -308,8 +292,7 @@ public class AddendumTest {
     /** Test execute. */
     @Test
     public void execute() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .execute(new Executable() {
@@ -323,8 +306,7 @@ public class AddendumTest {
     /** Test rename property. */
     @Test
     public void renameProperty() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -343,8 +325,7 @@ public class AddendumTest {
     /** Test rename property without column rename. */
     @Test
     public void renamePropertyWithoutColumnRename() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -365,8 +346,7 @@ public class AddendumTest {
     public void addPropertyExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -386,8 +366,7 @@ public class AddendumTest {
     public void addColumnExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -406,8 +385,7 @@ public class AddendumTest {
     /** Test rename property. */
     @Test
     public void addProperty() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -426,8 +404,7 @@ public class AddendumTest {
     /** Test drop property. */
     @Test
     public void dropProperty() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -450,8 +427,7 @@ public class AddendumTest {
     public void dropMissingProperty() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -469,8 +445,7 @@ public class AddendumTest {
     /** Test drop property. */
     @Test
     public void setColumn() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -489,8 +464,7 @@ public class AddendumTest {
     /** Test alter type. */
     @Test
     public void alterType() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -515,8 +489,7 @@ public class AddendumTest {
     /** Test alter not null. */
     @Test
     public void alterNull() {
-        ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-        Addenda addenda = new Addenda(connectors);
+        Addenda addenda = new Addenda(new MockConnector());
         addenda
             .addendum()
                 .create("a")
@@ -543,8 +516,7 @@ public class AddendumTest {
     public void insertMismatch() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -563,8 +535,7 @@ public class AddendumTest {
     public void propertyRenameExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -585,8 +556,7 @@ public class AddendumTest {
     public void table() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")
@@ -603,8 +573,7 @@ public class AddendumTest {
     public void columnRenameColumnExists() {
         exceptional(new Runnable() {
             public void run() {
-                ConnectorServer connectors = new ConnectorServer(new ConnectorKey(), new MockConnector());
-                Addenda addenda = new Addenda(connectors);
+                Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
                         .create("a")

@@ -1,6 +1,5 @@
 package com.goodworkalan.addendum;
 
-import com.goodworkalan.addendum.connector.ConnectorKey;
 
 /**
  * Definition of an entire migration for the life of a database schema.
@@ -29,18 +28,6 @@ public abstract class Migration {
      * Derived classes build the migration by overriding this method.
      */
     public abstract void create();
-    
-    /**
-     * Create a new addendum that make changes to the database associated with
-     * the given connector using the given dialect.
-     * 
-     * @param connectorKey
-     *            A database connection provider.
-     * @return An addendum builder used to specify updates to the database.
-     */
-    public Addendum addendum(ConnectorKey connectorKey) {
-        return addenda.addendum(connectorKey);
-    }
 
     /**
      * Create a new addendum that will changes to a the database associated with
