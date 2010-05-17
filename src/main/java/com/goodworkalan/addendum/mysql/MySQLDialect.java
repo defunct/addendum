@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.goodworkalan.addendum.dialect.AbstractDialect;
 import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.addendum.dialect.Dialect;
 import com.goodworkalan.notice.Notice;
 import com.goodworkalan.notice.NoticeFactory;
 
@@ -86,12 +87,21 @@ public class MySQLDialect extends AbstractDialect {
     }
     
     /**
-     * Return true if the database is a MySQL database.
+     * Return this dialect if the given connection is an H2 connection and the
+     * given candidate dialect is null.
      * 
-     * @return True if the database is a MySQL database.
+     * @param conneciton
+     *            The JDBC connection.
+     * @param dialect
+     *            The current dialect candidate.
+     * @return This dialect if the connection is an H2 connection and candidate
+     *         dialect is null.
      */
-    public boolean canTranslate(Connection connection) throws SQLException {
-        return connection.getMetaData().getDatabaseProductName().equals("MySQL");
+    public Dialect canTranslate(Connection connection, Dialect dialect) throws SQLException {
+        if (connection.getMetaData().getDatabaseProductName().equals("MySQL") && dialect == null) {
+            return this;
+        }
+        return dialect;
     }
     
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException {

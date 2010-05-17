@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -77,7 +77,11 @@ public class MySQLDialectTest {
         Connection connection = mock(Connection.class);
         when(connection.getMetaData()).thenReturn(meta);
         when(meta.getDatabaseProductName()).thenReturn("MySQL");
-        assertTrue(new MySQLDialect().canTranslate(connection));
+        MySQLDialect dialect = new MySQLDialect();
+        assertSame(dialect, dialect.canTranslate(connection, null));
+        assertNotSame(dialect, dialect.canTranslate(connection, new MySQLDialect()));
+        when(meta.getDatabaseProductName()).thenReturn("X");
+        assertNull(dialect.canTranslate(connection, null));
     }
     
     /** Test rename table. */
