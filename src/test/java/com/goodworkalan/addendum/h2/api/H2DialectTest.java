@@ -129,7 +129,7 @@ public class H2DialectTest {
         addenda.amend();
         addenda
             .addendum()
-                .rename("Person").to("Human")
+                .rename("Person", "Human")
                 .commit();
         addenda.amend();
         Connector connector = newConnector(new File(database, "temp").toString());
