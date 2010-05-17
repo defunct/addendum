@@ -5,7 +5,7 @@ import com.goodworkalan.mix.builder.Builder;
 import com.goodworkalan.mix.builder.JavaProject;
 
 /**
- * Build definition for Addendum.
+ * Builds the project definition for Addendum.
  *
  * @author Alan Gutierrez
  */
