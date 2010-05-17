@@ -5,6 +5,7 @@ import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 
 import java.util.Map;
 
@@ -154,13 +155,56 @@ public class Addendum {
      * 
      * @param from
      *            The name of the entity to rename.
-     * @return The entity rename builder.
+     * @param The
+     *            name to rename the entity to.
+     * @return This addendum builder to continue construction.
      */
-    public RenameEntity rename(String from) {
+    public Addendum rename(String from, String to) {
         if (!patch.schema.aliases.containsKey(from)) {
             throw new AddendumException(ENTITY_MISSING, from);
         }
-        return new RenameEntity(this, patch, from);
+        patch.schema.rename(from, to);
+        Schema schema = patch.schema;
+        Entity entity = schema.entities.get(schema.aliases.get(to));
+        if (entity.tableName.equals(from)) {
+            patch.add(new TableRename(to, from, to));
+        }
+        return this;
+    }
+
+    /**
+     * Sets the association between the given table name to the given entity
+     * name, replacing the current entity name to table name association. If the
+     * entity name is already in use, and is not associated with the given table
+     * name, an exception is raised. If the table name is not defined an
+     * exception is raised.
+     * <p>
+     * This method is useful when first mapping a legacy database with SQL like
+     * table names to Java objects.
+     * 
+     * @param tableName
+     *            The table name.
+     * @param entityName
+     *            The entity name.
+     * @return This addendum builder to continue construction.
+     * @exception AddendumException
+     *                If the entity name is already in use or if the table name
+     *                cannot be found.
+     */
+    public Addendum alias(String tableName, String entityName) {
+        // Didn't bother to create a schema update for this, since there is
+        // never a database operation and no need to reuse.
+        String existingEntityName = patch.schema.aliases.get(entityName);
+        if (existingEntityName == null) {
+            if (!patch.schema.entities.containsKey(tableName)) {
+                throw new AddendumException(TABLE_MISSING, tableName);
+            }
+            patch.schema.aliases.remove(patch.schema.getEntityName(tableName));
+            patch.schema.aliases.put(entityName, tableName);
+        } else if (!existingEntityName.equals(tableName)) {
+            throw new AddendumException(ENTITY_EXISTS, entityName);
+        }
+        return this;
     }
     
     /**

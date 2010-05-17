@@ -63,7 +63,7 @@ extends ExistingProperty<AlterEntity, AlterProperty> {
      * @return This alter column builder to continue construction.
      */
     public AlterProperty name(String name) {
-        patch.add(new PropertyRename(entity.tableName, entity.getPropertyName(column.getName()), name));
+        entity.rename(entity.getPropertyName(column.getName()), name);
         return this;
     }
 

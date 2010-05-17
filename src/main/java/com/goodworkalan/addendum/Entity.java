@@ -82,4 +82,22 @@ class Entity {
         }
         throw new IllegalArgumentException();
     }
+
+    /**
+     * Rename the property to with the name given by from to the name given by
+     * to. Throws an exception if the property does not exist in the entity.
+     * 
+     * @param from
+     *            The name to rename from.
+     * @param to
+     *            The name to rename to.
+     * @exception AddendumException
+     *                If the property does not exist in this entity.
+     */
+    public void rename(String from, String to) {
+        if (properties.containsKey(to)) {
+            throw new AddendumException(PROPERTY_EXISTS, to);
+        }
+        properties.put(to, properties.remove(from));
+    }
 }

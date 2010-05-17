@@ -9,18 +9,17 @@ import com.goodworkalan.mix.builder.JavaProject;
  *
  * @author Alan Gutierrez
  */
-public class AddendumProject extends ProjectModule {
+public class AddendumProject implements ProjectModule {
     /**
      * Build the project definition for Addendum.
      *
      * @param builder
      *          The project builder.
      */
-    @Override
     public void build(Builder builder) {
         builder
             .cookbook(JavaProject.class)
-                .produces("com.github.bigeasy.addendum/addendum/0.7.0.1")
+                .produces("com.github.bigeasy.addendum/addendum/0.7.0.2")
                 .depends()
                     .production("com.github.bigeasy.danger/danger/0.+1")
                     .production("com.github.bigeasy.furnish/furnish/0.+1")

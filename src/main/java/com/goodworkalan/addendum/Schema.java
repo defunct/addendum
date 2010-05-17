@@ -1,5 +1,6 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 
@@ -63,5 +64,23 @@ class Schema {
             }
         }
         return null;
+    }
+
+    /**
+     * Renames the entity with the name given by from to the name given by to.
+     * Throws an exception if the entity does not exist in the schema.
+     * 
+     * @param from
+     *            The name to rename from.
+     * @param to
+     *            The name to rename to.
+     * @exception AddendumException
+     *                If the entity does not exist in the schema.
+     */
+    public void rename(String from, String to) {
+        if (aliases.containsKey(to)) {
+            throw new AddendumException(ENTITY_EXISTS, to);
+        }
+        aliases.put(to, aliases.remove(from));
     }
 }

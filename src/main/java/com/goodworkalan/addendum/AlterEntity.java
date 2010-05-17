@@ -1,7 +1,7 @@
 package com.goodworkalan.addendum;
 
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.*;
 
 import com.goodworkalan.addendum.dialect.Column;
 
@@ -60,7 +60,7 @@ public class AlterEntity {
      * @return This alter entity builder to continue construction.
      */
     public AlterEntity name(String name) {
-        patch.add(new EntityRename(patch.schema.getEntityName(entity.tableName), name));
+        patch.schema.rename(patch.schema.getEntityName(entity.tableName), name);
         return this;
     }
 
@@ -72,8 +72,49 @@ public class AlterEntity {
      *            The name of the property to rename.
      * @return A property rename builder.
      */
-    public RenameProperty rename(String from) {
-        return new RenameProperty(this, patch, entity.tableName, entity.getColumn(from), from);
+    public AlterEntity rename(String from, String to) {
+        if (!entity.properties.containsKey(from)) {
+            throw new AddendumException(PROPERTY_MISSING, from);
+        }
+        entity.rename(from, to);
+        Column renamed = entity.getColumn(to);
+        if (renamed.getName().equals(from)) {
+            patch.add(new ColumnAlteration(entity.tableName, renamed, to));
+        }
+        return this;
+    }
+
+    /**
+     * Sets the association between the given column name to the given property
+     * name, replacing the current column name to property name association. If
+     * the property name is already in use, and is not associated with the given
+     * column name, an exception is thrown. If the column name is not defined an
+     * exception is thrown.
+     * <p>
+     * This method is useful when first mapping a legacy database with SQL like
+     * names to Java object fields and bean properties.
+     * 
+     * @param columnName
+     *            The column name.
+     * @param propertyName
+     *            The property name.
+     * @return This alter entity builder to continue construction.
+     * @exception AddendumException
+     *                If the property name is already in use or if the column
+     *                name cannot be found.
+     */
+    public AlterEntity alias(String columnName, String propertyName) {
+        String existingColumnName = entity.properties.get(propertyName);
+        if (existingColumnName == null) {
+            if (!entity.columns.containsKey(columnName)) {
+                throw new AddendumException(COLUMN_MISSING, columnName);
+            }
+            entity.properties.remove(entity.getPropertyName(columnName));
+            entity.properties.put(propertyName, columnName);
+        } else if (!existingColumnName.equals(columnName)) {
+            throw new AddendumException(PROPERTY_EXISTS, propertyName);
+        }
+        return this;
     }
 
     /**

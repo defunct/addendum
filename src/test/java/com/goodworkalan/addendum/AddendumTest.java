@@ -4,6 +4,7 @@ import static com.goodworkalan.addendum.AddendaTest.exceptional;
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.COLUMN_MISSING;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.INSERT_VALUES;
@@ -11,6 +12,7 @@ import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
 import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
 import static org.testng.Assert.assertEquals;
 
 import java.sql.Connection;
@@ -215,7 +217,7 @@ public class AddendumTest {
                 Addenda addenda = new Addenda(new MockConnector());
                 addenda
                     .addendum()
-                        .rename("a");
+                        .rename("a", "b");
             }
         }, ENTITY_MISSING, "The entity [a] cannot be found in the schema.");
     }
@@ -229,7 +231,7 @@ public class AddendumTest {
                 .create("a", "c")
                     .add("a", int.class).end()
                     .end()
-                .rename("a").to("b")
+                .rename("a", "b")
                 .commit();
         addenda.amend();
         assertEquals(addenda.schema.aliases.get("b"), "c");
@@ -261,10 +263,72 @@ public class AddendumTest {
                 .create("a")
                     .add("a", int.class).end()
                     .end()
-                .rename("a").to("b")
+                .rename("a", "b")
                 .commit();
         addenda.amend();
         assertEquals(addenda.schema.aliases.get("b"), "b");
+    }
+    
+    /** Test alias. */
+    @Test
+    public void alias() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("a")
+                    .add("a", int.class).end()
+                    .end()
+                .alias("a", "b")
+                .commit();
+        addenda.amend();
+        assertEquals(addenda.schema.aliases.get("b"), "a");
+    }
+    
+    /** Test alias without change. */
+    @Test
+    public void aliasWithoutChange() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("a")
+                    .add("a", int.class).end()
+                    .end()
+                .alias("a", "a")
+                .commit();
+        addenda.amend();
+        assertEquals(addenda.schema.aliases.get("a"), "a");
+    }
+
+    /** Test table alias to existing entity name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void aliasExists() {
+        exceptional(new Runnable() {
+            public void run() {
+                Addenda addenda = new Addenda(new MockConnector());
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .create("b")
+                            .add("a", int.class).end()
+                            .end()
+                        .alias("b", "a");
+            }
+        }, ENTITY_EXISTS, "An entity definition by the name of [a] already exists in the schema.");
+    }
+
+    /** Test table alias of missing table. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void aliasTableMissing() {
+        exceptional(new Runnable() {
+            public void run() {
+                Addenda addenda = new Addenda(new MockConnector());
+                addenda
+                    .addendum()
+                        .alias("b", "a");
+            }
+        }, TABLE_MISSING, "The table [b] cannot be found in the schema.");
     }
     
     /** Test entity rename to existing entity name. */
@@ -281,7 +345,7 @@ public class AddendumTest {
                         .create("b")
                             .add("a", int.class).end()
                             .end()
-                        .rename("a").to("b");
+                        .rename("a", "b");
             }
         }, ENTITY_EXISTS, "An entity definition by the name of [b] already exists in the schema.");
     }
@@ -313,12 +377,93 @@ public class AddendumTest {
         addenda
             .addendum()
                 .alter("a")
-                    .rename("a").to("b")
+                    .rename("a", "b")
                     .end()
                 .commit();
         addenda.amend();
     }
     
+    /** Test alias property. */
+    @Test
+    public void aliasProperty() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .alias("a", "b")
+                    .end()
+                .commit();
+        addenda.amend();
+        assertEquals(addenda.schema.entities.get("a").properties.get("b"), "a");
+    }
+    
+    /** Test alias property with no changes. */
+    @Test
+    public void aliasPropertyNoChange() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda
+            .addendum()
+                .create("a")
+                     .add("a", int.class).end()
+                     .end()
+                .commit();
+        addenda
+            .addendum()
+                .alter("a")
+                    .alias("a", "a")
+                    .end()
+                .commit();
+        addenda.amend();
+    }
+
+    /** Test column alias with existing property name. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void aliasPropertyExists() {
+        exceptional(new Runnable() {
+            public void run() {
+                Addenda addenda = new Addenda(new MockConnector());
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .add("b", int.class).end()
+                            .end()
+                        .commit();
+                addenda
+                    .addendum()
+                        .alter("a")
+                            .alias("a", "b");
+            }
+        }, PROPERTY_EXISTS, "A property by the name of [b] already exists in the entity.");
+    }
+    
+
+    /** Test column alias with a missing column. */
+    @Test(expectedExceptions = AddendumException.class)
+    public void aliasPropertyColumnMissing() {
+        exceptional(new Runnable() {
+            public void run() {
+                Addenda addenda = new Addenda(new MockConnector());
+                addenda
+                    .addendum()
+                        .create("a")
+                            .add("a", int.class).end()
+                            .end()
+                        .commit();
+                addenda
+                    .addendum()
+                        .alter("a")
+                            .alias("b", "c");
+            }
+        }, COLUMN_MISSING, "The column [b] does not exist.");
+    }
+
     /** Test rename property in alter. */
     @Test
     public void renamePropertyInAlter() {
@@ -352,7 +497,7 @@ public class AddendumTest {
         addenda
             .addendum()
                 .alter("a")
-                    .rename("a").to("b")
+                    .rename("a", "b")
                     .end()
                 .commit();
         addenda.amend();
@@ -564,7 +709,7 @@ public class AddendumTest {
                 addenda
                     .addendum()
                         .alter("a")
-                            .rename("a").to("b");
+                            .rename("a", "b");
             }
         }, PROPERTY_EXISTS, "A property by the name of [b] already exists in the entity.");
     }

@@ -28,7 +28,7 @@ public class ExampleMigration  {
             .createIfAbsent()
             .commit();
         addendum()
-            .rename("Employee").to("Person")
+            .rename("Employee", "Person")
             .commit();
         addendum()
             .alter("Person")
