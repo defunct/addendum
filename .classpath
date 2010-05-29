@@ -49,19 +49,24 @@
       <attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/github/bigeasy/retry/retry/0.1/retry-0.1-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/com/github/bigeasy/diffuse/diffuse/0.1.0.1/diffuse-0.1.0.1.jar" sourcepath="M2_REPO/com/github/bigeasy/diffuse/diffuse/0.1.0.1/diffuse-0.1.0.1-sources.jar">
+  <classpathentry kind="var" path="M2_REPO/com/github/bigeasy/diffuse/diffuse/0.1.0.2/diffuse-0.1.0.2.jar" sourcepath="M2_REPO/com/github/bigeasy/diffuse/diffuse/0.1.0.2/diffuse-0.1.0.2-sources.jar">
     <attributes>
-      <attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/github/bigeasy/diffuse/diffuse/0.1.0.1/diffuse-0.1.0.1-javadoc.jar!/"/>
+      <attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/github/bigeasy/diffuse/diffuse/0.1.0.2/diffuse-0.1.0.2-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/com/github/bigeasy/reflective/reflective/0.1/reflective-0.1.jar" sourcepath="M2_REPO/com/github/bigeasy/reflective/reflective/0.1/reflective-0.1-sources.jar">
+  <classpathentry kind="var" path="M2_REPO/com/github/bigeasy/reflective/reflective/0.3/reflective-0.3.jar" sourcepath="M2_REPO/com/github/bigeasy/reflective/reflective/0.3/reflective-0.3-sources.jar">
     <attributes>
-      <attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/github/bigeasy/reflective/reflective/0.1/reflective-0.1-javadoc.jar!/"/>
+      <attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/github/bigeasy/reflective/reflective/0.3/reflective-0.3-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/com/github/bigeasy/madlib/madlib/0.1.0.1/madlib-0.1.0.1.jar" sourcepath="M2_REPO/com/github/bigeasy/madlib/madlib/0.1.0.1/madlib-0.1.0.1-sources.jar">
     <attributes>
       <attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/github/bigeasy/madlib/madlib/0.1.0.1/madlib-0.1.0.1-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/github/bigeasy/reflective/reflective-getter/0.3/reflective-getter-0.3.jar" sourcepath="M2_REPO/com/github/bigeasy/reflective/reflective-getter/0.3/reflective-getter-0.3-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/alan/.m2/repository/com/github/bigeasy/reflective/reflective-getter/0.3/reflective-getter-0.3-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/com/github/bigeasy/class-association/class-association/0.1/class-association-0.1.jar" sourcepath="M2_REPO/com/github/bigeasy/class-association/class-association/0.1/class-association-0.1-sources.jar">

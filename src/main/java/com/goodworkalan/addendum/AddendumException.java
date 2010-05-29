@@ -14,7 +14,7 @@ import com.goodworkalan.danger.CodedDanger;
  */
 public final class AddendumException
 extends CodedDanger {
-    /** The cache of resource bundles for <code>CodedDanger</code>. */
+    /** The cache of exception message resource bundles. */
     private final static ConcurrentMap<String, ResourceBundle> BUNDLES = new ConcurrentHashMap<String, ResourceBundle>();
     
     /** The serial version id. */
