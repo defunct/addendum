@@ -21,7 +21,7 @@ import com.goodworkalan.furnish.Furnish;
  * @author Alan Gutierrez
  */
 public class Addenda {
-    /** The numbers of addendums to skip. */
+    /** The numbers of addenda to skip. */
     private final int skip;
 
     /** The tracking schema. */
