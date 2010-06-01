@@ -51,7 +51,7 @@ public class AlterEntity {
 
     /**
      * Rename the entity independently of the table. This differs from the
-     * {@link Addendum#rename(String) Addendum.rename} method in that it
+     * {@link Addendum#rename(String, String) Addendum.rename} method in that it
      * <em>will not</em> also rename the underlying table if the underlying
      * table has the name name.
      * 
@@ -69,7 +69,9 @@ public class AlterEntity {
      * the new name.
      * 
      * @param from
-     *            The name of the property to rename.
+     *            The name of the property.
+     * @param to
+     *            The name to rename the property to.
      * @return A property rename builder.
      */
     public AlterEntity rename(String from, String to) {

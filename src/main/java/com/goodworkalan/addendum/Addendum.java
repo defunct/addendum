@@ -155,8 +155,8 @@ public class Addendum {
      * 
      * @param from
      *            The name of the entity to rename.
-     * @param The
-     *            name to rename the entity to.
+     * @param to
+     *            The name to rename the entity to.
      * @return This addendum builder to continue construction.
      */
     public Addendum rename(String from, String to) {

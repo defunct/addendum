@@ -29,10 +29,8 @@ extends ExistingProperty<AlterEntity, AlterProperty> {
      *            The parent alter table builder.
      * @param patch
      *            The database migration.
-     * @param tableName
-     *            The entity table name.
-     * @param propertyName
-     *            The property name.
+     * @param entity
+     *            The entity.
      * @param column
      *            The column definition.
      */
