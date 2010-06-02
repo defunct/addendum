@@ -1,0 +1,17 @@
+ADDENDUM H2
+
+An H2 dialect for Addendum migrations.
+
+    Home: http://bigeasy.github.com/addendum
+
+    Source: http://github.com/bigeasy/addendum/tree/master
+    Documentation: http://wiki.github.com/bigeasy/addendum
+
+    Issues and Tasks: http://github.com/bigeasy/addendum/issues
+
+    Contact: alan@blogometer.com
+
+MOTIVATION
+
+Primarily used for testing other Addendum sub-projects, the H2 dialect is useful
+where ever an embedded relational database engine like H2 is useful.
