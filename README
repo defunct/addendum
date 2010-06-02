@@ -1,7 +1,6 @@
 ADDENDUM
 
-A strategy for managing database schema changes, ordered updates to an
-application database schema.
+Ordered database schema migrations.
 
     Home: http://bigeasy.github.com/addendum
 
