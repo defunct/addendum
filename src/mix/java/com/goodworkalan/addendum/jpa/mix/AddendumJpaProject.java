@@ -30,7 +30,7 @@ public class AddendumJpaProject implements ProjectModule {
                     .development("org.testng/testng-jdk15/5.10")
                     .development("org.mockito/mockito-core/1.6")
                     .development("com.h2database/h2/1.1.115")
-                    .development("com.goodworkalan/addendum-h2/0.1")
+                    .development("com.github.bigeasy.addendum/addendum-h2/0.+1")
                     .end()
                 .end()
             .end();
