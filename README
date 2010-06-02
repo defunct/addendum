@@ -1,0 +1,17 @@
+ADDENDUM MYSQL
+
+An MySQL dialect for Addendum migrations.
+
+    Home: http://bigeasy.github.com/addendum
+
+    Source: http://github.com/bigeasy/addendum/tree/mysql
+    Documentation: http://wiki.github.com/bigeasy/addendum
+
+    Issues and Tasks: http://bigeasy.lighthouseapp.com/projects/28792
+
+    Contact: alan@blogometer.com
+
+MOTIVATION
+
+Provide support for MySQL to Addendum. MySQL is my relational database of
+choice.
