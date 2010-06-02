@@ -1,0 +1,31 @@
+ADDENDUM JPA
+
+Builds an Addendum definition from JPA annotated classes.
+
+    Home: http://bigeasy.github.com/addendum
+
+    Source: http://github.com/bigeasy/addendum/tree/jpa
+    Documentation: http://wiki.github.com/bigeasy/addendum
+
+    Issues and Tasks: http://bigeasy.lighthouseapp.com/projects/28792
+
+    Contact: alan@blogometer.com
+
+MOTIVATION
+
+This is the solution for using JPA annotations to define addendums, by exporting
+the state of the class models to a addendum Definition. Previously, I'd
+attempted to create addendums from JPA annotations by reflecting on the classes
+in the migration definition. Of course, when the classes were refeactored, the
+reflections would only optain new class and property names and the old names
+were no longer avaialble through reflection. I'd have to go back and note that
+when a paritcular class was created, it really had a different name, introducing
+a lot of fiddly, typo prone strings.
+
+Given that refactoring is what Addendum is supposed to simplify, I developed
+this solution of taking a snapshot of the definitions obtained through
+relfection on JPA annotated classes and writing them out a definition class.
+Then you can check the definition class into source control, so that the state
+is remembered. It is generated via relfection so it is not typo prone. You can
+used however much or little of the definition as is necessary to generate your
+migrations, ignoring the parts that have not changed.
