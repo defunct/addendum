@@ -7,8 +7,8 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -167,7 +167,7 @@ class EntityInfo {
         }
         Map<String, Field> fields = new LinkedHashMap<String, Field>();
         addFields(entityClass, fields);
-        Set<String> names = new HashSet<String>();
+        Set<String> names = new LinkedHashSet<String>();
         names.addAll(fields.keySet());
         names.addAll(descriptors.keySet());
         for (String name : names) {
