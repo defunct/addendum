@@ -62,10 +62,10 @@ class DefinitionDocument {
         if (property.getName().equals(property.getColumnName())) {
             print(4, ".add(\"" + property.getName() + "\", " + property.getType().getCanonicalName() + ".class)");
         } else {
-            print(4, ".add(\"" + property.getName() + "\", " + property.getColumnName() + "\", " + property.getType().getCanonicalName() + ".class)");
+            print(4, ".add(\"" + property.getName() + "\", \"" + property.getColumnName() + "\", " + property.getType().getCanonicalName() + ".class)");
         }
         if (property.getGenerationType() != null) {
-            print(5, ".generator(GenerationType." + property.getGenerationType().toString() + ")");
+            print(5, ".generator(GeneratorType." + property.getGenerationType().toString() + ")");
         }
         if (property.getLength() != null) {
             print(5, ".length(" + property.getLength() + ")");
