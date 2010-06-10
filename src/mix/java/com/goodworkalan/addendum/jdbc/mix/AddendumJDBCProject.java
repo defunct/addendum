@@ -2,7 +2,7 @@ package com.goodworkalan.addendum.mix;
 
 import com.goodworkalan.mix.ProjectModule;
 import com.goodworkalan.mix.builder.Builder;
-import com.goodworkalan.mix.builder.JavaProject;
+import com.goodworkalan.mix.cookbook.JavaProject;
 
 /**
  * Build definition for Addendum JDBC.
