@@ -1,9 +1,5 @@
 package com.goodworkalan.addendum;
 
-import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import com.goodworkalan.danger.CodedDanger;
 
 /**
@@ -14,9 +10,6 @@ import com.goodworkalan.danger.CodedDanger;
  */
 public final class AddendumException
 extends CodedDanger {
-    /** The cache of exception message resource bundles. */
-    private final static ConcurrentMap<String, ResourceBundle> BUNDLES = new ConcurrentHashMap<String, ResourceBundle>();
-    
     /** The serial version id. */
     private static final long serialVersionUID = 20080620L;
     
@@ -125,7 +118,7 @@ extends CodedDanger {
      *            The positioned format arguments.
      */
     public AddendumException(int code, Object...arguments) {
-        super(BUNDLES, code, null, arguments);
+        super(code, null, arguments);
     }
 
     /**
@@ -140,7 +133,7 @@ extends CodedDanger {
      *            The positioned format arguments.
      */
     public AddendumException(int code, Throwable cause, Object... arguments) {
-        super(BUNDLES, code, cause, arguments);
+        super(code, cause, arguments);
     }
 }
 /* vim: set et sw=4 ts=4 ai tw=78 nowrap: */
