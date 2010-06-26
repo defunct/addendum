@@ -1,6 +1,8 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.AddendumException.COLUMN_MISSING;
+import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +22,8 @@ class Entity {
     public String tableName;
 
     /**
-     * The primary key.
-     * <p>
-     * FIXME The primary key is properties or columns?
+     * The primary key columns. Using properties is too clever. It is not as if
+     * the person defining the database is unaware of its underlying structure.
      */
     public final List<String> primaryKey = new ArrayList<String>();
     

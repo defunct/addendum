@@ -1,10 +1,9 @@
 package com.goodworkalan.addendum;
 
 import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_COLUMN_MISSING;
 import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
 import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
-
-import java.util.Arrays;
 
 import com.goodworkalan.addendum.dialect.Column;
 
@@ -110,7 +109,7 @@ public class DefineEntity {
     }
 
     /**
-     * Define the primary key of the table.
+     * Define the primary key of the table using column names.
      * 
      * @param columns
      *            The primary key column names.
@@ -120,8 +119,12 @@ public class DefineEntity {
         if (!entity.primaryKey.isEmpty()) {
             throw new AddendumException(PRIMARY_KEY_EXISTS);
         }
-        // FIXME Assert that properties exist?
-        entity.primaryKey.addAll(Arrays.asList(columns));
+        for (String column : columns) {
+            if (!entity.columns.containsKey(column)) {
+                throw new AddendumException(PRIMARY_KEY_COLUMN_MISSING, entity.tableName, column);
+            }
+            entity.primaryKey.add(column);
+        }
         return this;
     }
 

@@ -87,6 +87,9 @@ extends CodedDanger {
     
     /** A column does not exist the entity. */
     public final static int COLUMN_MISSING = 416;
+    
+    /** A primary key property does not exist. */
+    public final static int PRIMARY_KEY_COLUMN_MISSING = 417;
 
     /** Unable to create the table for an entity due to an SQL exception. */
     public final static int CANNOT_CREATE_TABLE = 501;
