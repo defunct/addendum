@@ -16,8 +16,7 @@ import com.goodworkalan.notice.Notice;
 import com.goodworkalan.notice.NoticeFactory;
 
 /**
- * Perform the updates defined by the domain-specific language used by
- * {@link DatabaseAddendum} against a MySQL database.
+ * Perform addendum defined updates against a MySQL database.
  * 
  * @author Alan Gutierrez
  */
@@ -90,7 +89,7 @@ public class MySQLDialect extends AbstractDialect {
      * Return this dialect if the given connection is an H2 connection and the
      * given candidate dialect is null.
      * 
-     * @param conneciton
+     * @param connection
      *            The JDBC connection.
      * @param dialect
      *            The current dialect candidate.
