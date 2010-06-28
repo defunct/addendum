@@ -16,6 +16,18 @@ import java.util.TreeMap;
  * @author Alan Gutierrez
  */
 public class DefinitionGenerator {
+    /**
+     * Generate the Java source code an Addendum definition of a database. The
+     * source code define a class with the <code></code> that implements
+     * <code>Definition</code> with the.
+     * 
+     * @param className
+     *            The class name.
+     * @param connection
+     *            The connection.
+     * @throws SQLException
+     *             For any SQL error.
+     */
     public static void generate(String className, Connection connection) throws SQLException {
         List<Table> tables = new ArrayList<Table>();
         DefinitionDocument definitionDocument = new DefinitionDocument(className, tables);
@@ -25,7 +37,8 @@ public class DefinitionGenerator {
             String catalog = results.getString("TABLE_CAT");
             String schema = results.getString("TABLE_SCHEM");
             String name = results.getString("TABLE_NAME");
-            if ((schema == null || schema.equals("PUBLIC")) && !name.toUpperCase().equals("ADDENDA")) {
+            String type = results.getString("TABLE_TYPE");
+            if (type.equals("TABLE") && (schema == null || schema.equals("PUBLIC")) && !name.toUpperCase().equals("ADDENDA")) {
                 ResultSetMetaData resultMeta = connection.createStatement(
                         ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM " + name + " WHERE 1 = 0").getMetaData();
                 Table table = new Table();

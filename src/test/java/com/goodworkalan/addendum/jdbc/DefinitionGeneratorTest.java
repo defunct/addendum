@@ -22,10 +22,17 @@ import com.goodworkalan.addendum.connector.DriverManagerConnector;
  * @author Alan Gutierrez
  */
 public class DefinitionGeneratorTest {
+    /** An H2 database server. */
     private Server server;
     
+    /** An H2 database directory. */
     private File database;
-    
+
+    /**
+     * Create an H2 database directory path.
+     * 
+     * @return The directory as a string.
+     */
     private String getDatabasePath() {
         String property = System.getProperty("java.io.tmpdir");
         do {
@@ -35,16 +42,24 @@ public class DefinitionGeneratorTest {
         return new File(database, "temp").toString();
     }
     
+    /**
+     * Start the H2 database.
+     * 
+     * @throws SQLException
+     *             For any database error.
+     */
     @BeforeTest
     public void start() throws SQLException {
         server = Server.createTcpServer(new String[] { "-trace" }).start();
     }
 
+    /** Stop the H2 database. */
     @AfterTest
     public void stop() {
         server.stop();
     }
 
+    /** Delete the H2 database directory. */
     @AfterMethod
     public void deleteDatabase() {
         if (database != null) {
@@ -59,7 +74,13 @@ public class DefinitionGeneratorTest {
         }
         database = null;
     }
-    
+
+    /**
+     * Create an addenda that defines a person and an address.
+     * 
+     * @param addenda
+     *            The addenda.
+     */
     private void createPersonAndAddress(Addenda addenda) {
         addenda
             .addendum()
@@ -80,7 +101,15 @@ public class DefinitionGeneratorTest {
                .insert("Person")
                    .columns("firstName", "lastName").values("Alan", "Gutierrez");
     }
-    
+
+    /**
+     * Drop the tables created by the invocation of this test.
+     * 
+     * @param connection
+     *            The data source.
+     * @throws SQLException
+     *             For any SQL error.
+     */
     private void dropPersonAndAddress(Connection connection) throws SQLException {
         Statement statement = null;
         try {
@@ -106,6 +135,13 @@ public class DefinitionGeneratorTest {
         }
     }
 
+    /**
+     * Create a new H2 connector for the given H2 database.
+     * 
+     * @param database
+     *            The database.
+     * @return A database connector.
+     */
     private Connector newConnector(String database) {
         return new DriverManagerConnector("jdbc:h2:" + database, "test", "");
     }
@@ -122,7 +158,7 @@ public class DefinitionGeneratorTest {
         DefinitionGenerator.generate("com.goodworkalan.accounts.Accounts", connection);
         connector.close(connection);
         Class.forName("com.mysql.jdbc.Driver"); 
-        connector = new DriverManagerConnector("jdbc:mysql://localhost/cds_solidica", "solidica", "solidica");
+        connector = new DriverManagerConnector("jdbc:mysql://localhost/cds_solidica", "solidica", null);
         addenda = new Addenda(connector);
         connection = connector.open();
         dropPersonAndAddress(connection);
