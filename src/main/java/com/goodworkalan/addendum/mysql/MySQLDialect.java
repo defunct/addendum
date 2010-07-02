@@ -62,8 +62,7 @@ public class MySQLDialect extends AbstractDialect {
         ResultSet results = metaData.getTables(null, null, "Addenda", null);
         boolean build = !results.next();
         results.close();
-        if (build)
-        {
+        if (build) {
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE Addenda (addendum INTEGER)");
             statement.close();
