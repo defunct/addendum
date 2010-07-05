@@ -1,16 +1,34 @@
 package com.goodworkalan.addendum;
 
+/**
+ * An example of a migration definition.
+ *
+ * @author Alan Gutierrez
+ */
 public class ExampleMigration  {
+    /** The addenda. */
     private final Addenda addenda;
 
+    /**
+     * Create an example migration.
+     * 
+     * @param addenda
+     *            The addenda.
+     */
     public ExampleMigration(Addenda addenda) {
         this.addenda = addenda;
     }
     
+    /**
+     * Create a new addendum and add it to the addenda.
+     * 
+     * @return A new addendum.
+     */
     public Addendum addendum() {
         return addenda.addendum();
     }
 
+    /** Create the migration definition. */
     public void create() {
         addendum()
             .create("Employee")

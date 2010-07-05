@@ -13,7 +13,23 @@ import org.testng.annotations.Test;
 import com.goodworkalan.addendum.connector.MockConnector;
 
 
+/**
+ * Unit tests for the {@link Addenda} class.
+ *
+ * @author Alan Gutierrez
+ */
 public class AddendaTest {
+    /**
+     * Run a block of code that raises an <code>AddendumException</code> and
+     * assert the values of the exception code and message.
+     * 
+     * @param runnable
+     *            The block of code.
+     * @param code
+     *            The expected error code.
+     * @param message
+     *            The expected error message.
+     */
     public static void exceptional(Runnable runnable, int code, String message) {
         try {
             runnable.run();
@@ -29,7 +45,7 @@ public class AddendaTest {
     public void getDialectSQLException() throws SQLException {
         exceptional(new Runnable() {
             public void run() {
-                new Addenda(new DatabaseMetaDataConnector("ERROR")).amend();
+                new Addenda(new MockConnector("ERROR")).amend();
             }
         }, SQL_GET_DIALECT, "Unable to create the database dialect.");
     }
@@ -39,41 +55,51 @@ public class AddendaTest {
     public void getDialectMissing() throws SQLException {
         exceptional(new Runnable() {
             public void run() {
-                new Addenda(new DatabaseMetaDataConnector("MISMATCH")).amend();
+                new Addenda(new MockConnector("MISMATCH")).amend();
             }
         }, SQL_GET_DIALECT, "Unable to create the database dialect.");
     }
     
+    /** Test inability to create addenda table. */
     @Test(expectedExceptions = AddendumException.class)
     public void createAddenda() {
         exceptional(new Runnable() {
             public void run() {
-                new Addenda(new DatabaseMetaDataConnector("FAIL_ON_CREATE_ADDENDA_TABLE")).amend();
+                new Addenda(new MockConnector("FAIL_ON_CREATE_ADDENDA_TABLE")).amend();
 
             }
         }, SQL_CREATE_ADDENDA, "Unable to create the addenda table to track updates.");
     }
 
+    /** Test cannot fetch addenda count. */
     @Test(expectedExceptions = AddendumException.class)
     public void addedaCount() {
         exceptional(new Runnable() {
             public void run() {
-                new Addenda(new DatabaseMetaDataConnector("FAIL_ON_ADDENDA_COUNT")).amend();
+                new Addenda(new MockConnector("FAIL_ON_ADDENDA_COUNT")).amend();
             }
         }, SQL_ADDENDA_COUNT, "Unable to fetch the maximum value of the applied updates from the addenda table.");
     }
 
+    /** Test unable to insert into the addenda table. */
     @Test(expectedExceptions = AddendumException.class)
     public void addendum() {
         exceptional(new Runnable() {
             public void run() {
-                Addenda addenda = new Addenda(new DatabaseMetaDataConnector("FAIL_ON_ADDENDUM"));
+                Addenda addenda = new Addenda(new MockConnector("FAIL_ON_ADDENDUM"));
                 addenda.addendum();
                 addenda.amend();
             }
-        }, SQL_ADDENDUM, "Unable to update the addenda table with a new update.");
+        }, SQL_ADDENDUM, "Unable to insert a new addenda into the the addenda table.");
     }
 
+    
+    /**
+     * Create person and address entity definitions.
+     * 
+     * @param addenda
+     *            The addenda.
+     */
     private void createPersonAndAddress(Addenda addenda) {
         addenda
             .addendum()
@@ -91,6 +117,13 @@ public class AddendaTest {
                    .columns("firstName", "lastName").values("Alan", "Gutierrez");
     }
 
+    /**
+     * Create a new connector with the given H2 database path.
+     * 
+     * @param database
+     *            The database path.
+     * @return A new connector.
+     */
     @Test
     public void tiny() throws ClassNotFoundException, SQLException {
         Addenda addenda = new Addenda(new MockConnector());
@@ -98,6 +131,7 @@ public class AddendaTest {
         addenda.amend();
     }
 
+    /** Test the existence of the addenda table. */
     @Test
     public void addendaTableExists()
     throws ClassNotFoundException, SQLException {
@@ -107,12 +141,14 @@ public class AddendaTest {
         addenda.amend();
     }
     
+    /** Test a basic migration. */
     @Test
     public void basic() {
         Addenda addenda = new Addenda(new MockConnector());
         new ExampleMigration(addenda).create();
     }
     
+    /** Test skipping. */
     @Test
     public void skip() {
         Addenda addenda = new Addenda(new MockConnector(), 1);

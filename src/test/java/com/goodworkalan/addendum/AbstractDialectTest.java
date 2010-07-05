@@ -63,17 +63,13 @@ public class AbstractDialectTest {
         server = Server.createTcpServer(new String[] { "-trace" }).start();
     }
 
-    /**
-     * Stop the database server.
-     */
+    /** Stop the database server. */
     @AfterTest
     public void stop() {
         server.stop();
     }
     
-    /**
-     * Delete the working database directory. 
-     */
+    /** Delete the working database directory. */
     @AfterMethod
     public void deleteDatabase() {
         if (database != null) {

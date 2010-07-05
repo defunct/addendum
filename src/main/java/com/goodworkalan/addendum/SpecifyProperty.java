@@ -42,6 +42,8 @@ public abstract class SpecifyProperty<Container, Element> {
      * We cannot simply return this, because calling one of the methods in this
      * class will change the type of builder in the build statement. We always
      * want to return the most derived builder type.
+     * <p>
+     * FIXME Rename Self.
      * 
      * @return This builder.
      */

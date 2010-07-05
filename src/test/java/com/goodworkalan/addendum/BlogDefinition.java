@@ -6,7 +6,18 @@ import com.goodworkalan.addendum.Addendum;
 import com.goodworkalan.addendum.Definition;
 import com.goodworkalan.addendum.GeneratorType;
 
+/**
+ * An example of an Addendum definition.
+ *
+ * @author Alan Gutierrez
+ */
 public class BlogDefinition implements Definition {
+    /**
+     * Create a definition of blog.
+     * 
+     * @param addendum
+     *            The addendum.
+     */
     public void define(Addendum addendum) {
         addendum
             .define("Post")
