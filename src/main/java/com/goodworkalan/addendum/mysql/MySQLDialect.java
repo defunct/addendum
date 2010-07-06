@@ -21,7 +21,8 @@ import com.goodworkalan.notice.NoticeFactory;
  * @author Alan Gutierrez
  */
 public class MySQLDialect extends AbstractDialect {
-    private final NoticeFactory notices = new NoticeFactory(LoggerFactory.getLogger(MySQLDialect.class));
+    /** The notice factory. */
+    private final NoticeFactory NOTICES = new NoticeFactory(LoggerFactory.getLogger(MySQLDialect.class));
 
     /**
      * Create a new MySQL dialect.
@@ -42,10 +43,14 @@ public class MySQLDialect extends AbstractDialect {
         setType(Types.NUMERIC, "NUMERIC(%2$d, %3$d)");
     }
 
-    
+    /**
+     * Get the notice factory in the context of the MySQL dialect.
+     * 
+     * @return The notice factory.
+     */
     @Override
     protected NoticeFactory getNoticeFactory() {
-        return notices;
+        return NOTICES;
     }
 
     /**
@@ -69,6 +74,16 @@ public class MySQLDialect extends AbstractDialect {
         }
     }
     
+    /**
+     * Get the maximum update applied.
+     * 
+     * @param connection
+     *            An SQL connection on the database.
+     * 
+     * @return The maximum update applied.
+     * @throws SQLException
+     *             For any SQL error.
+     */
     public int addendaCount(Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet results = statement.executeQuery("SELECT COALESCE(MAX(addendum), 0) FROM Addenda");
@@ -78,6 +93,15 @@ public class MySQLDialect extends AbstractDialect {
         return max;
     }
     
+    /**
+     * Increment the update number in the database.
+     * 
+     * @param connection
+     *            An SQL connection on the database.
+     * 
+     * @throws SQLException
+     *             For any SQL error.
+     */
     public void addendum(Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("INSERT INTO Addenda SELECT COALESCE(MAX(addendum), 0) + 1 FROM Addenda");
@@ -102,6 +126,22 @@ public class MySQLDialect extends AbstractDialect {
         return dialect;
     }
     
+    /**
+     * Alter the column in the given table with the given exiting column name
+     * according to the given column definition. This method can both rename and
+     * redefine columns.
+     * 
+     * @param connection
+     *            The JDBC connection.
+     * @param tableName
+     *            The table name.
+     * @param oldName
+     *            The exiting column name.
+     * @param column
+     *            The column definition.
+     * @throws SQLException
+     *             For any reason, any reason at all.
+     */
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException {
         Notice info = getNoticeFactory().info("alter.column");
         
