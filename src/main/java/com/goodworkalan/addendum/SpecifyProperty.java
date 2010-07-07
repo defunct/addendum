@@ -35,9 +35,10 @@ public abstract class SpecifyProperty<Container, Self> {
     }
 
     /**
-     * Return this column builder to continue the column builder statement. This
-     * is necessary to make the return types of the chained builder statements
-     * generic.
+     * Return this object, but cast to the type needed for the chained
+     * invocations of a dependent type. Descendant classes implement this method
+     * and simply return the <code>this</code> object. This is necessary to make
+     * the return types of the chained builder statements generic.
      * <p>
      * We cannot simply return this, because calling one of the methods in this
      * class will change the type of builder in the build statement. We always
