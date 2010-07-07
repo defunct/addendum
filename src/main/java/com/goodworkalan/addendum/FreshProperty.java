@@ -10,11 +10,11 @@ import com.goodworkalan.addendum.dialect.Column;
  * 
  * @param <Container>
  *            The parent builder in the domain-specific language.
- * @param <Element>
+ * @param <Self>
  *            The type of the sub-classed property builder.
  */
-public abstract class FreshProperty<Container, Element>
-extends SpecifyProperty<Container, Element> {
+public abstract class FreshProperty<Container, Self>
+extends SpecifyProperty<Container, Self> {
     /**
      * Create a property builder with the given container builder that builds
      * the given column definition.
@@ -36,9 +36,9 @@ extends SpecifyProperty<Container, Element> {
      *            The unique id generator type.
      * @return This property builder to continue construction.
      */
-    public Element generator(GeneratorType generatorType) {
+    public Self generator(GeneratorType generatorType) {
         column.setGeneratorType(generatorType);
-        return getElement();
+        return getSelf();
     }
     
     /**
@@ -46,8 +46,8 @@ extends SpecifyProperty<Container, Element> {
      * 
      * @return This property builder to continue construction.
      */
-    public Element notNull() {
+    public Self notNull() {
         column.setNotNull(true);
-        return getElement();
+        return getSelf();
     }
 }

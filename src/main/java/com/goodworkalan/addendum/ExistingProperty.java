@@ -11,11 +11,11 @@ import com.goodworkalan.addendum.dialect.Column;
  * 
  * @param <Container>
  *            The parent builder.
- * @param <Element>
+ * @param <Self>
  *            The type of the sub-classed proeprty builder.
  */
-public abstract class ExistingProperty<Container, Element>
-extends SpecifyProperty<Container, Element> {
+public abstract class ExistingProperty<Container, Self>
+extends SpecifyProperty<Container, Self> {
     /**
      * Create an alter property element that defines the given column and
      * returns the given container element.
@@ -38,9 +38,9 @@ extends SpecifyProperty<Container, Element> {
      * @return This alter column element to continue the domain-specific
      *         language statement.
      */
-    public Element type(int columnType) {
+    public Self type(int columnType) {
         column.setColumnType(columnType);
-        return getElement();
+        return getSelf();
     }
 
     /**
@@ -52,9 +52,9 @@ extends SpecifyProperty<Container, Element> {
      * @return This alter property element to continue the domain-specific
      *         language statement.
      */
-    public Element type(Class<?> nativeType) {
+    public Self type(Class<?> nativeType) {
         column.setColumnType(nativeType);
-        return getElement();
+        return getSelf();
     }
 
     /**
@@ -65,10 +65,10 @@ extends SpecifyProperty<Container, Element> {
      *            The default not null value.
      * @return This property builder to continue construction.
      */
-    public Element notNull(Object defaultValue) {
+    public Self notNull(Object defaultValue) {
         column.setNotNull(true);
         column.setDefaultValue(defaultValue);
-        return getElement();
+        return getSelf();
     }
 
     /**
@@ -76,8 +76,8 @@ extends SpecifyProperty<Container, Element> {
      * 
      * @return This property builder to continue construction.
      */
-    public Element nullable() {
+    public Self nullable() {
         column.setNotNull(false);
-        return getElement();
+        return getSelf();
     }
 }

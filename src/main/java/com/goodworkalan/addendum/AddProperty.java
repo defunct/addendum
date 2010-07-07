@@ -53,7 +53,7 @@ public class AddProperty extends FreshProperty<AlterEntity, AddProperty> {
      * @return This builder.
      */
     @Override
-    protected AddProperty getElement() {
+    protected AddProperty getSelf() {
         return this;
     }
 

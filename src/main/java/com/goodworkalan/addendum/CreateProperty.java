@@ -31,7 +31,7 @@ public class CreateProperty extends FreshProperty<DefineEntity, CreateProperty> 
      * @return This builder.
      */
     @Override
-    protected CreateProperty getElement() {
+    protected CreateProperty getSelf() {
         return this;
     }
 }

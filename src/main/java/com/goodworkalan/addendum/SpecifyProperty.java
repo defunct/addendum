@@ -9,12 +9,12 @@ import com.goodworkalan.addendum.dialect.Column;
  * 
  * @param <Container>
  *            The type of the containing domain-specific language element.
- * @param <Element>
+ * @param <Self>
  *            The type of the subclassed column specification language element.
  * 
  * @author Alan Gutierrez
  */
-public abstract class SpecifyProperty<Container, Element> {
+public abstract class SpecifyProperty<Container, Self> {
     /** The containing domain-specific language element. */
     private Container container;
     
@@ -42,12 +42,10 @@ public abstract class SpecifyProperty<Container, Element> {
      * We cannot simply return this, because calling one of the methods in this
      * class will change the type of builder in the build statement. We always
      * want to return the most derived builder type.
-     * <p>
-     * FIXME Rename Self.
      * 
      * @return This builder.
      */
-    protected abstract Element getElement();
+    protected abstract Self getSelf();
 
     /**
      * Set the database column length to the given length.
@@ -56,9 +54,9 @@ public abstract class SpecifyProperty<Container, Element> {
      *            The column length.
      * @return This property builder to continue construction.
      */
-    public Element length(int length) {
+    public Self length(int length) {
         column.setLength(length);
-        return getElement();
+        return getSelf();
     }
 
     /**
@@ -68,9 +66,9 @@ public abstract class SpecifyProperty<Container, Element> {
      *            The column precision.
      * @return This property builder to continue construction.
      */
-    public Element precision(int precision) {
+    public Self precision(int precision) {
         column.setPrecision(precision);
-        return getElement();
+        return getSelf();
     }
 
     /**
@@ -80,9 +78,9 @@ public abstract class SpecifyProperty<Container, Element> {
      *            The column scale.
      * @return This property builder to continue construction.
      */
-    public Element scale(int scale) {
+    public Self scale(int scale) {
         column.setScale(scale);
-        return getElement();
+        return getSelf();
     }
 
     /**
@@ -92,9 +90,9 @@ public abstract class SpecifyProperty<Container, Element> {
      *            The default column value.
      * @return This property builder to continue construction.
      */
-    public Element defaultValue(Object defaultValue) {
+    public Self defaultValue(Object defaultValue) {
         column.setDefaultValue(defaultValue);
-        return getElement();
+        return getSelf();
     }
 
     /**

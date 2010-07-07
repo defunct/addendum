@@ -71,7 +71,7 @@ extends ExistingProperty<AlterEntity, AlterProperty> {
      * @return This builder.
      */
     @Override
-    protected AlterProperty getElement() {
+    protected AlterProperty getSelf() {
         return this;
     }
     
