@@ -35,9 +35,7 @@ public abstract class AbstractDialect implements Dialect {
     /** A map of default lengths. */
     private final Map<Integer, Integer> defaultLengths;
 
-    /**
-     * Create a base dialect.
-     */
+    /** Create a base dialect. */
     protected AbstractDialect() {
         this.typeNames = new HashMap<Integer, SortedMap<Integer, String>>();
         this.defaultPrecisionScale = new HashMap<Integer, int[]>();
