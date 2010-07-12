@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
@@ -191,5 +193,23 @@ public class MySQLDialect extends AbstractDialect {
         Statement statement = connection.createStatement();
         statement.execute(sql.toString());
         statement.close();
+    }
+    
+    /**
+     * Generate create table SQL statement adding innodb as the table type.
+     * 
+     * @param sql
+     *            The SQL statement buffer.
+     * @param tableName
+     *            The table name.
+     * @param columns
+     *            The list of column definitions.
+     * @param primaryKey
+     *            The list of primary key fields.
+     */
+    @Override
+    protected void createTable(StringBuilder sql, String tableName, Collection<Column> columns, List<String> primaryKey) {
+        super.createTable(sql, tableName, columns, primaryKey);
+        sql.append("\nTYPE=INNODB");
     }
 }

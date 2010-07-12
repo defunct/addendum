@@ -11,6 +11,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.testng.annotations.Test;
 
@@ -92,5 +95,14 @@ public class MySQLDialectTest {
         when(connection.createStatement()).thenReturn(statement);
         new MySQLDialect().renameTable(connection, "a", "b");
         verify(statement).execute("RENAME TABLE a TO b");
+    }
+    
+    /** Test create table. */
+    @Test
+    public void createTable() throws SQLException {
+        StringBuilder sql = new StringBuilder();
+        Column column = new Column("b", Integer.class);
+        new MySQLDialect().createTable(sql, "a", Arrays.asList(column), Collections.<String>emptyList());
+        assertEquals("CREATE TABLE a (\nb INTEGER\n)\nTYPE=INNODB", sql.toString());
     }
 }
