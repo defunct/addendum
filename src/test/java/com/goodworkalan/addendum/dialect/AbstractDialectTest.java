@@ -1,4 +1,4 @@
-package com.goodworkalan.addendum;
+package com.goodworkalan.addendum.dialect;
 
 import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR;
 import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE;
@@ -21,11 +21,12 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.goodworkalan.addendum.AddendumException;
+import com.goodworkalan.addendum.GeneratorType;
 import com.goodworkalan.addendum.connector.Connector;
 import com.goodworkalan.addendum.connector.DriverManagerConnector;
 import com.goodworkalan.addendum.dialect.AbstractDialect;
 import com.goodworkalan.addendum.dialect.Column;
-import com.goodworkalan.addendum.dialect.ConcreteDialect;
 
 /**
  * Unit tests for the {@link AbstractDialect} class.

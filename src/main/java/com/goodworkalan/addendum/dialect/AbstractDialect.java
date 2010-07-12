@@ -124,28 +124,7 @@ public abstract class AbstractDialect implements Dialect {
             info.put("columns", columns);
        
             StringBuilder sql = new StringBuilder();
-            
-            sql.append("CREATE TABLE ").append(tableName).append(" (\n");
-
-            String separator = "";
-            for (Column column : columns) {
-                sql.append(separator);
-                columnDefinition(sql, column, true);
-                separator = ",\n";
-            }
-            
-            if (!primaryKey.isEmpty()) {
-                sql.append(separator);
-                sql.append("PRIMARY KEY (");
-                String keySeparator = "";
-                for (String key : primaryKey) {
-                    sql.append(keySeparator).append(key);
-                    keySeparator = ", ";
-                }
-                sql.append(")");
-            }
-    
-            sql.append("\n)");
+            createTable(sql, tableName, columns, primaryKey);
             
             info.put("sql", sql);
             
@@ -155,6 +134,42 @@ public abstract class AbstractDialect implements Dialect {
         } finally {
             info.send();
         }
+    }
+
+    /**
+     * Generate create table SQL statement.
+     * 
+     * @param sql
+     *            The SQL statement buffer.
+     * @param tableName
+     *            The table name.
+     * @param columns
+     *            The list of column definitions.
+     * @param primaryKey
+     *            The list of primary key fields.
+     */
+    protected void createTable(StringBuilder sql, String tableName, Collection<Column> columns, List<String> primaryKey) {
+        sql.append("CREATE TABLE ").append(tableName).append(" (\n");
+
+        String separator = "";
+        for (Column column : columns) {
+            sql.append(separator);
+            columnDefinition(sql, column, true);
+            separator = ",\n";
+        }
+        
+        if (!primaryKey.isEmpty()) {
+            sql.append(separator);
+            sql.append("PRIMARY KEY (");
+            String keySeparator = "";
+            for (String key : primaryKey) {
+                sql.append(keySeparator).append(key);
+                keySeparator = ", ";
+            }
+            sql.append(")");
+        }
+
+        sql.append("\n)");
     }
 
     /**
