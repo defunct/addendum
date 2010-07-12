@@ -41,6 +41,7 @@ public class MySQLDialect extends AbstractDialect {
         setType(Types.VARCHAR, "TEXT");
         setType(Types.TIMESTAMP, "TIMESTAMP");
         setType(Types.NUMERIC, "NUMERIC(%2$d, %3$d)");
+        setDefaultLength(Types.VARCHAR, 255);
     }
 
     /**
