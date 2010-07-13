@@ -1,9 +1,9 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDA_COUNT;
-import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDUM;
-import static com.goodworkalan.addendum.AddendumException.SQL_CREATE_ADDENDA;
-import static com.goodworkalan.addendum.AddendumException.SQL_GET_DIALECT;
+import static com.goodworkalan.addendum.Addendum.SQL_ADDENDA_COUNT;
+import static com.goodworkalan.addendum.Addendum.SQL_ADDENDUM;
+import static com.goodworkalan.addendum.Addendum.SQL_CREATE_ADDENDA;
+import static com.goodworkalan.addendum.Addendum.SQL_GET_DIALECT;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.goodworkalan.addendum.connector.Connector;
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
 import com.goodworkalan.furnish.Furnish;
 
 /**
@@ -79,21 +80,21 @@ public class Addenda {
                     dialect = candidate.canTranslate(connection, dialect);
                 }
             } catch (SQLException e) {
-                throw new AddendumException(SQL_GET_DIALECT, e);
+                throw new Danger(Addendum.class, SQL_GET_DIALECT, e);
             }
             if (dialect == null) {
-                throw new AddendumException(SQL_GET_DIALECT);
+                throw new Danger(Addendum.class, SQL_GET_DIALECT);
             }
             try {
                 dialect.createAddendaTable(connection);
             } catch (SQLException e) {
-                throw new AddendumException(SQL_CREATE_ADDENDA, e);
+                throw new Danger(Addendum.class, SQL_CREATE_ADDENDA, e);
             }
             int max;
             try {
                 max = dialect.addendaCount(connection);
             } catch (SQLException e) {
-                throw new AddendumException(SQL_ADDENDA_COUNT, e);
+                throw new Danger(Addendum.class, SQL_ADDENDA_COUNT, e);
             }
             for (int i = max, stop = scripts.size(); i < stop; i++) {
                 if (i >= skip) {
@@ -104,7 +105,7 @@ public class Addenda {
                 try {
                     dialect.addendum(connection);
                 } catch (SQLException e) {
-                    throw new AddendumException(SQL_ADDENDUM, e);
+                    throw new Danger(Addendum.class, SQL_ADDENDUM, e);
                 }
             }
         } finally {

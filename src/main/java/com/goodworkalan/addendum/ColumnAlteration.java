@@ -1,12 +1,14 @@
 package com.goodworkalan.addendum;
 
-import java.sql.Connection;
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.Addendum.CANNOT_ALTER_COLUMN;
+import static com.goodworkalan.addendum.Addendum.COLUMN_EXISTS;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.goodworkalan.addendum.dialect.Column;
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Performs a single alter column update against the database.
@@ -58,7 +60,7 @@ class ColumnAlteration implements SchemaUpdate {
             column.setName(newColumnName);
             entity.properties.put(propertyName, newColumnName);
             if (entity.columns.containsKey(newColumnName)) {
-                throw new AddendumException(COLUMN_EXISTS, column.getName());
+                throw new Danger(Addendum.class, COLUMN_EXISTS, column.getName());
             }
             entity.columns.put(newColumnName, column);
         }

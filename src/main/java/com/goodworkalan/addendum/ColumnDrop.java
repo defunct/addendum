@@ -1,11 +1,13 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.Addendum.CANNOT_DROP_COLUMN;
+import static com.goodworkalan.addendum.Addendum.PROPERTY_MISSING;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Drops a property from an entity in the database.
@@ -39,13 +41,13 @@ class ColumnDrop implements SchemaUpdate {
      * @param schema
      *            The tracking schema.
      * @return A database update that will drop the column in the database.
-     * @exception AddendumException If the property does not exist.
+     * @exception Danger If the property does not exist.
      */
     public DatabaseUpdate execute(Schema schema) {
         Entity entity = schema.entities.get(tableName);
         final String columnName = entity.properties.remove(property);
         if (columnName == null) {
-            throw new AddendumException(PROPERTY_MISSING, property);
+            throw new Danger(Addendum.class, PROPERTY_MISSING, property);
         }
         entity.columns.remove(columnName);
         return new DatabaseUpdate(CANNOT_DROP_COLUMN, columnName, tableName) {

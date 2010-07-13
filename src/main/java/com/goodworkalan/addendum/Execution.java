@@ -1,7 +1,8 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.Addendum.CANNOT_EXECUTE_SQL;
+
 import java.sql.Connection;
-import static com.goodworkalan.addendum.AddendumException.*;
 import java.sql.SQLException;
 
 import com.goodworkalan.addendum.dialect.Dialect;

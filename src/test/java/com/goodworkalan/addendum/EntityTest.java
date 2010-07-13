@@ -1,9 +1,12 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.Addendum.COLUMN_MISSING;
+import static com.goodworkalan.addendum.Addendum.PROPERTY_MISSING;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
+
+import com.goodworkalan.danger.Danger;
 
 /**
  * Unit tests for the {@link Entity} class.
@@ -12,27 +15,27 @@ import org.testng.annotations.Test;
  */
 public class EntityTest {
     /** Test missing property. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void propertyMissing() {
         try {
             Entity entity = new Entity("a");
             entity.getColumn("a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), PROPERTY_MISSING);
+        } catch (Danger e) {
+            assertEquals(e.code, PROPERTY_MISSING);
             System.out.println(e.getMessage());
             throw e;
         }
     }
     
     /** Test missing property. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void columnMissing() {
         try {
             Entity entity = new Entity("a");
             entity.properties.put("a", "a");
             entity.getColumn("a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), COLUMN_MISSING);
+        } catch (Danger e) {
+            assertEquals(e.code, COLUMN_MISSING);
             System.out.println(e.getMessage());
             throw e;
         }

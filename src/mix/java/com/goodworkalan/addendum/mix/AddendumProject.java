@@ -19,8 +19,9 @@ public class AddendumProject implements ProjectModule {
     public void build(Builder builder) {
         builder
             .cookbook(JavaProject.class)
-                .produces("com.github.bigeasy.addendum/addendum/0.7.0.5")
+                .produces("com.github.bigeasy.addendum/addendum/0.7.0.6")
                 .depends()
+                    .production("com.github.bigeasy.danger/danger/0.+1")
                     .production("com.github.bigeasy.furnish/furnish/0.+1")
                     .production("com.github.bigeasy.class-boxer/class-boxer/0.+1")
                     .production("com.github.bigeasy.notice/notice/0.+1")

@@ -1,6 +1,6 @@
 package com.goodworkalan.addendum.dialect;
 
-import static com.goodworkalan.addendum.AddendumException.UNMAPPABLE_TYPE;
+import static com.goodworkalan.addendum.Addendum.UNMAPPABLE_TYPE;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -8,8 +8,9 @@ import java.sql.Types;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.goodworkalan.addendum.AddendumException;
+import com.goodworkalan.addendum.Addendum;
 import com.goodworkalan.addendum.GeneratorType;
+import com.goodworkalan.danger.Danger;
 import com.goodworkalan.utility.Primitives;
 
 /**
@@ -121,7 +122,7 @@ public class Column {
         } else if (String.class.isAssignableFrom(nativeType)) {
             return Types.VARCHAR;
         }
-        throw new AddendumException(UNMAPPABLE_TYPE, nativeType.getCanonicalName());
+        throw new Danger(Addendum.class, UNMAPPABLE_TYPE, nativeType.getCanonicalName());
     }
 
     /**

@@ -1,13 +1,8 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
-import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
-
 import java.util.Map;
+
+import com.goodworkalan.danger.Danger;
 
 /**
  * The root builder for an individual migration definition.
@@ -17,6 +12,72 @@ import java.util.Map;
 public class Addendum {
     /** A list of updates to perform. */
     private final Patch patch;
+    /** An entity name already exists in the addendum. */
+    public final static String ADDENDUM_ENTITY_EXISTS = "403";
+    /** The entity cannot be found in the addendum. */
+    public final static String ADDENDUM_ENTITY_MISSING = "413";
+    /** A table name already exists in the addendum. */
+    public final static String ADDENDUM_TABLE_EXISTS = "404";
+    /** The table cannot be found in the addendum. */
+    public final static String ADDENDUM_TABLE_MISSING = "414";
+    /** Unable to add a column. */
+    public final static String CANNOT_ADD_COLUMN = "504";
+    /** Unable to alter a column. */
+    public final static String CANNOT_ALTER_COLUMN = "503";
+    /** Unable to create the table for an entity due to an SQL exception. */
+    public final static String CANNOT_CREATE_TABLE = "501";
+    /** Unable to drop a column. */
+    public final static String CANNOT_DROP_COLUMN = "505";
+    /** Unable to execute arbitrary SQL statements. */
+    public final static String CANNOT_EXECUTE_SQL = "502";
+    /** Unable to insert values. */
+    public final static String CANNOT_INSERT = "506";
+    /** Unable to rename a table. */
+    public final static String CANNOT_RENAME_TABLE = "507";
+    /** A column already exists in the table in the schema. */
+    public final static String COLUMN_EXISTS = "408";
+    /** A column does not exist the entity. */
+    public final static String COLUMN_MISSING = "416";
+    /** The requested generator type is not supported by the SQL dialect. */
+    public final static String DIALECT_DOES_NOT_SUPPORT_GENERATOR = "101";
+    /** The dialog does not support a specific SQL type. */
+    public final static String DIALECT_DOES_NOT_SUPPORT_TYPE = "102";
+    /** An entity name already exists in the schema. */
+    public final static String ENTITY_EXISTS = "405";
+    /** The entity cannot be found in the schema. */
+    public final static String ENTITY_MISSING = "410";
+    /** Insert statement DSL values count does not match column count. */
+    public final static String INSERT_VALUES = "401";
+    /** Unable to open an SQL connection due to a JNI naming error. */
+    public final static String NAMING_EXCEPTION = "201";
+    /** A primary key property does not exist. */
+    public final static String PRIMARY_KEY_COLUMN_MISSING = "417";
+    /** The primary key has already been specified for the entity. */
+    public final static String PRIMARY_KEY_EXISTS = "409";
+    /** A property already exists in the entity. */
+    public final static String PROPERTY_EXISTS = "407";
+    /** A property does not exist the entity. */
+    public final static String PROPERTY_MISSING = "415";
+    /** Unable to determine the maximum value of the applied updates. */
+    public final static String SQL_ADDENDA_COUNT = "303";
+    /** Unable to update the addenda table with a new update. */
+    public final static String SQL_ADDENDUM = "304";
+    /** Unable to close a JDBC data source. */
+    public final static String SQL_CLOSE = "399";
+    /** Unable to connect to a JDBC data source. */
+    public final static String SQL_CONNECT = "301";
+    /** Unable to create the addenda table to track updates. */
+    public final static String SQL_CREATE_ADDENDA = "302";
+    /** Unable to execute a SQL migration statement. */
+    public final static String SQL_EXECUTION = "308";
+    /** Unable to create database dialect. */
+    public final static String SQL_GET_DIALECT = "309";
+    /** A table name already exists in the schema. */
+    public final static String TABLE_EXISTS = "406";
+    /** The table cannot be found in the schema. */
+    public final static String TABLE_MISSING = "411";
+    /** Unable to determine an SQL type for a Java class. */
+    public final static String UNMAPPABLE_TYPE = "412";
 
     /**
      * Create a new addendum using the given patch to record the addendum
@@ -55,11 +116,11 @@ public class Addendum {
      */
     public DefineEntity define(String name, String tableName) {
         if (patch.aliases.put(name, tableName) != null) {
-            throw new AddendumException(ADDENDUM_ENTITY_EXISTS, name);
+            throw new Danger(Addendum.class, ADDENDUM_ENTITY_EXISTS, name);
         }
         Entity entity = new Entity(name);
         if (patch.entities.put(tableName, entity) != null) {
-            throw new AddendumException(ADDENDUM_TABLE_EXISTS, tableName);
+            throw new Danger(Addendum.class, ADDENDUM_TABLE_EXISTS, tableName);
         }
         return new DefineEntity(this, entity);
     }
@@ -88,7 +149,7 @@ public class Addendum {
             if (!patch.schema.aliases.containsKey(entityName)) {
                 String tableName = entry.getValue();
                 if (patch.schema.entities.containsKey(tableName)) {
-                    throw new AddendumException(TABLE_EXISTS, tableName);
+                    throw new Danger(Addendum.class, TABLE_EXISTS, tableName);
                 }
                 patch.add(new TableCreate(entityName, patch.entities.get(tableName)));
             }
@@ -125,10 +186,10 @@ public class Addendum {
      */
     public CreateEntity create(String name, String tableName) {
         if (patch.schema.aliases.containsKey(name)) {
-            throw new AddendumException(ENTITY_EXISTS, name);
+            throw new Danger(Addendum.class, ENTITY_EXISTS, name);
         }
         if (patch.schema.entities.containsKey(tableName)) {
-            throw new AddendumException(TABLE_EXISTS, tableName);
+            throw new Danger(Addendum.class, TABLE_EXISTS, tableName);
         }
         return new CreateEntity(this, new Entity(tableName), name, patch);
     }
@@ -161,7 +222,7 @@ public class Addendum {
      */
     public Addendum rename(String from, String to) {
         if (!patch.schema.aliases.containsKey(from)) {
-            throw new AddendumException(ENTITY_MISSING, from);
+            throw new Danger(Addendum.class, ENTITY_MISSING, from);
         }
         patch.schema.rename(from, to);
         Schema schema = patch.schema;
@@ -187,7 +248,7 @@ public class Addendum {
      * @param entityName
      *            The entity name.
      * @return This addendum builder to continue construction.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the entity name is already in use or if the table name
      *                cannot be found.
      */
@@ -197,12 +258,12 @@ public class Addendum {
         String existingEntityName = patch.schema.aliases.get(entityName);
         if (existingEntityName == null) {
             if (!patch.schema.entities.containsKey(tableName)) {
-                throw new AddendumException(TABLE_MISSING, tableName);
+                throw new Danger(Addendum.class, TABLE_MISSING, tableName);
             }
             patch.schema.aliases.remove(patch.schema.getEntityName(tableName));
             patch.schema.aliases.put(entityName, tableName);
         } else if (!existingEntityName.equals(tableName)) {
-            throw new AddendumException(ENTITY_EXISTS, entityName);
+            throw new Danger(Addendum.class, ENTITY_EXISTS, entityName);
         }
         return this;
     }

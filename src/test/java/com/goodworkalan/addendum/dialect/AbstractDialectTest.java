@@ -1,7 +1,7 @@
 package com.goodworkalan.addendum.dialect;
 
-import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR;
-import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE;
+import static com.goodworkalan.addendum.Addendum.DIALECT_DOES_NOT_SUPPORT_GENERATOR;
+import static com.goodworkalan.addendum.Addendum.DIALECT_DOES_NOT_SUPPORT_TYPE;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -21,12 +21,10 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.AddendumException;
 import com.goodworkalan.addendum.GeneratorType;
 import com.goodworkalan.addendum.connector.Connector;
 import com.goodworkalan.addendum.connector.DriverManagerConnector;
-import com.goodworkalan.addendum.dialect.AbstractDialect;
-import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Unit tests for the {@link AbstractDialect} class.
@@ -195,15 +193,15 @@ public class AbstractDialectTest {
     
     
     /** Test using a type that is unsupported by the dialect. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void unspportedType() {
         try {
             ConcreteDialect dialect = new ConcreteDialect();
             Column a = new Column("a", Types.DECIMAL);
             StringBuilder sql = new StringBuilder();
             dialect.columnDefinition(sql, a, true);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), DIALECT_DOES_NOT_SUPPORT_TYPE);
+        } catch (Danger e) {
+            assertEquals(e.code, DIALECT_DOES_NOT_SUPPORT_TYPE);
             System.out.println(e.getMessage());
             throw e;
         }
@@ -265,7 +263,7 @@ public class AbstractDialectTest {
     }
     
     /** Test using a generator that is unsupported by the dialect. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void unspportedGenerator() {
         try {
             ConcreteDialect dialect = new ConcreteDialect();
@@ -273,8 +271,8 @@ public class AbstractDialectTest {
             a.setGeneratorType(GeneratorType.SEQUENCE);
             StringBuilder sql = new StringBuilder();
             dialect.columnDefinition(sql, a, true);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), DIALECT_DOES_NOT_SUPPORT_GENERATOR);
+        } catch (Danger e) {
+            assertEquals(e.code, DIALECT_DOES_NOT_SUPPORT_GENERATOR);
             System.out.println(e.getMessage());
             throw e;
         }

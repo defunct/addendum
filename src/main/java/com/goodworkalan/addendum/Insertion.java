@@ -1,6 +1,6 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.INSERT_VALUES;
+import static com.goodworkalan.addendum.Addendum.INSERT_VALUES;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
 
 /**
  * An update action that inserts a record into the database.
@@ -54,13 +55,13 @@ class Insertion implements SchemaUpdate {
      * 
      * @param vals
      *            The column values in the insert statement.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the count of column values does not match the count of
      *                names.
      */
     public void values(String[] vals) {
         if (vals.length != columns.size()) {
-            throw new AddendumException(INSERT_VALUES);
+            throw new Danger(Addendum.class, INSERT_VALUES);
         }
         for (String value : vals) {
             values.add(value);

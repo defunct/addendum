@@ -1,6 +1,7 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.Addendum.CANNOT_CREATE_TABLE;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 

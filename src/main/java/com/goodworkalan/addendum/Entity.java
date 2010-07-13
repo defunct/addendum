@@ -1,8 +1,8 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.COLUMN_MISSING;
-import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
+import static com.goodworkalan.addendum.Addendum.COLUMN_MISSING;
+import static com.goodworkalan.addendum.Addendum.PROPERTY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.PROPERTY_MISSING;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.danger.Danger;
 
 /**
  * A mutable object that models a table specification.
@@ -49,18 +50,18 @@ class Entity {
      * @param property
      *            The property name.
      * @return The column definition.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the property cannot be found or if the column cannot be
      *                found.
      */
     public Column getColumn(String property) {
         String columnName = properties.get(property);
         if (columnName == null) {
-            throw new AddendumException(PROPERTY_MISSING, property);
+            throw new Danger(Addendum.class, PROPERTY_MISSING, property);
         }
         Column column = columns.get(columnName);
         if (column == null) {
-            throw new AddendumException(COLUMN_MISSING, columnName);
+            throw new Danger(Addendum.class, COLUMN_MISSING, columnName);
         }
         return column;
     }
@@ -92,12 +93,12 @@ class Entity {
      *            The name to rename from.
      * @param to
      *            The name to rename to.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the property does not exist in this entity.
      */
     public void rename(String from, String to) {
         if (properties.containsKey(to)) {
-            throw new AddendumException(PROPERTY_EXISTS, to);
+            throw new Danger(Addendum.class, PROPERTY_EXISTS, to);
         }
         properties.put(to, properties.remove(from));
     }

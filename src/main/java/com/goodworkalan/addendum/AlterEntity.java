@@ -1,9 +1,10 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.*;
+import static com.goodworkalan.addendum.Addendum.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.Addendum.*;
 
 import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Builds an entity alteration that can change the underlying table name, alter
@@ -76,7 +77,7 @@ public class AlterEntity {
      */
     public AlterEntity rename(String from, String to) {
         if (!entity.properties.containsKey(from)) {
-            throw new AddendumException(PROPERTY_MISSING, from);
+            throw new Danger(Addendum.class, PROPERTY_MISSING, from);
         }
         entity.rename(from, to);
         Column renamed = entity.getColumn(to);
@@ -101,7 +102,7 @@ public class AlterEntity {
      * @param propertyName
      *            The property name.
      * @return This alter entity builder to continue construction.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the property name is already in use or if the column
      *                name cannot be found.
      */
@@ -109,12 +110,12 @@ public class AlterEntity {
         String existingColumnName = entity.properties.get(propertyName);
         if (existingColumnName == null) {
             if (!entity.columns.containsKey(columnName)) {
-                throw new AddendumException(COLUMN_MISSING, columnName);
+                throw new Danger(Addendum.class, COLUMN_MISSING, columnName);
             }
             entity.properties.remove(entity.getPropertyName(columnName));
             entity.properties.put(propertyName, columnName);
         } else if (!existingColumnName.equals(columnName)) {
-            throw new AddendumException(PROPERTY_EXISTS, propertyName);
+            throw new Danger(Addendum.class, PROPERTY_EXISTS, propertyName);
         }
         return this;
     }
@@ -133,10 +134,10 @@ public class AlterEntity {
      */
     public AddProperty add(String name, String columnName, int columnType) {
         if (entity.properties.containsKey(name)) {
-            throw new AddendumException(PROPERTY_EXISTS, name);
+            throw new Danger(Addendum.class, PROPERTY_EXISTS, name);
         }
         if (entity.columns.containsKey(columnName)) {
-            throw new AddendumException(COLUMN_EXISTS, name);
+            throw new Danger(Addendum.class, COLUMN_EXISTS, name);
         }
         Column column = new Column(name, columnType);
         return new AddProperty(this, patch, entity.tableName, name, column);
@@ -205,7 +206,7 @@ public class AlterEntity {
      * @param property
      *            The property to drop.
      * @return This alter entity builder to continue construction.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the property does not exist.
      */
     public AlterEntity drop(String property) {

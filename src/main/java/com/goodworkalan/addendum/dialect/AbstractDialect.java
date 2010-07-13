@@ -1,7 +1,7 @@
 package com.goodworkalan.addendum.dialect;
 
-import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_GENERATOR;
-import static com.goodworkalan.addendum.AddendumException.DIALECT_DOES_NOT_SUPPORT_TYPE;
+import static com.goodworkalan.addendum.Addendum.DIALECT_DOES_NOT_SUPPORT_GENERATOR;
+import static com.goodworkalan.addendum.Addendum.DIALECT_DOES_NOT_SUPPORT_TYPE;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.goodworkalan.addendum.AddendumException;
+import com.goodworkalan.danger.Danger;
 import com.goodworkalan.notice.Notice;
 import com.goodworkalan.notice.NoticeFactory;
 
@@ -219,7 +219,7 @@ public abstract class AbstractDialect implements Dialect {
         }
         
         if (!typeNames.containsKey(column.getColumnType())) {
-            throw new AddendumException(DIALECT_DOES_NOT_SUPPORT_TYPE, column.getColumnType());
+            throw new Danger(AbstractDialect.class, DIALECT_DOES_NOT_SUPPORT_TYPE, column.getColumnType());
         }
 
         for (Map.Entry<Integer, String> name : typeNames.get(column.getColumnType()).entrySet()) {
@@ -247,7 +247,7 @@ public abstract class AbstractDialect implements Dialect {
                 sql.append(" AUTO_INCREMENT");
                 break;
             default:
-                throw new AddendumException(DIALECT_DOES_NOT_SUPPORT_GENERATOR, column.getGeneratorType().toString());
+                throw new Danger(AbstractDialect.class, DIALECT_DOES_NOT_SUPPORT_GENERATOR, column.getGeneratorType().toString());
             }
         }
         

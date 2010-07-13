@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
 
 /**
  * An update performed against the underlying database. Instances of this class
@@ -21,7 +22,7 @@ import com.goodworkalan.addendum.dialect.Dialect;
  */
 abstract class DatabaseUpdate {
     /** The wrapper exception error code. */
-    private final int code;
+    private final String code;
 
     /** The wrapper exception arguments. */
     private final Object[] arguments;
@@ -35,7 +36,7 @@ abstract class DatabaseUpdate {
      * @param arguments
      *            The wrapper exception arguments.
      */
-    public DatabaseUpdate(int code, Object...arguments) {
+    public DatabaseUpdate(String code, Object...arguments) {
         this.code = code;
         this.arguments = arguments;
     }
@@ -55,7 +56,7 @@ abstract class DatabaseUpdate {
         try {
             execute(connection, dialect);
         } catch (SQLException e) {
-            throw new AddendumException(code, e, arguments);
+            throw new Danger(Addendum.class, code, e, arguments);
         }
     }
 

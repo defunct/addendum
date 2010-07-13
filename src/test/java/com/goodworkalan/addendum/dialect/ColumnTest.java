@@ -1,6 +1,6 @@
 package com.goodworkalan.addendum.dialect;
 
-import static com.goodworkalan.addendum.AddendumException.UNMAPPABLE_TYPE;
+import static com.goodworkalan.addendum.Addendum.UNMAPPABLE_TYPE;
 import static org.testng.Assert.assertEquals;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.AddendumException;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Unit tests for the {@link Column} class.
@@ -37,12 +37,12 @@ public class ColumnTest {
     }
     
     /** Test failed Java type to SQL type conversion. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void noSuchColumnType() {
         try {
             Column.getColumnType(ByteBuffer.class);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), UNMAPPABLE_TYPE);
+        } catch (Danger e) {
+            assertEquals(e.code, UNMAPPABLE_TYPE);
             System.out.println(e.getMessage());
             throw e;
         }

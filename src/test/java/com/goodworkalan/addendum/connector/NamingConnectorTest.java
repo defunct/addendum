@@ -1,8 +1,8 @@
 package com.goodworkalan.addendum.connector;
 
-import static com.goodworkalan.addendum.AddendumException.NAMING_EXCEPTION;
-import static com.goodworkalan.addendum.AddendumException.SQL_CLOSE;
-import static com.goodworkalan.addendum.AddendumException.SQL_CONNECT;
+import static com.goodworkalan.addendum.Addendum.NAMING_EXCEPTION;
+import static com.goodworkalan.addendum.Addendum.SQL_CLOSE;
+import static com.goodworkalan.addendum.Addendum.SQL_CONNECT;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
@@ -15,10 +15,9 @@ import javax.naming.NamingException;
 
 import org.testng.annotations.Test;
 
-import com.goodworkalan.addendum.AddendumException;
 import com.goodworkalan.addendum.BadInitialContextFactory;
 import com.goodworkalan.addendum.TestInitialContextFactory;
-import com.goodworkalan.addendum.connector.NamingConnector;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Unit tests for the {@link NamingConnector} class.
@@ -27,28 +26,28 @@ import com.goodworkalan.addendum.connector.NamingConnector;
  */
 public class NamingConnectorTest {
     /** Test naming exception. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void namingException() throws NamingException {
         try {
             System.setProperty(Context.INITIAL_CONTEXT_FACTORY, BadInitialContextFactory.class.getName());
             NamingConnector connector = new NamingConnector("foo");
             connector.open();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), NAMING_EXCEPTION);
+        } catch (Danger e) {
+            assertEquals(e.code, NAMING_EXCEPTION);
             System.out.println(e.getMessage());
             throw e;
         }
     }
     
     /** Test SQL exception on open. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void openSqlException() throws NamingException {
         try {
             System.setProperty(Context.INITIAL_CONTEXT_FACTORY, TestInitialContextFactory.class.getName());
             NamingConnector connector = new NamingConnector("bad");
             connector.open();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), SQL_CONNECT);
+        } catch (Danger e) {
+            assertEquals(e.code, SQL_CONNECT);
             System.out.println(e.getMessage());
             throw e;
         }
@@ -63,15 +62,15 @@ public class NamingConnectorTest {
     }
 
     /** Test SQL exception on close. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void closeSqlException() throws NamingException, SQLException {
         NamingConnector connector = new NamingConnector("foo");
         Connection connection = mock(Connection.class);
         doThrow(new SQLException()).when(connection).close();
         try {
             connector.close(connection);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), SQL_CLOSE);
+        } catch (Danger e) {
+            assertEquals(e.code, SQL_CLOSE);
             System.out.println(e.getMessage());
             throw e;
         }

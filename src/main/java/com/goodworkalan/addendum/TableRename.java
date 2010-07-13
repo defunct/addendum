@@ -1,11 +1,11 @@
 package com.goodworkalan.addendum;
 
+import static com.goodworkalan.addendum.Addendum.CANNOT_RENAME_TABLE;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.goodworkalan.addendum.dialect.Dialect;
-
-import static com.goodworkalan.addendum.AddendumException.*;
 
 /**
  * Rename a table in the schema.

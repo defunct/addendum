@@ -1,8 +1,8 @@
 package com.goodworkalan.addendum.connector;
 
-import static com.goodworkalan.addendum.AddendumException.NAMING_EXCEPTION;
-import static com.goodworkalan.addendum.AddendumException.SQL_CLOSE;
-import static com.goodworkalan.addendum.AddendumException.SQL_CONNECT;
+import static com.goodworkalan.addendum.Addendum.NAMING_EXCEPTION;
+import static com.goodworkalan.addendum.Addendum.SQL_CLOSE;
+import static com.goodworkalan.addendum.Addendum.SQL_CONNECT;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,7 +11,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.goodworkalan.addendum.AddendumException;
+import com.goodworkalan.addendum.Addendum;
+import com.goodworkalan.danger.Danger;
 
 /**
  * A connector that creates JDBC connections using a JDNI specified data source.
@@ -45,12 +46,12 @@ public class NamingConnector implements Connector {
             InitialContext context = new InitialContext();
             dataSource = (DataSource) context.lookup(dataSourceName);
         } catch (NamingException e) {
-            throw new AddendumException(NAMING_EXCEPTION, e, dataSourceName);
+            throw new Danger(Addendum.class, NAMING_EXCEPTION, e, dataSourceName);
         }
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new AddendumException(SQL_CONNECT, e);
+            throw new Danger(Addendum.class, SQL_CONNECT, e);
         }
     }
 
@@ -64,7 +65,7 @@ public class NamingConnector implements Connector {
         try {
             connection.close();
         } catch (SQLException e) {
-            throw new AddendumException(SQL_CLOSE, e);
+            throw new Danger(Addendum.class, SQL_CLOSE, e);
         }
     }
 }

@@ -1,11 +1,13 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
-import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
+import static com.goodworkalan.addendum.Addendum.ENTITY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.ENTITY_MISSING;
+import static com.goodworkalan.addendum.Addendum.TABLE_MISSING;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.goodworkalan.danger.Danger;
 
 /**
  * A schema used to track the changes to the database. This tracking schema is
@@ -34,18 +36,18 @@ class Schema {
      * @param name
      *            The entity name.
      * @return The entity associated with the name.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the entity alias does not exist or the entity
      *                definition does not exist.
      */
     public Entity getEntity(String name) {
         String tableName = aliases.get(name);
         if (tableName == null) {
-            throw new AddendumException(ENTITY_MISSING, name);
+            throw new Danger(Addendum.class, ENTITY_MISSING, name);
         }
         Entity entity = entities.get(tableName);
         if (entity == null) {
-            throw new AddendumException(TABLE_MISSING, tableName);
+            throw new Danger(Addendum.class, TABLE_MISSING, tableName);
         }
         return entity;
     }
@@ -74,12 +76,12 @@ class Schema {
      *            The name to rename from.
      * @param to
      *            The name to rename to.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the entity does not exist in the schema.
      */
     public void rename(String from, String to) {
         if (aliases.containsKey(to)) {
-            throw new AddendumException(ENTITY_EXISTS, to);
+            throw new Danger(Addendum.class, ENTITY_EXISTS, to);
         }
         aliases.put(to, aliases.remove(from));
     }

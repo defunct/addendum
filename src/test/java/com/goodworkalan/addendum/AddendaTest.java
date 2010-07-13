@@ -1,9 +1,9 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDA_COUNT;
-import static com.goodworkalan.addendum.AddendumException.SQL_ADDENDUM;
-import static com.goodworkalan.addendum.AddendumException.SQL_CREATE_ADDENDA;
-import static com.goodworkalan.addendum.AddendumException.SQL_GET_DIALECT;
+import static com.goodworkalan.addendum.Addendum.SQL_ADDENDA_COUNT;
+import static com.goodworkalan.addendum.Addendum.SQL_ADDENDUM;
+import static com.goodworkalan.addendum.Addendum.SQL_CREATE_ADDENDA;
+import static com.goodworkalan.addendum.Addendum.SQL_GET_DIALECT;
 import static org.testng.Assert.assertEquals;
 
 import java.sql.SQLException;
@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.connector.MockConnector;
+import com.goodworkalan.danger.Danger;
 
 
 /**
@@ -20,8 +21,8 @@ import com.goodworkalan.addendum.connector.MockConnector;
  */
 public class AddendaTest {
     /**
-     * Run a block of code that raises an <code>AddendumException</code> and
-     * assert the values of the exception code and message.
+     * Run a block of code that raises an <code>Danger</code> and assert the
+     * values of the exception code and message.
      * 
      * @param runnable
      *            The block of code.
@@ -30,18 +31,18 @@ public class AddendaTest {
      * @param message
      *            The expected error message.
      */
-    public static void exceptional(Runnable runnable, int code, String message) {
+    public static void exceptional(Runnable runnable, String code, String message) {
         try {
             runnable.run();
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), code);
+        } catch (Danger e) {
+            assertEquals(e.code, code);
             assertEquals(e.getMessage(), message);
             throw e;
         }
     }
     
     /** Test the failure of the creation of a {@link Definition}. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void getDialectSQLException() throws SQLException {
         exceptional(new Runnable() {
             public void run() {
@@ -51,7 +52,7 @@ public class AddendaTest {
     }
     
     /** Test the failure of the creation of a {@link Definition}. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void getDialectMissing() throws SQLException {
         exceptional(new Runnable() {
             public void run() {
@@ -60,8 +61,8 @@ public class AddendaTest {
         }, SQL_GET_DIALECT, "Unable to create the database dialect.");
     }
     
-    /** Test inability to create addenda table. */
-    @Test(expectedExceptions = AddendumException.class)
+    /** Test inability to creatDanger*/
+    @Test(expectedExceptions = Danger.class)
     public void createAddenda() {
         exceptional(new Runnable() {
             public void run() {
@@ -72,7 +73,7 @@ public class AddendaTest {
     }
 
     /** Test cannot fetch addenda count. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void addedaCount() {
         exceptional(new Runnable() {
             public void run() {
@@ -82,7 +83,7 @@ public class AddendaTest {
     }
 
     /** Test unable to insert into the addenda table. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void addendum() {
         exceptional(new Runnable() {
             public void run() {

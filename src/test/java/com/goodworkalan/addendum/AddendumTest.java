@@ -1,18 +1,18 @@
 package com.goodworkalan.addendum;
 
 import static com.goodworkalan.addendum.AddendaTest.exceptional;
-import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.COLUMN_MISSING;
-import static com.goodworkalan.addendum.AddendumException.ENTITY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
-import static com.goodworkalan.addendum.AddendumException.INSERT_VALUES;
-import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.PROPERTY_MISSING;
-import static com.goodworkalan.addendum.AddendumException.TABLE_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
+import static com.goodworkalan.addendum.Addendum.ADDENDUM_ENTITY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.ADDENDUM_TABLE_EXISTS;
+import static com.goodworkalan.addendum.Addendum.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.Addendum.COLUMN_MISSING;
+import static com.goodworkalan.addendum.Addendum.ENTITY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.ENTITY_MISSING;
+import static com.goodworkalan.addendum.Addendum.INSERT_VALUES;
+import static com.goodworkalan.addendum.Addendum.PRIMARY_KEY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.PROPERTY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.PROPERTY_MISSING;
+import static com.goodworkalan.addendum.Addendum.TABLE_EXISTS;
+import static com.goodworkalan.addendum.Addendum.TABLE_MISSING;
 import static org.testng.Assert.assertEquals;
 
 import java.sql.Connection;
@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.connector.MockConnector;
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
 /**
  * Unit tests for the {@link Addendum} class.
  *
@@ -30,7 +31,7 @@ import com.goodworkalan.addendum.dialect.Dialect;
  */
 public class AddendumTest {
     /** Test duplicate definition of an entity name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void addendumEntityExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -46,7 +47,7 @@ public class AddendumTest {
     }
 
     /** Test duplicate definition of an entity name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void addendumTableExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -62,7 +63,7 @@ public class AddendumTest {
     }
 
     /** Test duplicate definition of an entity name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void entityExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -78,7 +79,7 @@ public class AddendumTest {
     }
 
     /** Test duplicate definition of an entity name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void tableExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -97,7 +98,7 @@ public class AddendumTest {
      * Test attempting to create a table that already exists when creating
      * absent entities.
      */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void createIfAbsentTableExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -142,7 +143,7 @@ public class AddendumTest {
     }
     
     /** Test specifying a property that already exists. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void propertyExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -157,7 +158,7 @@ public class AddendumTest {
     }
     
     /** Test specifying a column that already exists. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void columnExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -172,7 +173,7 @@ public class AddendumTest {
     }
     
     /** Test specifying the primary key twice. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void primaryKeyExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -210,7 +211,7 @@ public class AddendumTest {
     }
     
     /** Test renaming an entity that does not exist. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void renameTableMissing() {
         exceptional(new Runnable() {
             public void run() {
@@ -300,7 +301,7 @@ public class AddendumTest {
     }
 
     /** Test table alias to existing entity name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void aliasExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -319,7 +320,7 @@ public class AddendumTest {
     }
 
     /** Test table alias of missing table. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void aliasTableMissing() {
         exceptional(new Runnable() {
             public void run() {
@@ -332,7 +333,7 @@ public class AddendumTest {
     }
     
     /** Test entity rename to existing entity name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void renameExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -423,7 +424,7 @@ public class AddendumTest {
     }
 
     /** Test column alias with existing property name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void aliasPropertyExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -445,7 +446,7 @@ public class AddendumTest {
     
 
     /** Test column alias with a missing column. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void aliasPropertyColumnMissing() {
         exceptional(new Runnable() {
             public void run() {
@@ -505,7 +506,7 @@ public class AddendumTest {
     }
     
     /** Test entity add property with existing property name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void addPropertyExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -525,7 +526,7 @@ public class AddendumTest {
     }
     
     /** Test add property with existing column name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void addColumnExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -586,7 +587,7 @@ public class AddendumTest {
     
     
     /** Test drop property. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void dropMissingProperty() {
         exceptional(new Runnable() {
             public void run() {
@@ -675,7 +676,7 @@ public class AddendumTest {
     }
     
     /** Test insert mismatch. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void insertMismatch() {
         exceptional(new Runnable() {
             public void run() {
@@ -694,7 +695,7 @@ public class AddendumTest {
     }
     
     /** Test rename property to existing name. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void propertyRenameExists() {
         exceptional(new Runnable() {
             public void run() {
@@ -715,7 +716,7 @@ public class AddendumTest {
     }
     
     /** Test set table name.. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void table() {
         exceptional(new Runnable() {
             public void run() {
@@ -732,7 +733,7 @@ public class AddendumTest {
     }
     
     /** Test set table name.. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void columnRenameColumnExists() {
         exceptional(new Runnable() {
             public void run() {

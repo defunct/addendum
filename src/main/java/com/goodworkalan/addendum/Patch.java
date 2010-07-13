@@ -1,11 +1,13 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.ADDENDUM_ENTITY_MISSING;
-import static com.goodworkalan.addendum.AddendumException.ADDENDUM_TABLE_MISSING;
+import static com.goodworkalan.addendum.Addendum.ADDENDUM_ENTITY_MISSING;
+import static com.goodworkalan.addendum.Addendum.ADDENDUM_TABLE_MISSING;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.goodworkalan.danger.Danger;
 
 /**
  * A set of updates for a single migration. Updates are added to the patch by
@@ -63,18 +65,18 @@ class Patch {
      * @param name
      *            The entity name.
      * @return The entity associated with the name.
-     * @exception AddendumException
+     * @exception Addendum
      *                If the entity alias does not exist or the entity
      *                definition does not exist.
      */
     public Entity getEntity(String name) {
         String tableName = aliases.get(name);
         if (tableName == null) {
-            throw new AddendumException(ADDENDUM_ENTITY_MISSING, name);
+            throw new Danger(Addendum.class, ADDENDUM_ENTITY_MISSING, name);
         }
         Entity entity = entities.get(tableName);
         if (entity == null) {
-            throw new AddendumException(ADDENDUM_TABLE_MISSING, tableName);
+            throw new Danger(Addendum.class, ADDENDUM_TABLE_MISSING, tableName);
         }
         return entity;
     }

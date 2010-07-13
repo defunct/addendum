@@ -1,13 +1,14 @@
 package com.goodworkalan.addendum.connector;
 
-import static com.goodworkalan.addendum.AddendumException.SQL_CLOSE;
-import static com.goodworkalan.addendum.AddendumException.SQL_CONNECT;
+import static com.goodworkalan.addendum.Addendum.SQL_CLOSE;
+import static com.goodworkalan.addendum.Addendum.SQL_CONNECT;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.goodworkalan.addendum.AddendumException;
+import com.goodworkalan.addendum.Addendum;
+import com.goodworkalan.danger.Danger;
 /**
  * An implementation of a JDBC connection factory that creates connections using
  * the JDBC <code>java.sql.DriverManager</code>.
@@ -51,7 +52,7 @@ public class DriverManagerConnector implements Connector {
         try {
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
-            throw new AddendumException(SQL_CONNECT, e);
+            throw new Danger(Addendum.class, SQL_CONNECT, e);
         }
     }
 
@@ -65,7 +66,7 @@ public class DriverManagerConnector implements Connector {
         try {
             connection.close();
         } catch (SQLException e) {
-            throw new AddendumException(SQL_CLOSE, e);
+            throw new Danger(Addendum.class, SQL_CLOSE, e);
         }
     }
 }

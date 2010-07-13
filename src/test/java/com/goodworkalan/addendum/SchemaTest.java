@@ -1,10 +1,13 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.ENTITY_MISSING;
-import static com.goodworkalan.addendum.AddendumException.TABLE_MISSING;
-import static org.testng.Assert.*;
+import static com.goodworkalan.addendum.Addendum.ENTITY_MISSING;
+import static com.goodworkalan.addendum.Addendum.TABLE_MISSING;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 import org.testng.annotations.Test;
+
+import com.goodworkalan.danger.Danger;
 
 /**
  * Unit tests for the {@link Schema} class.
@@ -13,27 +16,27 @@ import org.testng.annotations.Test;
  */
 public class SchemaTest {
     /** Test for missing entity. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void entityMissing() {
         try {
             Schema schema = new Schema();
             schema.getEntity("a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), ENTITY_MISSING);
+        } catch (Danger e) {
+            assertEquals(e.code, ENTITY_MISSING);
             System.out.println(e.getMessage());
             throw e;
         }
     }
 
     /** Test for missing table. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void tableMissing() {
         try {
             Schema schema = new Schema();
             schema.aliases.put("a", "a");
             schema.getEntity("a");
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), TABLE_MISSING);
+        } catch (Danger e) {
+            assertEquals(e.code, TABLE_MISSING);
             System.out.println(e.getMessage());
             throw e;
         }

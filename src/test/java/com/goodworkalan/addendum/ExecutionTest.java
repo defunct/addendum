@@ -1,6 +1,6 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.CANNOT_EXECUTE_SQL;
+import static com.goodworkalan.addendum.Addendum.CANNOT_EXECUTE_SQL;
 import static org.testng.Assert.assertEquals;
 
 import java.sql.Connection;
@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Unit tests for the {@link Execution} class.
@@ -17,7 +18,7 @@ import com.goodworkalan.addendum.dialect.Dialect;
  */
 public class ExecutionTest {
     /** Test SQL exception wrapping. */
-    @Test(expectedExceptions = AddendumException.class)
+    @Test(expectedExceptions = Danger.class)
     public void sqlException() {
         Execution execution = new Execution(new Executable() {
             public void execute(Connection connection, Dialect dialect)
@@ -27,8 +28,8 @@ public class ExecutionTest {
         });
         try {
             execution.execute(new Schema()).update(null, null);
-        } catch (AddendumException e) {
-            assertEquals(e.getCode(), CANNOT_EXECUTE_SQL);
+        } catch (Danger e) {
+            assertEquals(e.code, CANNOT_EXECUTE_SQL);
             System.out.println(e.getMessage());
             throw e;
         }

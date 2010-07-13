@@ -1,11 +1,12 @@
 package com.goodworkalan.addendum;
 
-import static com.goodworkalan.addendum.AddendumException.COLUMN_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_COLUMN_MISSING;
-import static com.goodworkalan.addendum.AddendumException.PRIMARY_KEY_EXISTS;
-import static com.goodworkalan.addendum.AddendumException.PROPERTY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.COLUMN_EXISTS;
+import static com.goodworkalan.addendum.Addendum.PRIMARY_KEY_COLUMN_MISSING;
+import static com.goodworkalan.addendum.Addendum.PRIMARY_KEY_EXISTS;
+import static com.goodworkalan.addendum.Addendum.PROPERTY_EXISTS;
 
 import com.goodworkalan.addendum.dialect.Column;
+import com.goodworkalan.danger.Danger;
 
 /**
  * Builds an entity definition specifying the entity primary key and entity
@@ -51,10 +52,10 @@ public class DefineEntity {
      */
     public CreateProperty add(String name, String columnName, int columnType) {
         if (entity.properties.containsKey(name)) {
-            throw new AddendumException(PROPERTY_EXISTS, name);
+            throw new Danger(Addendum.class, PROPERTY_EXISTS, name);
         }
         if (entity.columns.containsKey(columnName)) {
-            throw new AddendumException(COLUMN_EXISTS, columnName);
+            throw new Danger(Addendum.class, COLUMN_EXISTS, columnName);
         }
         entity.properties.put(name, columnName);
         Column column = new Column(columnName, columnType);
@@ -117,11 +118,11 @@ public class DefineEntity {
      */
     public DefineEntity primaryKey(String... columns) {
         if (!entity.primaryKey.isEmpty()) {
-            throw new AddendumException(PRIMARY_KEY_EXISTS);
+            throw new Danger(Addendum.class, PRIMARY_KEY_EXISTS);
         }
         for (String column : columns) {
             if (!entity.columns.containsKey(column)) {
-                throw new AddendumException(PRIMARY_KEY_COLUMN_MISSING, entity.tableName, column);
+                throw new Danger(Addendum.class, PRIMARY_KEY_COLUMN_MISSING, entity.tableName, column);
             }
             entity.primaryKey.add(column);
         }
