@@ -23,7 +23,7 @@ public class AddendumProject implements ProjectModule {
                 .depends()
                     .production("com.github.bigeasy.danger/danger/0.+1")
                     .production("com.github.bigeasy.furnish/furnish/0.+1")
-                    .production("com.github.bigeasy.class-boxer/class-boxer/0.+1")
+                    .production("com.github.bigeasy.class/class-boxer/0.+1")
                     .production("com.github.bigeasy.notice/notice/0.+1")
                     .production("org.slf4j/slf4j-api/1.4.2")
                     .development("com.h2database/h2/1.1.115")
