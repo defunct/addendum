@@ -1,8 +1,8 @@
-package com.goodworkalan.addendum.mysql.mix;
+package com.goodworkalan.addendum.mysql;
 
-import com.goodworkalan.mix.ProjectModule;
-import com.goodworkalan.mix.builder.Builder;
-import com.goodworkalan.mix.cookbook.JavaProject;
+import com.goodworkalan.cafe.ProjectModule;
+import com.goodworkalan.cafe.builder.Builder;
+import com.goodworkalan.cafe.outline.JavaProject;
 
 /**
  * Build definition for Addendum MySQL.
