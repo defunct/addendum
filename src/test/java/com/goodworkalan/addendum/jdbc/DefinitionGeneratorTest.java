@@ -147,7 +147,6 @@ public class DefinitionGeneratorTest {
     }
 
     /** Test the default constructor. */
-    @Test
     public void constructor() throws ClassNotFoundException, SQLException {
         Connector connector = newConnector(getDatabasePath());
         Class.forName("org.h2.Driver");
@@ -168,5 +167,11 @@ public class DefinitionGeneratorTest {
         connection = connector.open();
         DefinitionGenerator.generate("com.goodworkalan.accounts.Accounts", connection);
         connector.close(connection);
+    }
+    
+    
+    @Test
+    public void export() {
+        
     }
 }

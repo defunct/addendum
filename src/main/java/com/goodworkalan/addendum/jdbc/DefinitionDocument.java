@@ -101,6 +101,12 @@ public class DefinitionDocument {
             return "Types.VARCHAR";
         case Types.TIMESTAMP:
             return "Types.TIMESTAMP";
+        case Types.BIT:
+            return "Types.BIT";
+        case Types.DECIMAL:
+            return "Types.DECIMAL";
+        case Types.LONGVARCHAR:
+            return "Types.LONGVARCHAR";
         }
         throw new IllegalArgumentException();
     }
