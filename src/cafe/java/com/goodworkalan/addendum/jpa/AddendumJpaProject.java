@@ -1,8 +1,8 @@
-package com.goodworkalan.addendum.jpa.mix;
+package com.goodworkalan.addendum.jpa;
 
-import com.goodworkalan.mix.ProjectModule;
-import com.goodworkalan.mix.builder.Builder;
-import com.goodworkalan.mix.cookbook.JavaProject;
+import com.goodworkalan.cafe.ProjectModule;
+import com.goodworkalan.cafe.builder.Builder;
+import com.goodworkalan.cafe.outline.JavaProject;
 
 /**
  * Build definition for Addendum JPA.
@@ -22,9 +22,9 @@ public class AddendumJpaProject implements ProjectModule {
                 .produces("com.github.bigeasy.addendum/addendum-jpa/0.1")
                 .depends()
                     .production("org.slf4j/slf4j-api/1.4.2")
-                    .production("com.github.bigeasy.addendum/addendum/0.+7")
-                    .production("org.hibernate/hibernate-core/3.3.1.GA")
-                    .production("org.hibernate/hibernate-annotations/3.4.0.GA")
+                    .production("org.hibernate/hibernate-core/3.5.2-Final")
+                    .production("org.hibernate/hibernate-annotations/3.5.2-Final")
+                    .production("org.hibernate/hibernate-entitymanager/3.5.2-Final")
                     .development("org.slf4j/slf4j-log4j12/1.4.2")
                     .development("log4j/log4j/1.2.14")
                     .development("org.testng/testng-jdk15/5.10")

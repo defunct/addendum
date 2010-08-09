@@ -14,16 +14,31 @@ class DefinitionDocument {
     /** The class name of the definition to generate. */
     public String className;
 
+    /**
+     * The document should generate
+     * <code>com.goodworkalan.addendum.GeneratorType</code>.
+     */
     public boolean needsGeneratorType;
     
+    /** Whether to import <code>java.sql.Types</code>. */
     public boolean needsTypes;
     
+    /** The map of entity names to entity information. */
     public Map<String, EntityInfo> entities = new TreeMap<String, EntityInfo>();
 
+    /** Print a blank line to standard out. */
     private void println() { 
         System.out.println("");
     }
 
+    /**
+     * Print the line indented to the given depth.
+     * 
+     * @param depth
+     *            The depth of the index.
+     * @param line
+     *            The line.
+     */
     private void print(int depth, String line) { 
         for (int i = 0; i < (depth * 4); i++) {
             System.out.print(' ');
@@ -31,6 +46,7 @@ class DefinitionDocument {
         System.out.println(line);
     }
 
+    /** Print the definition class file. */
     public void print() {
         print(0, "package " + className.substring(0, className.lastIndexOf('.')) + ";");
         println();
@@ -58,6 +74,12 @@ class DefinitionDocument {
         print(0, "}");
     }
     
+    /**
+     * Print the property information.
+     * 
+     * @param property
+     *            The property information.
+     */
     private void print(PropertyInfo property) {
         if (property.getName().equals(property.getColumnName())) {
             print(4, ".add(\"" + property.getName() + "\", " + property.getType().getCanonicalName() + ".class)");
@@ -82,6 +104,15 @@ class DefinitionDocument {
         print(5, ".end()");
     }
 
+    /**
+     * Print the entity definition.
+     * 
+     * @param entity
+     *            The entity information.
+     * @param terminate
+     *            The string to print after the entity definition, possibly the
+     *            empty string, possibly a semi-colon.
+     */
     private void print(EntityInfo entity, String terminate) {
         if (!entity.getName().equals(entity.getTableName())) {
             print(3, ".define(\"" + entity.getName() + "\", \"" + entity.getTableName()  + "\")");

@@ -1,20 +1,31 @@
 package com.goodworkalan.addendum.jpa;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
+/**
+ * Generate an Addendum definition that describes all of the classes in the
+ * <code>META-INF/persistehce.xml</code> definition file.
+ *
+ * @author Alan Gutierrez
+ */
 public class DefinitionGenerator {
-    public static void generate(String className) throws IOException, ParserConfigurationException, SAXException, DOMException, ClassNotFoundException {
+    /**
+     * Generate the definition class.
+     * 
+     * @param className
+     *            The definition class name.
+     * @throws Exception
+     *             For any number of entirely unrecoverable errors.
+     */
+    public static void generate(String className) throws Exception {
+        try {
         DefinitionDocument definitionDocument = new DefinitionDocument();
         definitionDocument.className = className;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -42,5 +53,9 @@ public class DefinitionGenerator {
             }
         }
         definitionDocument.print();
+        } catch (Exception e) {
+            // Everything here is entirely unrecoverable, simply report the error.
+            throw new RuntimeException(e);
+        }
     }
 }

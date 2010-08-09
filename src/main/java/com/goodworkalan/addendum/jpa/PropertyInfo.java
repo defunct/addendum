@@ -315,6 +315,7 @@ class PropertyInfo {
         return new PropertyInfo(name, columnName, type, id, length, precision, scale, nullable, generationType);
     }
 
+    // TODO Document.
     private static Class<?> getReferrantType(Class<?> type, Class<?> targetEntity) {
         Class<?> referrantType = type;
         if (targetEntity != void.class) {
@@ -323,6 +324,7 @@ class PropertyInfo {
         return referrantType;
     }
     
+    // TODO Document.
     private static boolean isOptional(boolean optional, boolean nullable) {
         if (!optional) {
             nullable = false;
