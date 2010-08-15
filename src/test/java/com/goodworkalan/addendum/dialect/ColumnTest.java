@@ -20,7 +20,7 @@ import com.goodworkalan.danger.Danger;
  */
 public class ColumnTest {
     /** Test Java type to SQL type conversion. */
-    @Test
+ //  @Test
     public void getColumnType() {
         assertEquals(Column.getColumnType(boolean.class), Types.BIT);
         assertEquals(Column.getColumnType(short.class), Types.TINYINT);
@@ -37,7 +37,7 @@ public class ColumnTest {
     }
     
     /** Test failed Java type to SQL type conversion. */
-    @Test(expectedExceptions = Danger.class)
+ //   @Test(expectedExceptions = Danger.class)
     public void noSuchColumnType() {
         try {
             Column.getColumnType(ByteBuffer.class);
@@ -49,7 +49,7 @@ public class ColumnTest {
     }
     
     /** Test setting the column type from a Java type. */
-    @Test
+ //   @Test
     public void setColumnTypeJava() {
         Column column = new Column("a", long.class);
         column.setColumnType(int.class);

@@ -26,6 +26,7 @@ public class AddendumProject implements ProjectModule {
                     .production("com.github.bigeasy.class/class-boxer/0.+1")
                     .production("com.github.bigeasy.notice/notice/0.+1")
                     .production("org.slf4j/slf4j-api/1.4.2")
+                    .development("com.github.bigeasy.danger/danger-test/0.+1")
                     .development("com.h2database/h2/1.1.115")
                     .development("org.slf4j/slf4j-log4j12/1.4.2")
                     .development("log4j/log4j/1.2.14")

@@ -17,7 +17,7 @@ import com.goodworkalan.danger.Danger;
  */
 public class PatchTest {
     /** Test lookup of an entity that is missing. */
-    @Test(expectedExceptions = Danger.class)
+ //  @Test(expectedExceptions = Danger.class)
     public void entityMissing() {
         try {
             Patch patch = new Patch(new Schema(), new ArrayList<DatabaseUpdate>());
@@ -30,7 +30,7 @@ public class PatchTest {
     }
     
     /** Test lookup of an entity table that is missing. */
-    @Test(expectedExceptions = Danger.class)
+ //  @Test(expectedExceptions = Danger.class)
     public void tableMissing() {
         try {
             Patch patch = new Patch(new Schema(), new ArrayList<DatabaseUpdate>());

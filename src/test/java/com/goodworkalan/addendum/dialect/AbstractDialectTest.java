@@ -114,7 +114,7 @@ public class AbstractDialectTest {
     }
 
     /** Test creation of a table. */
-    @Test
+ //   @Test
     public void createTable() throws SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
         Connector connector = newConnector(getDatabasePath());
@@ -131,7 +131,7 @@ public class AbstractDialectTest {
     }
     
     /** Test creation of a table with no primary key. */
-    @Test
+ //  @Test
     public void createTableNoPrimaryKey() throws SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
         Connector connector = newConnector(getDatabasePath());
@@ -148,7 +148,7 @@ public class AbstractDialectTest {
     }
 
     /** Test definition of a column with a maximum size. */
-    @Test
+ //   @Test
     public void defineText() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", String.class);
@@ -159,7 +159,7 @@ public class AbstractDialectTest {
     }
 
     /** Test definition of a column with an intermediate size. */
-    @Test
+ //  @Test
     public void defineLargerString() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", String.class);
@@ -170,7 +170,7 @@ public class AbstractDialectTest {
     }
     
     /** Test setting the default precision. */
-    @Test
+ //   @Test
     public void defaultPrecision() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.NUMERIC);
@@ -181,7 +181,7 @@ public class AbstractDialectTest {
     }
     
     /** Test setting the default scale. */
-    @Test
+ //  @Test
     public void defaultScale() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.NUMERIC);
@@ -193,7 +193,7 @@ public class AbstractDialectTest {
     
     
     /** Test using a type that is unsupported by the dialect. */
-    @Test(expectedExceptions = Danger.class)
+ //   @Test(expectedExceptions = Danger.class)
     public void unspportedType() {
         try {
             ConcreteDialect dialect = new ConcreteDialect();
@@ -208,7 +208,7 @@ public class AbstractDialectTest {
     }
 
     /** Test setting not null when not null is not allowed. */
-    @Test
+ //  @Test
     public void cannotNull() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.INTEGER);
@@ -219,7 +219,7 @@ public class AbstractDialectTest {
     }
     
     /** Test setting not null. */
-    @Test
+ //   @Test
     public void canNullIsNull() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.INTEGER);
@@ -230,7 +230,7 @@ public class AbstractDialectTest {
     }
     
     /** Test identity generator. */
-    @Test
+ //   @Test
     public void identityGenerator() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.INTEGER);
@@ -241,7 +241,7 @@ public class AbstractDialectTest {
     }
     
     /** Test auto generator. */
-    @Test
+ //   @Test
     public void autoGenerator() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.INTEGER);
@@ -252,7 +252,7 @@ public class AbstractDialectTest {
     }
     
     /** Test auto generator. */
-    @Test
+ //   @Test
     public void noneGenerator() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.INTEGER);
@@ -263,7 +263,7 @@ public class AbstractDialectTest {
     }
     
     /** Test using a generator that is unsupported by the dialect. */
-    @Test(expectedExceptions = Danger.class)
+ //  @Test(expectedExceptions = Danger.class)
     public void unspportedGenerator() {
         try {
             ConcreteDialect dialect = new ConcreteDialect();
@@ -279,7 +279,7 @@ public class AbstractDialectTest {
     }
 
     /** Test identity generator. */
-    @Test
+ //  @Test
     public void defaultValue() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.VARCHAR);
@@ -290,7 +290,7 @@ public class AbstractDialectTest {
     }
     
     /** Test identity generator. */
-    @Test
+ //  @Test
     public void defaultCharValue() {
         ConcreteDialect dialect = new ConcreteDialect();
         Column a = new Column("a", Types.CHAR);
@@ -302,7 +302,7 @@ public class AbstractDialectTest {
     }
     
     /** Test column add. */
-    @Test
+ //  @Test
     public void addColumn() throws SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
         Connector connector = newConnector(getDatabasePath());
@@ -327,7 +327,7 @@ public class AbstractDialectTest {
     }
     
     /** Test column drop. */
-    @Test
+ //  @Test
     public void dropColumn() throws SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
         Connector connector = newConnector(getDatabasePath());
@@ -348,7 +348,7 @@ public class AbstractDialectTest {
     }
 
     /** Test data insert. */
-    @Test
+ //   @Test
     public void insert() throws SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
         Connector connector = newConnector(getDatabasePath());
@@ -369,7 +369,7 @@ public class AbstractDialectTest {
     }
  
     /** Test the unimplemented verify table method. */
-    @Test
+ //  @Test
     public void verifyTable() throws SQLException {
         new ConcreteDialect().verifyTable(null, null, null);
     }

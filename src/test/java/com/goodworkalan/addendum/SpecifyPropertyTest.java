@@ -14,7 +14,7 @@ import com.goodworkalan.addendum.dialect.Column;
  */
 public class SpecifyPropertyTest {
     /** Test scale. */
-    @Test
+ //   @Test
     public void scale() {
         Column column = new Column("a", int.class);
         CreateProperty add = new CreateProperty(null, column);
@@ -23,7 +23,7 @@ public class SpecifyPropertyTest {
     }
     
     /** Test precision. */
-    @Test
+ //   @Test
     public void precision() {
         Column column = new Column("a", int.class);
         CreateProperty add = new CreateProperty(null, column);

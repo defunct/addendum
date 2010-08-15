@@ -26,7 +26,7 @@ import com.goodworkalan.danger.Danger;
  */
 public class NamingConnectorTest {
     /** Test naming exception. */
-    @Test(expectedExceptions = Danger.class)
+ //  @Test(expectedExceptions = Danger.class)
     public void namingException() throws NamingException {
         try {
             System.setProperty(Context.INITIAL_CONTEXT_FACTORY, BadInitialContextFactory.class.getName());
@@ -40,7 +40,7 @@ public class NamingConnectorTest {
     }
     
     /** Test SQL exception on open. */
-    @Test(expectedExceptions = Danger.class)
+ //  @Test(expectedExceptions = Danger.class)
     public void openSqlException() throws NamingException {
         try {
             System.setProperty(Context.INITIAL_CONTEXT_FACTORY, TestInitialContextFactory.class.getName());
@@ -54,7 +54,7 @@ public class NamingConnectorTest {
     }
     
     /** Test open. */
-    @Test
+ //  @Test
     public void openAndClose() throws NamingException {
         System.setProperty(Context.INITIAL_CONTEXT_FACTORY, TestInitialContextFactory.class.getName());
         NamingConnector connector = new NamingConnector("good");
@@ -62,7 +62,7 @@ public class NamingConnectorTest {
     }
 
     /** Test SQL exception on close. */
-    @Test(expectedExceptions = Danger.class)
+ //   @Test(expectedExceptions = Danger.class)
     public void closeSqlException() throws NamingException, SQLException {
         NamingConnector connector = new NamingConnector("foo");
         Connection connection = mock(Connection.class);
