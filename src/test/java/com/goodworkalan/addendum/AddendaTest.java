@@ -4,13 +4,18 @@ import static com.goodworkalan.addendum.Addendum.SQL_ADDENDA_COUNT;
 import static com.goodworkalan.addendum.Addendum.SQL_ADDENDUM;
 import static com.goodworkalan.addendum.Addendum.SQL_CREATE_ADDENDA;
 import static com.goodworkalan.addendum.Addendum.SQL_GET_DIALECT;
-import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.*;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.connector.MockConnector;
+import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.addendum.dialect.MockDatabase;
 import com.goodworkalan.danger.Danger;
 import com.goodworkalan.danger.test.Dangerous;
 
@@ -21,6 +26,18 @@ import com.goodworkalan.danger.test.Dangerous;
  * @author Alan Gutierrez
  */
 public class AddendaTest {
+    /** Reset the mock database before running a test. */
+    @BeforeMethod
+    public void resetDatabase() {
+        MockDatabase.clear();
+    }
+
+    /** The constructor creates a new instance of an addenda. */ 
+    @Test
+    public void constructor() {
+        new Addenda(new MockConnector());
+    }
+
     /**
      * Run a block of code that raises an <code>Danger</code> and assert the
      * values of the exception code and message.
@@ -42,57 +59,70 @@ public class AddendaTest {
         }
     }
     
-    /** Test the failure of the creation of a {@link Definition}. */
+    /**
+     * An <code>SQLException</code> thrown from
+     * {@link Dialect#canTranslate(java.sql.Connection, Dialect) is wrapped in a
+     * <code>Danger</code> and thrown.
+     */
     @Test(expectedExceptions = Danger.class)
     public void getDialectSQLException() throws SQLException {
         Dangerous.danger(new Runnable() {
             public void run() {
                 new Addenda(new MockConnector("ERROR")).amend();
             }
-        }, Addendum.class, SQL_GET_DIALECT, "Unable to create the database dialect.");
+        }, Addendum.class, SQL_GET_DIALECT, SQLException.class, "Unable to create the database dialect.");
     }
     
     /** Test the failure of the creation of a {@link Definition}. */
-    //    @Test(expectedExceptions = Danger.class)
+    @Test(expectedExceptions = Danger.class)
     public void getDialectMissing() throws SQLException {
-        exceptional(new Runnable() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 new Addenda(new MockConnector("MISMATCH")).amend();
             }
-        }, SQL_GET_DIALECT, "Unable to create the database dialect.");
+        }, Addendum.class, SQL_GET_DIALECT, null, "Unable to create the database dialect.");
     }
     
-    /** Test inability to creatDanger*/
-    //@Test(expectedExceptions = Danger.class)
-    public void createAddenda() {
-        exceptional(new Runnable() {
+    /**
+     * When the Addenda table cannot be created a <code>Danger</code> exception
+     * is thrown.
+     */
+    @Test(expectedExceptions = Danger.class)
+    public void unableToCreateAddendaTable() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 new Addenda(new MockConnector("FAIL_ON_CREATE_ADDENDA_TABLE")).amend();
 
             }
-        }, SQL_CREATE_ADDENDA, "Unable to create the addenda table to track updates.");
+        }, Addendum.class, SQL_CREATE_ADDENDA, SQLException.class, "Unable to create the addenda table to track updates.");
     }
 
-    /** Test cannot fetch addenda count. */
-    // @Test(expectedExceptions = Danger.class)
-    public void addedaCount() {
-        exceptional(new Runnable() {
+    /**
+     * When the addenda count cannot be fetched from the Addenda table a
+     * <code>Danger</code> exception is thrown.
+     */
+    @Test(expectedExceptions = Danger.class)
+    public void unableToGetAddedaCount() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 new Addenda(new MockConnector("FAIL_ON_ADDENDA_COUNT")).amend();
             }
-        }, SQL_ADDENDA_COUNT, "Unable to fetch the maximum value of the applied updates from the addenda table.");
+        }, Addendum.class, SQL_ADDENDA_COUNT, SQLException.class, "Unable to fetch the maximum value of the applied updates from the addenda table.");
     }
 
-    /** Test unable to insert into the addenda table. */
- // @Test(expectedExceptions = Danger.class)
-    public void addendum() {
-        exceptional(new Runnable() {
+    /**
+     * When the addenda count cannot be fetched from the Addenda table a
+     * <code>Danger</code> exception is thrown.
+     */
+    @Test(expectedExceptions = Danger.class)
+    public void unableToInsertAddendum() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 Addenda addenda = new Addenda(new MockConnector("FAIL_ON_ADDENDUM"));
                 addenda.addendum();
                 addenda.amend();
             }
-        }, SQL_ADDENDUM, "Unable to insert a new addenda into the the addenda table.");
+        }, Addendum.class, SQL_ADDENDUM, SQLException.class, "Unable to insert a new addenda into the the addenda table.");
     }
 
     
@@ -117,6 +147,17 @@ public class AddendaTest {
                     .end()
                .insert("Person")
                    .columns("firstName", "lastName").values("Alan", "Gutierrez");
+    }
+    
+    /**
+     * An empty amend completes successfully without throwing exceptions.
+     */
+    @Test
+    public void emptyAmend() {
+        Addenda addenda = new Addenda(new MockConnector());
+        addenda.addendum();
+        addenda.amend();
+        assertEquals(1, MockDatabase.INSTANCE.addenda.size());
     }
 
     /**
@@ -150,12 +191,23 @@ public class AddendaTest {
         new ExampleMigration(addenda).create();
     }
     
-    /** Test skipping. */
- // @Test
+    /**
+     * A skipped addendum is not invoked. If the skipped addendum were invoked,
+     * an exception would be thrown by this test.
+     */
+    @Test
     public void skip() {
         Addenda addenda = new Addenda(new MockConnector(), 1);
-        createPersonAndAddress(addenda);
+        addenda
+            .addendum()
+                .execute(new Executable() {
+                    public void execute(Connection connection, Dialect dialect) {
+                        throw new RuntimeException();
+                    }
+                })
+            .commit();
         addenda.amend();
+        assertEquals(1, MockDatabase.INSTANCE.addenda.size());
     }
 }
 

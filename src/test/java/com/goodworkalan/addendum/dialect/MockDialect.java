@@ -2,12 +2,8 @@ package com.goodworkalan.addendum.dialect;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.goodworkalan.addendum.dialect.Column;
-import com.goodworkalan.addendum.dialect.Dialect;
 
 /**
  * A mock dialect that can be configured to raise exceptions.
@@ -15,18 +11,6 @@ import com.goodworkalan.addendum.dialect.Dialect;
  * @author Alan Gutierrez
  */
 public class MockDialect implements Dialect {
-    /** The list of addenda applied. */
-    private final List<Integer> addenda = new ArrayList<Integer>();
-
-    /** The create table records. */
-    public final List<CreateTable> createTables = new ArrayList<CreateTable>();
-
-    /** The add column records. */
-    public final List<AddColumn> addColumns = new ArrayList<AddColumn>();
-    
-    /** The alter column records. */
-    public final List<AlterColumn> alterColumns = new ArrayList<AlterColumn>();
-    
     /** Whether to throw an exception when creating the addenda table. */
     private boolean failOnCreateAddendaTable;
     
@@ -48,7 +32,7 @@ public class MockDialect implements Dialect {
         if (failOnAddendum) {
             throw new SQLException();
         }
-        addenda.add(addenda.size());
+        MockDatabase.INSTANCE.addenda.add(MockDatabase.INSTANCE.addenda.size());
     }
 
     /**
@@ -78,7 +62,7 @@ public class MockDialect implements Dialect {
         if (failOnAddendaCount) {
             throw new SQLException();
         }
-        return addenda.size();
+        return MockDatabase.INSTANCE.addenda.size();
     }
 
     /**
@@ -92,7 +76,7 @@ public class MockDialect implements Dialect {
      *            The column definition.
      */
     public void addColumn(Connection connection, String tableName, Column column) throws SQLException {
-        addColumns.add(new AddColumn(tableName, column));
+        MockDatabase.INSTANCE.addColumns.add(new AddColumn(tableName, column));
     }
 
     /**
@@ -155,7 +139,7 @@ public class MockDialect implements Dialect {
      *            The column definition.
      */
     public void alterColumn(Connection connection, String tableName, String oldName, Column column) throws SQLException {
-        alterColumns.add(new AlterColumn(tableName, oldName, column));
+        MockDatabase.INSTANCE.alterColumns.add(new AlterColumn(tableName, oldName, column));
     }
 
     /**
