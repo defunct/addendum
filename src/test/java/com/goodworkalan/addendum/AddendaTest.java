@@ -4,13 +4,12 @@ import static com.goodworkalan.addendum.Addendum.SQL_ADDENDA_COUNT;
 import static com.goodworkalan.addendum.Addendum.SQL_ADDENDUM;
 import static com.goodworkalan.addendum.Addendum.SQL_CREATE_ADDENDA;
 import static com.goodworkalan.addendum.Addendum.SQL_GET_DIALECT;
-import static org.testng.AssertJUnit.*;
+import static org.testng.AssertJUnit.assertEquals;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.goodworkalan.addendum.connector.MockConnector;

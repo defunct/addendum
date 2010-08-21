@@ -19,18 +19,25 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import org.testng.annotations.Test;
+
 import com.goodworkalan.addendum.connector.MockConnector;
 import com.goodworkalan.addendum.dialect.Dialect;
+import com.goodworkalan.danger.Danger;
+import com.goodworkalan.danger.test.Dangerous;
 /**
  * Unit tests for the {@link Addendum} class.
  *
  * @author Alan Gutierrez
  */
 public class AddendumTest {
-    /** Test duplicate definition of an entity name. */
- //  @Test(expectedExceptions = Danger.class)
-    public void addendumEntityExists() {
-        exceptional(new Runnable() {
+    /**
+     * Duplicate definition of an entity name within an addendum throws an
+     * exception.
+     */
+    @Test(expectedExceptions = Danger.class)
+    public void entityExistsInAddendum() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 Addenda addenda = new Addenda(new MockConnector());
                 addenda
@@ -40,13 +47,13 @@ public class AddendumTest {
                             .end()
                         .define("a");
             }
-        }, ADDENDUM_ENTITY_EXISTS, "An entity definition by the name of [a] already exists in this addendum.");
+        }, Addendum.class, ADDENDUM_ENTITY_EXISTS, null, "An entity definition by the name of [a] already exists in this addendum.");
     }
 
-    /** Test duplicate definition of an entity name. */
- //  @Test(expectedExceptions = Danger.class)
-    public void addendumTableExists() {
-        exceptional(new Runnable() {
+    /** Duplicate definition of a table name within an addendum throws an exception. */
+    @Test(expectedExceptions = Danger.class)
+    public void tableExistsInAddendum() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 Addenda addenda = new Addenda(new MockConnector());
                 addenda
@@ -56,13 +63,16 @@ public class AddendumTest {
                             .end()
                         .define("b", "a");
             }
-        }, ADDENDUM_TABLE_EXISTS, "An entity definition with a table by the name of [a] already exists in this addendum.");
+        }, Addendum.class, ADDENDUM_TABLE_EXISTS, null, "An entity definition with a table by the name of [a] already exists in this addendum.");
     }
 
-    /** Test duplicate definition of an entity name. */
- //   @Test(expectedExceptions = Danger.class)
-    public void entityExists() {
-        exceptional(new Runnable() {
+    /**
+     * Duplicate definition of an entity name within a schema throws an
+     * exception.
+     */
+    @Test(expectedExceptions = Danger.class)
+    public void entityExistsInSchema() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 Addenda addenda = new Addenda(new MockConnector());
                 addenda
@@ -72,13 +82,15 @@ public class AddendumTest {
                             .end()
                         .create("a");
             }
-        }, ENTITY_EXISTS, "An entity definition by the name of [a] already exists in the schema.");
+        }, Addendum.class, ENTITY_EXISTS, null, "An entity definition by the name of [a] already exists in the schema.");
     }
 
-    /** Test duplicate definition of an entity name. */
- //  @Test(expectedExceptions = Danger.class)
-    public void tableExists() {
-        exceptional(new Runnable() {
+    /**
+     * Duplicate definition of a table name within a schema throws an exception.
+     */
+    @Test(expectedExceptions = Danger.class)
+    public void tableExistsInSchema() {
+        Dangerous.danger(new Runnable() {
             public void run() {
                 Addenda addenda = new Addenda(new MockConnector());
                 addenda
@@ -88,7 +100,7 @@ public class AddendumTest {
                             .end()
                         .create("b", "a");
             }
-        },  TABLE_EXISTS, "An entity definition with a table by the name of [a] already exists in the schema.");
+        }, Addendum.class, TABLE_EXISTS, null, "An entity definition with a table by the name of [a] already exists in the schema.");
     }
     
     /**
